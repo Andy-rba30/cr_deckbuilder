@@ -7,6 +7,8 @@ Ejemplos:
   python cli.py --demo --mode ranking
   python cli.py --tag "#ABC123" --mode upgrades
   python cli.py --tag "#ABC123" --mode meta --players 150   (descarga batallas reales)
+  python cli.py --mode wiki                                 (actualiza los stats de la wiki para el motor v4)
+  python cli.py --demo --engine clasico                     (usa el motor v3)
 """
 from __future__ import annotations
 
@@ -15,7 +17,8 @@ import sys
 
 from crdeck.api import ApiError, fetch_battlelog
 from crdeck.battles import BATTLES_PATH, crawl, save_battles
-from crdeck.collection import default_reference_level
+from crdeck.attributes import apply_attributes, point_names
+from crdeck.collection import attach_catalog, default_reference_level
 from crdeck.comfort import apply_comfort
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
@@ -24,6 +27,7 @@ from crdeck.ranking import rank_archetypes
 from crdeck.scoring import evaluate_cards
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
+from crdeck.wiki import STATS_PATH, WikiError, fetch_all, load_stats, save_stats
 
 
 def print_deck(i, d, player):
@@ -41,6 +45,10 @@ def print_deck(i, d, player):
     print("  Amenazas: " + ", ".join(f"{t['name']} {t['cov']:.0%}" for t in d["coverage"]))
     for txt, *_ in d["works"][:4]:
         print(f"  ✓ {txt}")
+    if d.get("points"):
+        names = point_names()
+        print("  Puntos por tipo: " + ", ".join(f"{names.get(k, k)} {v:g}"
+                                               for k, v in sorted(d["points"].items(), key=lambda kv: -kv[1])))
     for a, b, w, r in d["synergies"]:
         print(f"  {'+' if w > 0 else '−'} {a} + {b} ({w:+.2f}): {r}")
     for w in d["warnings"]:
@@ -74,11 +82,12 @@ def main(argv=None):
             stream.reconfigure(encoding="utf-8", errors="replace")
     env_found = load_env()
     ap = argparse.ArgumentParser(description="Recomendador de mazos de Clash Royale")
-    src = ap.add_mutually_exclusive_group(required=True)
+    src = ap.add_mutually_exclusive_group(required="--mode" not in (argv or sys.argv) or
+                                          "wiki" not in (argv or sys.argv))
     src.add_argument("--tag")
     src.add_argument("--json", help="Archivo JSON con la respuesta de la API")
     src.add_argument("--demo", action="store_true")
-    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades", "ranking", "meta"], default="optimal")
+    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades", "ranking", "meta", "wiki"], default="optimal")
     ap.add_argument("--archetype", help="Clave del arquetipo (ver data/archetypes.yaml)")
     ap.add_argument("--ref-level", type=int, help="Nivel de referencia (por defecto: mediana de tus mejores cartas)")
     ap.add_argument("--level-weight", type=float, default=1.0, help="Importancia del nivel (0 a 2)")
@@ -89,6 +98,8 @@ def main(argv=None):
     ap.add_argument("--players", type=int, default=100, help="Modo meta: jugadores cuyo historial se descarga")
     ap.add_argument("--seed-tags", default="", help="Modo meta: tags extra para empezar, separados por comas")
     ap.add_argument("--no-battle-meta", action="store_true", help="Ignora data/battles.json (usa solo los YAML)")
+    ap.add_argument("--engine", choices=["atributos", "clasico"],
+                    help="Motor: atributos (v4, fichas de la wiki; por defecto si existe data/card_stats.json) o clasico (v3)")
     ap.add_argument("--comfort", type=float, help="Bonus por cartas que ya juegas (por defecto el de rules.yaml; 0 = sin bonus)")
     a = ap.parse_args(argv)
 
@@ -96,6 +107,21 @@ def main(argv=None):
         sys.exit(f"No encuentro el archivo .env. Debe estar exactamente en: {ENV_PATH}")
     game = load_game_data()
     cfg = game.rules["battle_meta"]
+    if a.mode == "wiki":
+        names = [c.name for c in game.cards.values()]
+        names += [n for n in load_stats().get("cards", {}) if n not in names]   # cartas nuevas ya conocidas
+        print(f"Leyendo {len(names)} cartas (con evoluciones y héroes) de la Clash Royale Wiki...")
+        try:
+            data = fetch_all(names, progress=lambda i, n, name: print(f"  {i}/{n} {name}") if i % 20 == 0 else None)
+        except WikiError as e:
+            sys.exit(str(e))
+        save_stats(data)
+        print(f"Guardado en {STATS_PATH}: {len(data['cards'])} cartas. Sin datos: {', '.join(data['missing']) or 'ninguna'}")
+        return
+    engine = a.engine or ("atributos" if STATS_PATH.exists() else "clasico")
+    if engine == "atributos":
+        game = apply_attributes(game)
+        print("Motor v4 (atributos): fichas de la Clash Royale Wiki. Usa --engine clasico para el motor v3.")
     if a.mode == "meta":
         if not a.tag:
             sys.exit("El modo meta necesita tu --tag (descarga tu historial y el de tus rivales).")
@@ -128,6 +154,7 @@ def main(argv=None):
             log = fetch_battlelog(a.tag)
         except ApiError as e:
             print(f"No se pudo leer tu historial (solo se usa tu mazo actual): {e}")
+    attach_catalog(player, game)
     apply_comfort(player, log, game.rules["comfort"])
     comfort = game.rules["comfort"]["weight"] if a.comfort is None else a.comfort
     ref = a.ref_level or default_reference_level(player)

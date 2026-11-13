@@ -24,6 +24,17 @@ Player Tag vienen con tu cuenta; si tienes la clave en `.env`, la app además de
 completo (`/cards`, guardado 7 días en `.cache/`) para mostrar imágenes también en la demo y en
 las cartas que no tienes. Sin clave, se ven fichas de color con el nombre.
 
+## Versiones
+
+| Versión | Qué tiene | Cómo volver a ella |
+|---|---|---|
+| v2 | Motor ILP original con datos de `cards.yaml` | `git checkout v2.0` |
+| v3 | Meta de batallas, interfaz visual, amenazas, complementos, victoria estimada | `git checkout v3.0` |
+| **v4** | **Motor de atributos**: fichas de puntos por carta con los stats de la wiki | (actual) |
+
+Dentro de la app (y con `--engine` en la consola) puedes elegir el motor **Atributos (v4)** o el
+**Clásico (v3)** sin cambiar de versión.
+
 ## Instalación
 
 Necesitas Python 3.10 o superior.
@@ -116,6 +127,28 @@ una queda por debajo del 50% aparece un aviso. Son estimaciones editables, como 
 lugar, se queda con los cambios que suben el puntaje y respetan las reglas, y propone uno por carta
 sin repetir la que entra. Se usa en 🛠️ Creador (botón **Aplicar**).
 
+## Motor v4: fichas de atributos (`crdeck/wiki.py`, `crdeck/attributes.py`)
+
+1. **Stats de la wiki**: `python cli.py --mode wiki` lee de la [Clash Royale Wiki](https://clashroyale.fandom.com)
+   (Fandom, licencia CC BY-SA) la página de cada carta, de su evolución (`Carta/Evolution`) y de su
+   héroe (`Carta/Hero`): coste, vida, daño, daño por segundo, alcance, velocidad, objetivo, cantidad,
+   radio y habilidades (aturde, congela, empuja, invoca, escudo, provoca...). Se guardan solo los datos,
+   a nivel 11, en `data/card_stats.json`. Vuelve a ejecutarlo tras un cambio de balance.
+2. **Ficha de puntos (0–10)** por carta: Tanque, Daño, Daño en área, Antiaéreo, Alcance, Velocidad,
+   Ciclo, Enjambre, Daño de hechizo, Daño a torre, Rompe edificios y Control. Las evoluciones y los
+   héroes tienen su propia ficha (más puntos por sus habilidades). Se ven en 📚 Colección.
+3. **Reglas sobre los puntos** (`data/attribute_rules.yaml`, todas editables como fórmulas):
+   necesidades y quién las cubre, respuesta a amenazas, reglas entre pares (p. ej. "dos tanques
+   pesados −0.30", "presión por aire y por tierra +0.10") y roles automáticos para cartas que no están
+   en `cards.yaml` (las nuevas, como Ronin o Minion Giant, ya se pueden usar).
+4. **Puntos de quiebre reales**: con los stats y el +10% por nivel del juego, calcula qué hechizo mata a
+   qué tropa y con cuántos niveles de diferencia (Bola de fuego → Mosquetera con +1 nivel, El Tronco →
+   Princesa a igual nivel...). Reemplazan los 4 ejemplos sin verificar de `interactions.yaml`.
+5. **Puntos finales**: el puntaje suma cartas (meta × nivel), sinergias, complementos, roles, amenazas
+   y recomendaciones; cada mazo muestra además sus **puntos por tipo** (suma de las fichas).
+
+El motor de optimización es el mismo; v4 cambia de dónde salen las reglas.
+
 ## Meta con batallas reales (`crdeck/battles.py`, `crdeck/meta.py`)
 
 En la pestaña **📊 Meta** (con tu Player Tag) o con `--mode meta`, la app descarga tu historial
@@ -154,6 +187,8 @@ Con 100 jugadores son unas 100 peticiones a la API (cerca de 1 minuto) y unas 1.
 | `data/interactions.yaml` | Puntos de quiebre (ej. Bola de fuego vs Mosquetera) |
 | `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves y parámetros del meta de batallas |
 | `data/threats.yaml` | Amenazas y qué tan bien responde cada carta (por rol o valor exacto) |
+| `data/attribute_rules.yaml` | Motor v4: cómo se calculan los puntos de la ficha y las reglas entre ellos |
+| `data/card_stats.json` | Motor v4: stats de la wiki (se regenera con `python cli.py --mode wiki`) |
 | `data/archetypes.yaml` | Plantillas de arquetipos: núcleo, grupos, cartas prohibidas, elixir |
 
 Roles disponibles: `win_condition, tank, mini_tank, building, air_defense, small_spell, big_spell,

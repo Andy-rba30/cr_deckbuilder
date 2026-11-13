@@ -53,6 +53,7 @@ def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight:
     # Puntos de quiebre: comparamos tu carta contra la del rival al nivel de referencia.
     pen = rules["level"]["breakpoint_penalty"] * level_weight
     by_norm = {norm(n): n for n in player.cards}
+    es = lambda n: game.info(n).es if game.info(n) else n
     for it in game.interactions:
         tag = "" if it.verified else " (dato sin verificar)"
         tgt = by_norm.get(norm(it.target))
@@ -62,7 +63,7 @@ def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight:
                 e = out[tgt]
                 e.bp_penalty += pen
                 e.value -= pen
-                e.warnings.append(f"Tu {player.cards[tgt].es} (nv {t}) muere ante {it.attacker} rival de nv {ref_level}{tag}")
+                e.warnings.append(f"Tu {player.cards[tgt].es} (nv {t}) muere ante {es(it.attacker)} rival de nv {ref_level}{tag}")
         att = by_norm.get(norm(it.attacker))
         if att:  # ¿tu hechizo ya no mata al objetivo rival que a igual nivel sí mataría?
             a = player.cards[att].level
@@ -70,7 +71,7 @@ def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight:
                 e = out[att]
                 e.bp_penalty += pen
                 e.value -= pen
-                e.warnings.append(f"Tu {player.cards[att].es} (nv {a}) ya no mata a {it.target} rival de nv {ref_level}{tag}")
+                e.warnings.append(f"Tu {player.cards[att].es} (nv {a}) ya no mata a {es(it.target)} rival de nv {ref_level}{tag}")
     for e in out.values():
         e.value = max(0.0, e.value)
     return out
@@ -96,6 +97,11 @@ DEFENSE_ROLES = {"air_defense", "building", "anti_tank_dps", "mini_tank", "cheap
 
 def _sat(x: float, k: float) -> float:
     return 10.0 * (1.0 - math.exp(-max(0.0, x) / k))
+
+
+def deck_points(deck, evos, game):   # import tardío: attributes importa scoring indirectamente
+    from .attributes import deck_points as _dp
+    return _dp(deck, evos, game)
 
 
 def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameData,
@@ -172,6 +178,7 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
             "Cobertura": 10.0 * sum(t["cov"] for t in cov) / max(1, len(cov)),
         },
         "coverage": cov,
+        "points": deck_points(deck, evos, game),   # motor v4: puntos del mazo por tipo (suma de fichas)
         "complements": comp,          # necesidades de cada carta y quién las cubre
         "works": good,                # [(texto, peso, detalle)] lo que se complementa bien
         "missing": missing,           # [(texto, peso, detalle)] defectos que nada cubre

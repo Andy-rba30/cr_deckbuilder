@@ -79,3 +79,14 @@ def test_builder_shows_coverage_and_swap_suggestions():
     apply.click().run()
     assert at.session_state["builder"] != before and len(at.session_state["builder"]) == 8
     assert not at.exception
+
+
+def test_engine_selector_switches_engines():
+    at = _app()
+    radio = next(r for r in at.radio if r.label == "Motor")
+    assert radio.value == "atributos"
+    at.button(key="b_opt").click().run()
+    assert "Puntos del mazo por tipo" in " ".join(m.value for m in at.markdown)
+    radio.set_value("clasico").run()
+    at.button(key="b_opt").click().run()
+    assert not at.exception and "Puntos del mazo por tipo" not in " ".join(m.value for m in at.markdown)

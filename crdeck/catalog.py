@@ -56,6 +56,8 @@ class GameData:
     meta_detail: dict[str, dict] = field(default_factory=dict)     # nombre -> meta del catálogo, de datos y final
     threats: dict = field(default_factory=dict)                    # data/threats.yaml
     needs: dict = field(default_factory=dict)                      # data/needs.yaml
+    fichas: dict = field(default_factory=dict)                     # motor v4: fichas de puntos por carta
+    engine: str = "clasico"                                        # "clasico" (v3) o "atributos" (v4)
 
     def info(self, name: str) -> CardInfo | None:
         return self.cards.get(norm(name))

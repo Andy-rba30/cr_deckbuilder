@@ -10,7 +10,9 @@ from crdeck import ui
 from crdeck.advice import suggest_swaps
 from crdeck.api import ApiError, fetch_battlelog, fetch_cards, has_key
 from crdeck.battles import BATTLES_PATH, crawl, load_cards_info, save_battles
-from crdeck.collection import default_reference_level, parse_player
+from crdeck.catalog import norm
+from crdeck.attributes import apply_attributes, point_names
+from crdeck.collection import attach_catalog, default_reference_level, parse_player
 from crdeck.comfort import apply_comfort
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
@@ -19,6 +21,7 @@ from crdeck.ranking import ArchetypeRank, rank_archetypes
 from crdeck.scoring import evaluate_cards, evaluate_deck, pick_evos, rule_checks
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
+from crdeck.wiki import STATS_PATH
 
 st.set_page_config(page_title="Recomendador de mazos CR", page_icon="🃏", layout="wide")
 ENV_FOUND = load_env()
@@ -31,10 +34,20 @@ def base_game():
 
 
 @st.cache_resource
-def meta_game(mtime: float | None):
-    """Catálogo con el meta de data/battles.json aplicado; se recalcula cuando cambia el archivo."""
-    game, bm = load_battle_meta(base_game())
+def engine_game(engine: str, stats_mtime: float | None):
+    """Catálogo del motor elegido: clásico (v3, data/*.yaml) o atributos (v4, fichas de la wiki)."""
+    return apply_attributes(base_game()) if engine == "atributos" else base_game()
+
+
+@st.cache_resource
+def meta_game(engine: str, stats_mtime: float | None, battles_mtime: float | None):
+    """Catálogo del motor con el meta de data/battles.json aplicado; se recalcula si cambia algún archivo."""
+    game, bm = load_battle_meta(engine_game(engine, stats_mtime))
     return game, bm, load_cards_info()
+
+
+def mtime(path) -> float | None:
+    return path.stat().st_mtime if path.exists() else None
 
 
 @st.cache_resource(ttl=24 * 3600)
@@ -48,7 +61,15 @@ def api_cards() -> dict[str, dict]:
 
 BASE = base_game()
 API_CARDS = api_cards() if has_key() else {}
-GAME_META, BM, SEEN_CARDS = meta_game(BATTLES_PATH.stat().st_mtime if BATTLES_PATH.exists() else None)
+with st.sidebar:
+    ENGINE = st.radio(
+        "Motor", ["atributos", "clasico"], horizontal=True, disabled=not STATS_PATH.exists(),
+        index=0 if STATS_PATH.exists() else 1,
+        format_func=lambda e: "Atributos (v4)" if e == "atributos" else "Clásico (v3)",
+        help="Atributos: cada carta tiene una ficha de puntos con sus stats de la wiki y las reglas de "
+             "data/attribute_rules.yaml deciden qué se complementa. Clásico: listas de needs.yaml y threats.yaml.")
+ENGINE_GAME = engine_game(ENGINE, mtime(STATS_PATH))
+GAME_META, BM, SEEN_CARDS = meta_game(ENGINE, mtime(STATS_PATH), mtime(BATTLES_PATH))
 CFG_META = BASE.rules["battle_meta"]
 
 
@@ -127,8 +148,10 @@ if not player:
     st.info("Elige el origen de los datos en la barra lateral. El modo Demo funciona sin clave de API.")
     st.stop()
 
-game = GAME_META if (use_meta and BM) else BASE
+game = GAME_META if (use_meta and BM) else ENGINE_GAME
+attach_catalog(player, game)   # el motor v4 da roles a las cartas nuevas
 evals = evaluate_cards(player, game, ref, level_weight, comfort_weight)
+POINT_NAMES = point_names() if game.fichas else {}
 
 
 # ------------------------------------------------------------------ piezas visuales
@@ -180,6 +203,10 @@ def show_deck(title: str, d: dict, subtitle: str | None = None):
             st.html(ui.chips([(w, "warn", "") for w in d["warnings"]]))
         else:
             st.caption("Ninguno")
+        if d.get("points"):
+            st.markdown("**Puntos del mazo por tipo** (suma de las fichas de sus cartas)")
+            st.html(ui.chips([(f"{POINT_NAMES.get(k, k)} {v:g}", "", "") for k, v in
+                              sorted(d["points"].items(), key=lambda kv: -kv[1])]))
         p = d["parts"]
         st.caption("Desglose del puntaje: " + " + ".join(f"{k} {v:.2f}" for k, v in [
             ("cartas", p["cartas"]), ("cartas que ya juegas", p["comodidad"]), ("evoluciones", p["evoluciones"]),
@@ -254,7 +281,7 @@ def context(**params) -> dict:
     """Ajustes con los que se calcula un resultado; si cambian, el resultado queda desactualizado."""
     return {"tag": player.tag, "ref": ref, "level_weight": level_weight, "locked": tuple(locked),
             "banned": tuple(banned), "meta": (bool(use_meta and BM), BM.last if BM else None),
-            "comfort": comfort_weight, **params}
+            "comfort": comfort_weight, "engine": ENGINE, **params}
 
 
 def saved(key: str, ctx: dict) -> dict | None:
@@ -556,6 +583,27 @@ with tab_col:
     names = sorted((n for n, c in player.cards.items()
                     if (not q or q in c.es.lower() or q in n.lower() or any(q in r for r in c.roles))
                     and (not rar or c.rarity in rar)), key=keyf)
+    if game.fichas:
+        with st.expander("📋 Ficha de una carta (stats de la wiki → puntos)"):
+            pick = st.selectbox("Carta", sorted(player.cards, key=lambda n: player.cards[n].es),
+                                format_func=lambda n: player.cards[n].es, key="ficha_card")
+            f = game.fichas.get(norm(pick))
+            if f is None:
+                st.caption("La wiki no tiene datos de esta carta (vuelve a ejecutar `python cli.py --mode wiki`).")
+            else:
+                cols = st.columns(1 + bool(f.evolution) + bool(f.hero))
+                variants = [("Normal", f.points, f.abilities)]
+                variants += [("Evolución", f.evolution, f.variant_abilities.get("evolution", []))] if f.evolution else []
+                variants += [("Héroe", f.hero, f.variant_abilities.get("hero", []))] if f.hero else []
+                for col, (label, pts, abil) in zip(cols, variants):
+                    with col:
+                        st.markdown(f"**{label}**" + (f" · habilidades: {', '.join(abil)}" if abil else ""))
+                        st.html('<div class="crd-root">' + "".join(
+                            ui.meter(POINT_NAMES.get(k, k), v, maximum=10, text=f"{v:.1f}") for k, v in pts.items())
+                                + "</div>")
+                v = f.variables
+                st.caption(f"Stats (nivel 11): vida {v['hp']:.0f} · daño/s {v['dps']:.0f} · alcance {v['rango']:g} · "
+                           f"coste {v['coste']:g}" + (f" · [página en la wiki]({f.url})" if f.url else ""))
     st.caption(f"{len(names)} cartas · nivel coloreado: verde = a tu nivel de referencia ({ref}) o más, "
                "ámbar = 1 nivel abajo, rojo = 2 o más · ♥ = la juegas seguido.")
     st.html(ui.pool_html([ui.owned_tile(n, player, evals, evo=player.cards[n].evo_unlocked,
@@ -571,4 +619,5 @@ with tab_col:
 st.divider()
 st.caption("Este material no es oficial y no está respaldado por Supercell. Para más información, consulta la "
            "[Política de contenido de fans de Supercell](https://www.supercell.com/fan-content-policy). "
-           "Las imágenes de las cartas vienen de la API oficial de Clash Royale.")
+           "Las imágenes de las cartas vienen de la API oficial de Clash Royale. Los stats del motor v4 vienen de la "
+           "[Clash Royale Wiki](https://clashroyale.fandom.com) (Fandom), con licencia CC BY-SA.")
