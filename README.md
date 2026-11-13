@@ -5,11 +5,35 @@ Lee tu cuenta con la API oficial de Supercell y arma mazos con un modelo de
 
 | Modo | Qué hace |
 |---|---|
-| ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas distintas |
-| 🧩 Arquetipo | Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
+| ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas que cambian al menos 3 cartas |
+| 🧩 Arquetipo | Ranking de qué arquetipo te conviene + variantes de Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
 | ⚔️ Guerra de clanes | 4 mazos **sin cartas repetidas**, optimizados a la vez para que ninguno quede débil |
-| 📈 Asesor de mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
-| 📚 Mi colección | Tus cartas con nivel normalizado, factor de nivel y valor |
+| 🛠️ Creador | Arma tu mazo a mano (＋ Añadir / ✕ Quitar), míralo evaluado al momento, revisa reglas y amenazas, **🔍 cambios sugeridos** con un clic y **✨ Completar** rellena los huecos |
+| 📈 Mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
+| 📊 Meta | Descarga batallas reales de jugadores de tu nivel y calcula fuerza de cartas y combos |
+| 📚 Colección | Galería de tus cartas con nivel coloreado, filtros y valor |
+
+Los mazos se muestran como en el juego: cuadrícula de 4×2 con imagen de cada carta (si la API la
+trae), costo de elixir, nivel coloreado (verde = a tu nivel de referencia, ámbar = 1 abajo,
+rojo = 2 o más), marca **EVO** y 👑, ♥ en las cartas que juegas, elixir medio, costo de ciclo,
+botón para copiar al juego, **victoria estimada** (con batallas descargadas) y barras de ataque,
+defensa, sinergia y cobertura de amenazas. El tema oscuro está en `.streamlit/config.toml`.
+
+**Imágenes oficiales:** las cartas usan las imágenes de la API oficial de Clash Royale. Con tu
+Player Tag vienen con tu cuenta; si tienes la clave en `.env`, la app además descarga el catálogo
+completo (`/cards`, guardado 7 días en `.cache/`) para mostrar imágenes también en la demo y en
+las cartas que no tienes. Sin clave, se ven fichas de color con el nombre.
+
+## Versiones
+
+| Versión | Qué tiene | Cómo volver a ella |
+|---|---|---|
+| v2 | Motor ILP original con datos de `cards.yaml` | `git checkout v2.0` |
+| v3 | Meta de batallas, interfaz visual, amenazas, complementos, victoria estimada | `git checkout v3.0` |
+| **v4** | **Motor de atributos**: fichas de puntos por carta con los stats de la wiki | (actual) |
+
+Dentro de la app (y con `--engine` en la consola) puedes elegir el motor **Atributos (v4)** o el
+**Clásico (v3)** sin cambiar de versión.
 
 ## Instalación
 
@@ -31,6 +55,8 @@ Se abre en el navegador; elige **Demo** en la barra lateral. También por consol
 ```bash
 python cli.py --demo --mode optimal --alternatives 2
 python cli.py --demo --mode archetype --archetype log_bait
+python cli.py --demo --mode ranking
+python cli.py --tag "#ABC123" --mode meta --players 150   # descarga batallas reales (necesita clave)
 python cli.py --demo --mode war
 python cli.py --demo --mode upgrades
 ```
@@ -59,15 +85,98 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
 - `sens` cerca de 1 (Mosquetera, Tres mosqueteras) → pierde mucho valor.
 - **Nivel de referencia** = nivel típico de tus rivales (por defecto, la mediana de tus mejores 24 cartas).
 - **Importancia del nivel**: 0 ignora niveles, 2 los castiga el doble.
+- **Bonus por cartas que ya juegas** (`crdeck/comfort.py`): las cartas que usas seguido valen un poco
+  más, porque ya sabes jugarlas. Uso = % de tus últimas batallas (historial de la API, con tu tag) en
+  que iba en tu mazo; las de tu mazo equipado cuentan como 60% o más. Bonus = peso × uso.
+  Peso por defecto 0.10 (solo desempata); con 0.3 o más la app se queda cerca de tu mazo actual.
+  Se ajusta en la barra lateral o con `--comfort`. En la app las marca ♥ y tu mazo actual aparece
+  en ⭐ Óptimo para comparar (y se puede cargar en 🛠️ Creador).
 
 **Modelo ILP** (`crdeck/solver.py`) — variables sí/no por carta y mazo:
-- Restricciones duras: 8 cartas, 1–2 condiciones de victoria, ≥2 antiaéreas, 1–3 hechizos,
-  máx. 1 tanque, máx. 2 estructuras, máx. 1 campeón, rango de elixir, espacios de evolución.
-- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + roles cubiertos.
+- Restricciones duras: 8 cartas, ≥2 antiaéreas, 1–3 hechizos, máx. 1 tanque, máx. 2 estructuras,
+  máx. 1 campeón, rango de elixir, espacios de evolución.
+- **Recomendación** (no obligatoria): 1–2 condiciones de victoria. Se puede romper si el mazo lo
+  compensa; cada una de más o de menos resta 0.30 y la app lo avisa (`deck.recommended` en rules.yaml).
+- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + **complementos**
+  + roles cubiertos + **cobertura de amenazas** (ver abajo).
 - Guerra: además, cada carta en un solo mazo, y se maximiza **el mazo más débil** (×10) + el total.
-- Alternativas: se vuelve a resolver prohibiendo repetir exactamente el mazo anterior.
+- Arquetipos: solo admiten las condiciones de victoria de su plantilla (`core`, `core_any`, `groups`
+  o `extra_wincons`), para que no se cuele, por ejemplo, un Montapuercos en un Graveyard.
+- Alternativas: se vuelve a resolver exigiendo que cambien al menos N cartas (3 por defecto;
+  ajustable en la barra lateral o con `--min-diff`) respecto a cada mazo ya mostrado.
 
 Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución del óptimo teórico.
+En Guerra, el modelo arranca desde 4 mazos armados uno por uno, así llega antes a buenas soluciones.
+
+**Cómo se complementan** (`data/needs.yaml`, `crdeck/needs.py`): en vez de reglas fijas de qué va
+con qué, cada carta tiene necesidades (defectos que otra debe cubrir o algo que la potencia) y otras
+cartas las cubren: quitar edificios (Montapuercos ← Terremoto), despejar antiaéreas (Globo ← Bola de
+fuego, Hielo), limpiar enjambres, anular Infernos (Gólem ← Descarga, Rayo), un tanque delante
+(Cementerio, Chispitas), apoyo detrás del tanque y sobrecargar hechizos pequeños (cebo). Cada
+necesidad suma de −50% (nada la cubre) a +50% (cubierta) de su peso: una carta exigente vale menos
+sola y más bien acompañada. La app lo explica en cada mazo ("El Terremoto quita los edificios que
+frenan al Montapuercos" / "Nada elimina las antiaéreas que paran al Globo"). Son estimaciones editables.
+
+**Respuesta a amenazas** (`data/threats.yaml`, `crdeck/threats.py`): 7 amenazas típicas (aéreos,
+enjambres, tanques, presión rápida, asedio, tropas de apoyo, infernos y cargas). Cada carta tiene
+una respuesta de 0 a 1 (por sus roles o un valor exacto); la cobertura de un mazo es la suma de sus
+respuestas dividida por `need` (máx. 100%). Cada amenaza cubierta suma hasta 0.15 al puntaje y si
+una queda por debajo del 50% aparece un aviso. Son estimaciones editables, como `cards.yaml`.
+
+**Cambios sugeridos** (`crdeck/advice.py`): para cada carta de un mazo prueba todas tus cartas en su
+lugar, se queda con los cambios que suben el puntaje y respetan las reglas, y propone uno por carta
+sin repetir la que entra. Se usa en 🛠️ Creador (botón **Aplicar**).
+
+## Motor v4: fichas de atributos (`crdeck/wiki.py`, `crdeck/attributes.py`)
+
+1. **Stats de la wiki**: `python cli.py --mode wiki` lee de la [Clash Royale Wiki](https://clashroyale.fandom.com)
+   (Fandom, licencia CC BY-SA) la página de cada carta, de su evolución (`Carta/Evolution`) y de su
+   héroe (`Carta/Hero`): coste, vida, daño, daño por segundo, alcance, velocidad, objetivo, cantidad,
+   radio y habilidades (aturde, congela, empuja, invoca, escudo, provoca...). Se guardan solo los datos,
+   a nivel 11, en `data/card_stats.json`. Vuelve a ejecutarlo tras un cambio de balance.
+2. **Ficha de puntos (0–10)** por carta: Tanque, Daño, Daño en área, Antiaéreo, Alcance, Velocidad,
+   Ciclo, Enjambre, Daño de hechizo, Daño a torre, Rompe edificios y Control. Las evoluciones y los
+   héroes tienen su propia ficha (más puntos por sus habilidades). Se ven en 📚 Colección.
+3. **Reglas sobre los puntos** (`data/attribute_rules.yaml`, todas editables como fórmulas):
+   necesidades y quién las cubre, respuesta a amenazas, reglas entre pares (p. ej. "dos tanques
+   pesados −0.30", "presión por aire y por tierra +0.10") y roles automáticos para cartas que no están
+   en `cards.yaml` (las nuevas, como Ronin o Minion Giant, ya se pueden usar).
+4. **Puntos de quiebre reales**: con los stats y el +10% por nivel del juego, calcula qué hechizo mata a
+   qué tropa y con cuántos niveles de diferencia (Bola de fuego → Mosquetera con +1 nivel, El Tronco →
+   Princesa a igual nivel...). Reemplazan los 4 ejemplos sin verificar de `interactions.yaml`.
+5. **Puntos finales**: el puntaje suma cartas (meta × nivel), sinergias, complementos, roles, amenazas
+   y recomendaciones; cada mazo muestra además sus **puntos por tipo** (suma de las fichas).
+
+El motor de optimización es el mismo; v4 cambia de dónde salen las reglas.
+
+## Meta con batallas reales (`crdeck/battles.py`, `crdeck/meta.py`)
+
+En la pestaña **📊 Meta** (con tu Player Tag) o con `--mode meta`, la app descarga tu historial
+de batallas, luego el de tus rivales, el de los rivales de ellos, etc. Como el juego empareja
+jugadores parecidos, la muestra refleja **el meta de tu nivel**. Solo cuentan batallas 1 contra 1
+(los tipos están en `rules.yaml`), cada una se guarda una vez en `data/battles.json` (no se sube a git)
+y las de más de 28 días se descartan, porque el balance cambia cada mes.
+
+- **Fuerza de cada carta**: regresión logística sobre quién ganó cada batalla, con las cartas de los
+  dos mazos y la diferencia de nivel. Así una carta no parece fuerte solo porque la juega gente con
+  más nivel o porque siempre va con otra carta fuerte. También da cuánto vale 1 nivel de ventaja.
+- **Meta final** = mezcla de los datos con `cards.yaml` según cuántas partidas hay: con 100 partidas
+  pesan igual; con pocas manda el catálogo. Los datos deciden el orden de las cartas y la escala sale
+  de `cards.yaml`, para no desbalancear el modelo. Las cartas nuevas que faltan en el catálogo
+  también reciben su meta de los datos.
+- **Sinergias (realzan juntas)**: la misma regresión estima, para los pares con suficientes mazos
+  (30+), cuánto más **ganan** dos cartas juntas de lo que predice cada una por separado. Así suben
+  los combos que funcionan aunque sean raros y bajan las mezclas populares que no. Un poco de peso
+  va también a "se juegan juntas más de lo esperado". Se suma a `synergies.yaml` y entra en la
+  victoria estimada. Con más batallas, más pares medidos y más precisión.
+- **Victoria estimada**: con la misma regresión, la probabilidad de que un mazo le gane a un rival
+  típico de tu nivel (el mazo medio del meta, al nivel de referencia), con un rango del 90%. Tiene en
+  cuenta la fuerza de cada carta y tu nivel medio; no las sinergias.
+- Se activa o desactiva con el interruptor **Usar meta de batallas reales** (o `--no-battle-meta`).
+  Todos los parámetros están en `rules.yaml`, sección `battle_meta`, y se pueden cambiar sin volver
+  a descargar.
+
+Con 100 jugadores son unas 100 peticiones a la API (cerca de 1 minuto) y unas 1.500–2.500 batallas.
 
 ## Archivos que puedes editar (sin tocar código)
 
@@ -76,7 +185,10 @@ Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución
 | `data/cards.yaml` | Roles, sensibilidad al nivel, fuerza en el meta y bonus de evolución de cada carta |
 | `data/synergies.yaml` | Combos (+) y antisinergias (−) con su peso y explicación |
 | `data/interactions.yaml` | Puntos de quiebre (ej. Bola de fuego vs Mosquetera) |
-| `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves |
+| `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves y parámetros del meta de batallas |
+| `data/threats.yaml` | Amenazas y qué tan bien responde cada carta (por rol o valor exacto) |
+| `data/attribute_rules.yaml` | Motor v4: cómo se calculan los puntos de la ficha y las reglas entre ellos |
+| `data/card_stats.json` | Motor v4: stats de la wiki (se regenera con `python cli.py --mode wiki`) |
 | `data/archetypes.yaml` | Plantillas de arquetipos: núcleo, grupos, cartas prohibidas, elixir |
 
 Roles disponibles: `win_condition, tank, mini_tank, building, air_defense, small_spell, big_spell,
@@ -93,7 +205,8 @@ splash, anti_tank_dps, dps, ranged_dps, support, cycle, cheap_defense, swarm, ba
   ajusta `evo_slots` en `rules.yaml`. Los héroes no están modelados todavía.
 - El modo Guerra puede tardar unos 20 s (más en computadoras con pocos núcleos).
 - El jugador demo es inventado y sus IDs de cartas son de ejemplo.
-- Uso personal. Si algún día lo publicas, revisa la Política de contenido de fans de Supercell.
+- Uso personal. La app muestra el aviso de la [Política de contenido de fans de Supercell](https://www.supercell.com/fan-content-policy):
+  material no oficial, sin respaldo de Supercell. Si algún día lo publicas, revisa esa política.
 
 ## Pruebas
 

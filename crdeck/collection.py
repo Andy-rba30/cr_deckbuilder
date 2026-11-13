@@ -1,7 +1,7 @@
 """Convierte la respuesta de la API en la colección del jugador con niveles normalizados."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .catalog import CardInfo, GameData
 
@@ -37,6 +37,9 @@ class Player:
     trophies: int | None
     max_level: int
     cards: dict[str, OwnedCard]   # clave: nombre en inglés de la API
+    current_deck: list[str] = field(default_factory=list)   # mazo equipado ahora (si la API lo trae)
+    comfort: dict[str, float] = field(default_factory=dict)  # carta -> qué tanto la juegas (0 a 1)
+    comfort_source: str = ""                                 # de dónde salió (para mostrarlo)
 
     @property
     def unknown_cards(self) -> list[str]:
@@ -79,6 +82,7 @@ def parse_player(raw: dict, game: GameData) -> Player:
         trophies=raw.get("trophies"),
         max_level=game_max,
         cards=cards,
+        current_deck=[c["name"] for c in raw.get("currentDeck") or [] if c.get("name") in cards],
     )
 
 
@@ -86,3 +90,13 @@ def default_reference_level(player: Player, top_n: int = 24) -> int:
     """Nivel de referencia por defecto: la mediana de tus mejores `top_n` cartas."""
     levels = sorted((c.level for c in player.cards.values()), reverse=True)[:top_n]
     return levels[len(levels) // 2] if levels else player.max_level
+
+
+def attach_catalog(player: Player, game) -> Player:
+    """Vuelve a enlazar cada carta con el catálogo activo (el motor v4 añade cartas nuevas y sus roles)."""
+    for name, c in player.cards.items():
+        info = game.info(name)
+        if info is not None:
+            c.info = info
+            c.champion = c.champion or info.champion
+    return player

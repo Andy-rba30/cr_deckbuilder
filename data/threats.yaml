@@ -1,0 +1,70 @@
+# Amenazas típicas y qué tan bien responde cada carta (0 = nada, 1 = respuesta sólida).
+#   roles: valor por rol de la carta (se toma el más alto de sus roles)
+#   cards: valor exacto para cartas concretas (manda sobre los roles)
+#   need:  suma de respuestas para cubrir la amenaza al 100% (2 = quieres dos respuestas sólidas,
+#          para tener otra si la primera no está en mano)
+# Cobertura de un mazo = suma de las respuestas de sus cartas / need (como máximo 100%).
+#
+# IMPORTANTE: son ESTIMACIONES INICIALES, como las de cards.yaml. Ajústalas a tu criterio.
+weight: 0.15        # puntaje extra por cada amenaza cubierta al 100%
+warn_below: 0.5     # avisa si un mazo cubre una amenaza menos que esto
+threats:
+  air:
+    name: Aéreos
+    examples: Globo, Sabueso de lava, esbirros, murciélagos
+    need: 2
+    roles: {air_defense: 1.0}
+    cards: {Fire Spirit: 0.3, Electro Spirit: 0.4, Bats: 0.6, Goblin Gang: 0.4, Spear Goblins: 0.6,
+            Goblin Giant: 0.4, X-Bow: 0.8, Arrows: 0.5, Fireball: 0.4, Poison: 0.4, Zap: 0.3, Tornado: 0.4,
+            Rocket: 0.3, Lightning: 0.3}
+  swarm:
+    name: Enjambres
+    examples: Ejército de esqueletos, Pandilla de duendes, Horda de esbirros
+    need: 2
+    roles: {splash: 1.0, small_spell: 0.8, big_spell: 0.5}
+    cards: {The Log: 0.8, Arrows: 1.0, Zap: 0.7, Giant Snowball: 0.6, Barbarian Barrel: 0.6, Royal Delivery: 0.7,
+            Poison: 0.8, Fireball: 0.5, Earthquake: 0.2, Rocket: 0.3, Lightning: 0.2, Electro Wizard: 0.4,
+            Fire Spirit: 0.6, Ice Wizard: 0.7, Bomber: 0.9, Skeleton King: 0.8, Mega Knight: 0.9,
+            Giant Skeleton: 0.6, Furnace: 0.6}
+  tank:
+    name: Tanques
+    examples: Gólem, Gigante, P.E.K.K.A, Megacaballero
+    need: 2
+    roles: {anti_tank_dps: 1.0, building: 0.6, swarm: 0.4, mini_tank: 0.3, dps: 0.3}
+    cards: {Inferno Tower: 1.0, Inferno Dragon: 1.0, Mini P.E.K.K.A: 1.0, P.E.K.K.A: 1.0, Hunter: 0.9,
+            Skeleton Army: 0.9, Minion Horde: 0.9, Barbarians: 0.9, Mighty Miner: 0.9, Elite Barbarians: 0.7,
+            Prince: 0.6, Cannon Cart: 0.8, Sparky: 0.9, Lumberjack: 0.6, Guards: 0.6, Tombstone: 0.6,
+            Night Witch: 0.4, Goblin Gang: 0.5, Bandit: 0.4, Rocket: 0.1, Lightning: 0.2, Elixir Collector: 0.0,
+            X-Bow: 0.3, Mortar: 0.3, Goblin Drill: 0.3}
+  bridge:
+    name: Presión rápida
+    examples: Montapuercos, Ariete, Puercos reales, Bandida
+    need: 2
+    roles: {building: 1.0, cheap_defense: 0.7, mini_tank: 0.7, swarm: 0.5, anti_tank_dps: 0.5}
+    cards: {Cannon: 1.0, Tesla: 1.0, Goblin Cage: 1.0, Tombstone: 0.9, Bomb Tower: 0.7, Mini P.E.K.K.A: 1.0,
+            Knight: 0.8, Ice Golem: 0.8, Fisherman: 0.7, Tornado: 0.8, Valkyrie: 0.6, Skeletons: 0.6,
+            Ice Spirit: 0.4, Electro Spirit: 0.3, Miner: 0.3, Elixir Collector: 0.0, X-Bow: 0.3, Mortar: 0.3,
+            Goblin Drill: 0.3, Goblin Hut: 0.5, Barbarian Hut: 0.5, Furnace: 0.5}
+  siege:
+    name: Asedio
+    examples: Ballesta, Mortero, Recolector de elixir
+    need: 1.5
+    roles: {big_spell: 0.7, tank: 0.9, mini_tank: 0.5}
+    cards: {Rocket: 1.0, Earthquake: 1.0, Lightning: 0.8, Fireball: 0.5, Poison: 0.3, Void: 0.4, Miner: 0.7,
+            Graveyard: 0.6, Wall Breakers: 0.5, Goblin Barrel: 0.4, Balloon: 0.7, Ram Rider: 0.6,
+            Battle Ram: 0.6, Hog Rider: 0.6, Royal Hogs: 0.6, Knight: 0.6, Ice Golem: 0.5}
+  support:
+    name: Tropas de apoyo
+    examples: Bruja, Mago, Mosquetera, Verdugo
+    need: 1.5
+    roles: {big_spell: 1.0, mini_tank: 0.5, dps: 0.5}
+    cards: {Earthquake: 0.2, Void: 0.8, Poison: 0.8, Miner: 0.6, Bandit: 0.7, Lumberjack: 0.6,
+            Mini P.E.K.K.A: 0.6, Royal Delivery: 0.5, Arrows: 0.3, Zap: 0.2, Graveyard: 0.3, Valkyrie: 0.6,
+            Electro Wizard: 0.4}
+  reset:
+    name: Infernos y cargas
+    examples: Torre infernal, Dragón infernal, Chispitas
+    need: 1
+    roles: {reset: 1.0, swarm: 0.5}
+    cards: {Lightning: 1.0, Freeze: 0.7, Ice Spirit: 0.5, Giant Snowball: 0.3, Electro Giant: 0.8, Rocket: 0.5,
+            Fireball: 0.3, Tornado: 0.4}

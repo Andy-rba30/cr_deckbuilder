@@ -1,0 +1,92 @@
+# Cómo se complementan las cartas: cada carta tiene NECESIDADES (defectos que otra carta debe
+# cubrir, o algo que la potencia) y otras cartas las CUBREN.
+#
+#   cards:          quién lo necesita y cuánto (0..1)
+#   card_roles:     lo mismo, por rol (si la carta no está en cards:)
+#   providers:      quién lo cubre y cuánto (0..1)
+#   provider_roles: lo mismo, por rol (si la carta no está en providers:)
+#   need:           suma de cobertura para cubrirlo al 100% (por defecto 1)
+#   good / bad:     textos para explicar el mazo ({p} = quien cubre, {c} = quien lo necesita)
+#
+# Una carta nunca se cubre a sí misma. En el puntaje, cada necesidad cuenta desde −50% (nada la
+# cubre) hasta +50% (cubierta del todo) de weight × necesidad: así una carta "exigente" vale menos
+# sola y más bien acompañada, sin reglas fijas de qué va con qué.
+#
+# IMPORTANTE: son ESTIMACIONES INICIALES, como las de cards.yaml. Ajústalas a tu criterio.
+weight: 0.20
+warn_below: 0.5     # avisa si una necesidad importante (≥ 0.5) queda cubierta menos que esto
+needs:
+  clear_buildings:
+    name: Quitar edificios
+    good: "{p} quita los edificios que frenan a {c}"
+    bad: "Nada quita los edificios que frenan a {c}"
+    cards: {Hog Rider: 1.0, Royal Hogs: 0.8, Balloon: 0.8, Ram Rider: 0.7, Battle Ram: 0.7, Wall Breakers: 0.6,
+            Giant: 0.6, Goblin Giant: 0.6, Golem: 0.5, Elixir Golem: 0.5, Royal Giant: 0.4, Electro Giant: 0.4,
+            Skeleton Barrel: 0.3, Goblin Drill: 0.3}
+    providers: {Earthquake: 1.0, Lightning: 0.8, Rocket: 0.6, Freeze: 0.5, Fireball: 0.4, Poison: 0.3, Void: 0.4,
+                Miner: 0.4, Mighty Miner: 0.4, Royal Delivery: 0.3}
+  clear_air_defense:
+    name: Despejar antiaéreas
+    good: "{p} elimina las antiaéreas que paran a {c}"
+    bad: "Nada elimina las antiaéreas que paran a {c}"
+    cards: {Balloon: 1.0, Lava Hound: 0.8, Minion Horde: 0.4, Skeleton Dragons: 0.3, Phoenix: 0.3,
+            Inferno Dragon: 0.3, Baby Dragon: 0.2}
+    providers: {Fireball: 1.0, Lightning: 0.9, Freeze: 0.8, Rocket: 0.7, Poison: 0.7, Void: 0.7, Lumberjack: 0.6,
+                Lava Hound: 0.6, Miner: 0.4, Arrows: 0.4, Zap: 0.3, Earthquake: 0.3}
+  clear_swarms:
+    name: Limpiar enjambres
+    good: "{p} limpia los enjambres que frenan a {c}"
+    bad: "Nada limpia los enjambres que frenan a {c}"
+    cards: {P.E.K.K.A: 0.8, Sparky: 0.8, Prince: 0.7, Inferno Dragon: 0.7, Hog Rider: 0.6, Mini P.E.K.K.A: 0.6,
+            Giant: 0.6, Golem: 0.6, Royal Giant: 0.6, Elite Barbarians: 0.6, Lumberjack: 0.5, Balloon: 0.5,
+            Goblin Giant: 0.5, Royal Hogs: 0.5, Hunter: 0.5, Mighty Miner: 0.5, Inferno Tower: 0.5,
+            Electro Giant: 0.4, Ram Rider: 0.4, Battle Ram: 0.4, Golden Knight: 0.4, Lava Hound: 0.3, X-Bow: 0.3}
+    provider_roles: {splash: 0.9, small_spell: 0.8}
+    providers: {Arrows: 1.0, The Log: 1.0, Zap: 0.9, Barbarian Barrel: 0.8, Giant Snowball: 0.6, Poison: 0.8,
+                Fireball: 0.5, Tornado: 0.4, Royal Delivery: 0.7, Electro Wizard: 0.6, Electro Spirit: 0.5,
+                Fire Spirit: 0.6, Valkyrie: 1.0, Bowler: 0.9, Executioner: 0.9, Baby Dragon: 0.9, Wizard: 0.9,
+                Firecracker: 0.9, Mega Knight: 0.9, Bomber: 0.8, Princess: 0.8, Dark Prince: 0.7, Ice Wizard: 0.6}
+  reset_infernos:
+    name: Anular Infernos
+    good: "{p} anula los Infernos que derriten a {c}"
+    bad: "Nada anula los Infernos que derriten a {c}"
+    cards: {Golem: 1.0, Lava Hound: 0.9, Giant: 0.8, Royal Giant: 0.8, Goblin Giant: 0.7, Balloon: 0.7,
+            Electro Giant: 0.6, P.E.K.K.A: 0.6, Mega Knight: 0.6, Elixir Golem: 0.5, Giant Skeleton: 0.4,
+            Hog Rider: 0.4, Royal Hogs: 0.3}
+    provider_roles: {reset: 1.0}
+    providers: {Zap: 1.0, Electro Wizard: 1.0, Lightning: 1.0, Electro Spirit: 0.9, Freeze: 0.8, Zappies: 0.8,
+                Electro Dragon: 0.8, Tornado: 0.5, Earthquake: 0.5, Ice Spirit: 0.4, Rocket: 0.4,
+                Skeleton Army: 0.4, Fireball: 0.3, Skeletons: 0.3, Bats: 0.3, Goblin Gang: 0.3, Guards: 0.3}
+  tank_in_front:
+    name: Un tanque delante
+    good: "{p} tanquea delante de {c}"
+    bad: "Nada tanquea delante de {c}"
+    cards: {Graveyard: 0.8, Sparky: 0.8, Three Musketeers: 0.6, Night Witch: 0.6, Balloon: 0.5, Witch: 0.5,
+            Lumberjack: 0.5, Baby Dragon: 0.4, Executioner: 0.4, Wizard: 0.4, Mother Witch: 0.4,
+            Electro Dragon: 0.4, Skeleton Dragons: 0.4, Bowler: 0.4, Musketeer: 0.3, Electro Wizard: 0.3,
+            Mega Minion: 0.3, Dark Prince: 0.3}
+    provider_roles: {tank: 1.0, mini_tank: 0.6}
+    providers: {Giant Skeleton: 0.8, Lava Hound: 0.7, Royal Giant: 0.6, Miner: 0.4, Bandit: 0.3, Royal Ghost: 0.3,
+                Battle Ram: 0.3}
+  support_behind:
+    name: Apoyo detrás del tanque
+    good: "{p} apoya detrás de {c}"
+    bad: "Nada apoya detrás de {c}"
+    cards: {Golem: 1.0, Giant: 0.8, Lava Hound: 0.8, Electro Giant: 0.6, Goblin Giant: 0.6, Elixir Golem: 0.6,
+            Royal Giant: 0.5, Giant Skeleton: 0.5, P.E.K.K.A: 0.4, Mega Knight: 0.3}
+    provider_roles: {support: 0.8, ranged_dps: 0.8, splash: 0.5, dps: 0.5}
+    providers: {Night Witch: 1.0, Baby Dragon: 0.9, Lumberjack: 0.8, Balloon: 0.8, Electro Wizard: 0.7,
+                Mega Minion: 0.7, Skeleton Dragons: 0.7, Minions: 0.6, Inferno Dragon: 0.6, Phoenix: 0.6,
+                Sparky: 0.8, Graveyard: 0.6, Miner: 0.4}
+  spell_bait:
+    name: Sobrecargar hechizos pequeños
+    need: 1.5
+    good: "{p} también atrae los hechizos pequeños que paran a {c}"
+    bad: "Nada más atrae los hechizos pequeños que paran a {c}"
+    cards: {Goblin Barrel: 1.0, Skeleton Barrel: 0.6, Skeleton Army: 0.6, Minion Horde: 0.6, Princess: 0.5,
+            Goblin Gang: 0.5, Dart Goblin: 0.5, Graveyard: 0.5, Wall Breakers: 0.4, Spear Goblins: 0.3,
+            Bats: 0.3, Rascals: 0.3}
+    provider_roles: {bait: 0.7}
+    providers: {Princess: 0.8, Goblin Gang: 0.8, Goblin Barrel: 0.7, Dart Goblin: 0.6, Skeleton Barrel: 0.6,
+                Skeleton Army: 0.6, Spear Goblins: 0.5, Minion Horde: 0.5, Rascals: 0.5, Wall Breakers: 0.5,
+                Bats: 0.4, Goblin Hut: 0.4, Guards: 0.4, Goblins: 0.4, Tombstone: 0.3}

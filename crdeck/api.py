@@ -12,10 +12,14 @@ import httpx
 CACHE_DIR = Path(__file__).resolve().parent.parent / ".cache"
 VALID_TAG = re.compile(r"^[0289PYLQGRJCUV]{3,15}$")
 PLACEHOLDERS = {"pega_aqui_tu_clave", "tu_clave", ""}
+DEFAULT_BASE = "https://api.clashroyale.com/v1"
 
 
 class ApiError(Exception):
-    pass
+    def __init__(self, message: str, status: int | None = None, fatal: bool = False):
+        super().__init__(message)
+        self.status = status
+        self.fatal = fatal   # problema de clave o de IP: no tiene sentido seguir pidiendo datos
 
 
 def normalize_tag(tag: str) -> str:
@@ -28,19 +32,42 @@ def normalize_tag(tag: str) -> str:
 def fetch_player(tag: str, api_key: str | None = None, base_url: str | None = None,
                  ttl_seconds: int = 600, use_cache: bool = True) -> dict:
     tag = normalize_tag(tag)
-    api_key = api_key or os.getenv("CR_API_KEY")
-    base_url = (base_url or os.getenv("CR_API_BASE") or "https://api.clashroyale.com/v1").rstrip("/")
-    cache_file = CACHE_DIR / f"player_{tag}.json"
+    return _get_json(f"/players/%23{tag}", CACHE_DIR / f"player_{tag}.json", ttl_seconds, use_cache,
+                     api_key, base_url)
 
+
+def fetch_battlelog(tag: str, api_key: str | None = None, base_url: str | None = None,
+                    ttl_seconds: int = 3 * 3600, use_cache: bool = True) -> list[dict]:
+    """Últimas batallas del jugador (la API guarda unas 25)."""
+    tag = normalize_tag(tag)
+    data = _get_json(f"/players/%23{tag}/battlelog", CACHE_DIR / f"battlelog_{tag}.json", ttl_seconds,
+                     use_cache, api_key, base_url)
+    return data.get("items", []) if isinstance(data, dict) else data
+
+
+def has_key() -> bool:
+    return (os.getenv("CR_API_KEY") or "").strip() not in PLACEHOLDERS
+
+
+def fetch_cards(api_key: str | None = None, base_url: str | None = None,
+                ttl_seconds: int = 7 * 24 * 3600, use_cache: bool = True) -> list[dict]:
+    """Catálogo oficial de todas las cartas (nombre, id, rareza, elixir e imágenes en iconUrls)."""
+    data = _get_json("/cards", CACHE_DIR / "cards.json", ttl_seconds, use_cache, api_key, base_url)
+    return data.get("items", []) if isinstance(data, dict) else data
+
+
+def _get_json(path: str, cache_file: Path, ttl_seconds: int, use_cache: bool,
+              api_key: str | None, base_url: str | None):
     if use_cache and cache_file.exists() and time.time() - cache_file.stat().st_mtime < ttl_seconds:
         return json.loads(cache_file.read_text(encoding="utf-8"))
 
-    api_key = (api_key or "").strip()
+    api_key = (api_key or os.getenv("CR_API_KEY") or "").strip()
+    base_url = (base_url or os.getenv("CR_API_BASE") or DEFAULT_BASE).rstrip("/")
     if api_key in PLACEHOLDERS:
         raise ApiError("No hay clave: en el archivo .env (carpeta del proyecto) CR_API_KEY sigue vacío "
-                       "o con el texto de ejemplo. Pega tu clave y guarda el archivo.")
+                       "o con el texto de ejemplo. Pega tu clave y guarda el archivo.", fatal=True)
 
-    url = f"{base_url}/players/%23{tag}"
+    url = f"{base_url}{path}"
     headers = {"Authorization": f"Bearer {api_key}", "Accept": "application/json"}
     last_err = None
     for attempt in range(3):
@@ -59,13 +86,13 @@ def fetch_player(tag: str, api_key: str | None = None, base_url: str | None = No
             time.sleep(2 * (attempt + 1))
             continue
         if r.status_code == 403:
-            raise ApiError(_explain_403(r))
+            raise ApiError(_explain_403(r), status=403, fatal=True)
         msgs = {
             400: "Petición incorrecta (revisa el tag).",
             404: "No existe un jugador con ese tag.",
             503: "La API está en mantenimiento.",
         }
-        raise ApiError(f"Error {r.status_code}: {msgs.get(r.status_code, r.text[:200])}")
+        raise ApiError(f"Error {r.status_code}: {msgs.get(r.status_code, r.text[:200])}", status=r.status_code)
     raise ApiError(f"No se pudo contactar la API: {last_err or 'demasiadas peticiones (429)'}")
 
 

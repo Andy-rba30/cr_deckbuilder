@@ -5,6 +5,12 @@
 #   forbid:   cartas prohibidas en este arquetipo
 #   avg_elixir: rango propio de elixir (opcional)
 #   role_limits: reemplaza límites de rules.yaml solo para este arquetipo (opcional)
+#   extra_wincons: condiciones de victoria secundarias permitidas (opcional)
+#
+# Coherencia: un mazo de arquetipo solo puede llevar las condiciones de victoria que
+# aparecen en su plantilla (core, core_any, groups o extra_wincons). Así, por ejemplo,
+# el Montapuercos no se cuela en un Graveyard. Las cartas obligatorias del usuario
+# siempre se permiten.
 archetypes:
   log_bait:
     name: Log Bait

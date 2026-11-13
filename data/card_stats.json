@@ -1,0 +1,5773 @@
+{
+ "cards": {
+  "Archer Queen": {
+   "abilities": [
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 1.2,
+    "Projectile Speed": 800.0,
+    "Range": 5.0,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Ability Cooldown": 17.0,
+     "Boost": "+180%",
+     "Cast Time": 0.933,
+     "Cost": 1.0,
+     "Duration": 3.5,
+     "Speed": 45.0,
+     "section": "Cloaking Cape Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 225.0,
+    "Damage per second": 187.0,
+    "Damage per second (with Cloaking Cape)": 337.0,
+    "Hitpoints": 1000.0
+   },
+   "title": "Archer Queen",
+   "url": "https://clashroyale.fandom.com/wiki/Archer_Queen"
+  },
+  "Archers": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 2.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 0.9,
+    "Projectile Speed": 600.0,
+    "Range": 5.0,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 2.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 0.9,
+     "Projectile Speed": 600.0,
+     "Range": 6.0,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Power Shot Range": "4-6",
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 112.0,
+     "Damage Per Second": 124.0,
+     "Hitpoints": 304.0,
+     "Power Shot Damage": 140.0,
+     "Power Shot Damage Per Second": 155.0
+    },
+    "title": "Archers/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 112.0,
+    "Damage Per Second": 124.0,
+    "Hitpoints": 304.0
+   },
+   "title": "Archers",
+   "url": "https://clashroyale.fandom.com/wiki/Archers"
+  },
+  "Arrows": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Projectile Speed": 1100.0,
+    "Radius": 3.5,
+    "Rarity": "Common",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 366.0,
+    "Crown Tower Damage": 93.0
+   },
+   "title": "Arrows",
+   "url": "https://clashroyale.fandom.com/wiki/Arrows"
+  },
+  "Baby Dragon": {
+   "abilities": [
+    "pull"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 1.5,
+    "Projectile Speed": 500.0,
+    "Range": 3.5,
+    "Rarity": "Epic",
+    "Speed": 90.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "pull",
+     "slow"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.3,
+     "Hit Speed": 1.5,
+     "Projectile Speed": 500.0,
+     "Range": 3.5,
+     "Rarity": "Epic",
+     "Speed": 90.0,
+     "Splash Radius": 1.5,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Enemy Movement Speed Reduction": "-30%",
+      "Troops Movement Speed Buff": "+30%",
+      "section": "Statistics"
+     }
+    ],
+    "stats": {
+     "Damage": 168.0,
+     "Damage Per Second": 112.0,
+     "Hitpoints": 1152.0
+    },
+    "title": "Baby Dragon/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 168.0,
+    "Damage Per Second": 112.0,
+    "Hitpoints": 1152.0
+   },
+   "title": "Baby Dragon",
+   "url": "https://clashroyale.fandom.com/wiki/Baby_Dragon"
+  },
+  "Balloon": {
+   "abilities": [
+    "death_damage"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Death Damage Splash Radius": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.2,
+    "Hit Speed": 2.0,
+    "Range": 0.1,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [
+     "death_damage"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Crown Tower Damage": "-90%",
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.2,
+     "Hit Speed": 2.0,
+     "Range": 0.1,
+     "Rarity": "Epic",
+     "Skeletrooper Range": "Melee: Short",
+     "Speed": 60.0,
+     "Target": "Buildings",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Death Damage Splash Radius": 3.0,
+      "Deploy Time": 3.0,
+      "Target": "Air & Ground",
+      "section": "Bomb Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 640.0,
+     "Damage per second": 320.0,
+     "Death Damage": 240.0,
+     "Hitpoints": 1679.0,
+     "Landing Crown Tower Damage": 27.0,
+     "Landing Damage": 263.0,
+     "Skeletrooper Damage": 204.0,
+     "Skeletrooper Hitpoints": 473.0,
+     "Skeletropper Damage per second": 185.0
+    },
+    "title": "Balloon/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 640.0,
+    "Damage per second": 320.0,
+    "Death Damage": 240.0,
+    "Hitpoints": 1679.0
+   },
+   "title": "Balloon",
+   "url": "https://clashroyale.fandom.com/wiki/Balloon"
+  },
+  "Bandit": {
+   "abilities": [
+    "charge",
+    "dash",
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.0,
+    "Range": 0.75,
+    "Rarity": "Legendary",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Dash Range": "3.5-6",
+     "Dash Speed": 500.0,
+     "Dash Time": 0.8,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Dash Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 194.0,
+    "Damage per second": 194.0,
+    "Dash Damage": 389.0,
+    "Hitpoints": 906.0
+   },
+   "title": "Bandit",
+   "url": "https://clashroyale.fandom.com/wiki/Bandit"
+  },
+  "Barbarian Barrel": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Range": 4.5,
+    "Rarity": "Epic",
+    "Target": "Ground",
+    "Type": "Spell",
+    "Width": 2.6
+   },
+   "hero": {
+    "abilities": [
+     "heal"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Damage Healed": 50.0,
+     "Range": 4.5,
+     "Rarity": "Epic",
+     "Target": "Ground",
+     "Type": "Spell",
+     "Width": 2.6
+    },
+    "secondary": [
+     {
+      "Count": 1.0,
+      "Deploy Time": 0.5,
+      "First Hit Speed": 0.4,
+      "Hit Speed": 1.3,
+      "Range": 0.5,
+      "Speed": 60.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Barbarian Attributes"
+     }
+    ],
+    "stats": {
+     "Barbarian Barrel Area Damage": 232.0,
+     "Crown Tower Damage": 116.0,
+     "Damage": 192.0,
+     "Damage Per Second": 137.0,
+     "Hitpoints": 716.0
+    },
+    "title": "Barbarian Barrel/Hero"
+   },
+   "secondary": [
+    {
+     "Count": 1.0,
+     "Deploy Time": 0.5,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.3,
+     "Range": 0.5,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Barbarian Attributes"
+    }
+   ],
+   "stats": {
+    "Barbarian Barrel Area Damage": 215.0,
+    "Damage": 191.0,
+    "Damage Per Second": 146.0,
+    "Hitpoints": 670.0
+   },
+   "title": "Barbarian Barrel",
+   "url": "https://clashroyale.fandom.com/wiki/Barbarian_Barrel"
+  },
+  "Barbarian Hut": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 6.0,
+    "Deploy Time": 1.0,
+    "Lifetime": 30.0,
+    "Rarity": "Rare",
+    "Spawn Speed": 15.0,
+    "Type": "Building"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.3,
+     "Range": 0.7,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Barbarian Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 192.0,
+    "Damage Per Second": 147.0,
+    "Hitpoints": 1164.0,
+    "Hitpoints lost per second": 38.8
+   },
+   "title": "Barbarian Hut",
+   "url": "https://clashroyale.fandom.com/wiki/Barbarian_Hut"
+  },
+  "Barbarians": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 5.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.4,
+    "Range": 0.7,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 5.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.4,
+     "Range": 0.7,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Boost": "+30%",
+      "Boost Duration": 5.0,
+      "Cycles": 1.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Boosted Damage Per Second": 197.0,
+     "Damage": 192.0,
+     "Damage Per Second": 137.0,
+     "Hitpoints": 716.0
+    },
+    "title": "Barbarians/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 192.0,
+    "Damage Per Second": 137.0,
+    "Hitpoints": 716.0
+   },
+   "title": "Barbarians",
+   "url": "https://clashroyale.fandom.com/wiki/Barbarians"
+  },
+  "Bats": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 5.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.3,
+    "Range": 1.2,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "heal"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Count": 5.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.3,
+     "Range": 1.2,
+     "Rarity": "Common",
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Heal Speed": "2 pulses every 1 sec",
+      "Time Between Pulses": 0.5,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 81.0,
+     "Damage Per Second": 62.0,
+     "Healing per pulse": 38.0,
+     "Healing per second": 76.0,
+     "Hitpoints": 122.0,
+     "Max Hitpoints": 244.0
+    },
+    "title": "Bats/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 62.0,
+    "Hitpoints": 81.0
+   },
+   "title": "Bats",
+   "url": "https://clashroyale.fandom.com/wiki/Bats"
+  },
+  "Battle Healer": {
+   "abilities": [
+    "heal"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Heal Speed": "4 pulses every 1 sec",
+    "Hit Speed": 2.0,
+    "Radius": 3.0,
+    "Range": 1.6,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Time Between Pulses": 0.25,
+    "Time Between pulses": 0.25,
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Active healing per pulse": 25.0,
+    "Active healing per second": 100.0,
+    "Damage": 268.0,
+    "Damage per second": 134.0,
+    "Hitpoints": 1920.0,
+    "Spawn healing per pulse": 50.0,
+    "Spawn healing per second": 200.0
+   },
+   "title": "Battle Healer",
+   "url": "https://clashroyale.fandom.com/wiki/Battle_Healer"
+  },
+  "Battle Ram": {
+   "abilities": [
+    "chain",
+    "charge"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Range": 0.5,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "chain",
+     "charge",
+     "knockback"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "Range": 0.5,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Charge Range": 3.5,
+      "Self Pushback": 2.0,
+      "Speed": 120.0,
+      "Target": "Buildings",
+      "Transport": "Ground",
+      "section": "Charge Attributes"
+     },
+     {
+      "Boost": "+30%",
+      "Boost Duration": 3.0,
+      "Count": 2.0,
+      "Deploy Time": 1.0,
+      "Hit Speed": 1.3,
+      "Range": 0.7,
+      "Speed": 60.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Evolved Barbarian Attributes"
+     }
+    ],
+    "stats": {
+     "Boosted Damage Per Second": 197.0,
+     "Damage": 192.0,
+     "Damage Per Second": 147.0,
+     "Evolved Battle Ram Charge Damage": 573.0,
+     "Evolved Battle Ram Charge Pushback Damage": 212.0,
+     "Evolved Battle Ram Damage": 286.0,
+     "Evolved Battle Ram Hitpoints": 967.0,
+     "Hitpoints": 737.0
+    },
+    "title": "Battle Ram/Evolution"
+   },
+   "secondary": [
+    {
+     "Charge Range": 3.5,
+     "Speed": 120.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Charge Attributes"
+    },
+    {
+     "Count": 2.0,
+     "Deploy Time": 1.0,
+     "Hit Speed": 1.3,
+     "Range": 0.7,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Barbarian Attributes"
+    }
+   ],
+   "stats": {
+    "Battle Ram Charge Damage": 573.0,
+    "Battle Ram Damage": 286.0,
+    "Battle Ram Hitpoints": 967.0,
+    "Damage": 192.0,
+    "Damage Per Second": 147.0,
+    "Hitpoints": 716.0
+   },
+   "title": "Battle Ram",
+   "url": "https://clashroyale.fandom.com/wiki/Battle_Ram"
+  },
+  "Berserker": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.2,
+    "Hit Speed": 0.6,
+    "Range": 0.8,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 2.0,
+     "Count": 1.0,
+     "Crown Tower Damage": "-75%",
+     "Deploy Time": 1.0,
+     "Duration": 4.0,
+     "First Hit Speed": 0.2,
+     "Hit Speed": 0.6,
+     "Minimum Hitpoints": 1.0,
+     "Range": 0.8,
+     "Rarity": "Common",
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Bear Damage": 167.0,
+     "Damage": 102.0,
+     "Damage Per Second": 170.0,
+     "Hitpoints": 896.0
+    },
+    "title": "Berserker/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 102.0,
+    "Damage Per Second": 170.0,
+    "Hitpoints": 896.0
+   },
+   "title": "Berserker",
+   "url": "https://clashroyale.fandom.com/wiki/Berserker"
+  },
+  "Bomb Tower": {
+   "abilities": [
+    "death_damage"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Death Damage Splash Radius": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.8,
+    "Lifetime": 30.0,
+    "Projectile Speed": 500.0,
+    "Range": 6.0,
+    "Rarity": "Rare",
+    "Splash Radius": 1.5,
+    "Target": "Ground",
+    "Type": "Building"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 222.0,
+    "Damage Per Second": 123.0,
+    "Death Damage": 222.0,
+    "Hitpoints": 1356.0,
+    "Hitpoints lost per second": 45.2
+   },
+   "title": "Bomb Tower",
+   "url": "https://clashroyale.fandom.com/wiki/Bomb_Tower"
+  },
+  "Bomber": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.2,
+    "Hit Speed": 1.8,
+    "Projectile Speed": 400.0,
+    "Range": 4.5,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Splash Radius": 1.5,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 2.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.2,
+     "Hit Speed": 1.8,
+     "Projectile Speed": 400.0,
+     "Range": 4.5,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Splash Radius": 1.5,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Bounce Range": 2.5,
+      "Bounces": 2.0,
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 225.0,
+     "Bounce Damage": 225.0,
+     "Damage Per Second": 125.0,
+     "Hitpoints": 332.0
+    },
+    "title": "Bomber/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 212.0,
+    "Damage Per Second": 125.0,
+    "Hitpoints": 304.0
+   },
+   "title": "Bomber",
+   "url": "https://clashroyale.fandom.com/wiki/Bomber"
+  },
+  "Boss Bandit": {
+   "abilities": [
+    "charge",
+    "dash",
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.1,
+    "Range": 0.8,
+    "Rarity": "Champion",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Dash Range": "3.5-6",
+     "Dash Speed": 500.0,
+     "Dash Time": 0.8,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Dash Attributes"
+    },
+    {
+     "Ability Cooldown": 3.0,
+     "Ability Count": 2.0,
+     "Cast Time": 0.933,
+     "Cost": 1.0,
+     "Invisibility Duration": 1.0,
+     "Teleport Range": 6.0,
+     "section": "Getaway Grenade Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 245.0,
+    "Damage per second": 221.0,
+    "Dash Damage": 491.0,
+    "Hitpoints": 2624.0
+   },
+   "title": "Boss Bandit",
+   "url": "https://clashroyale.fandom.com/wiki/Boss_Bandit"
+  },
+  "Bowler": {
+   "abilities": [
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": "1x",
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 2.5,
+    "Projectile Range": 7.0,
+    "Projectile Speed": 170.0,
+    "Projectile Width": 3.6,
+    "Range": 4.0,
+    "Rarity": "Epic",
+    "Speed": 45.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [
+     "knockback"
+    ],
+    "attributes": {
+     "Cast Time": 2.5,
+     "Cost": 5.0,
+     "Count": "1x",
+     "Deploy Time": 1.0,
+     "Duration": 7.3,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 2.5,
+     "Projectile Range": 7.0,
+     "Projectile Speed": 170.0,
+     "Projectile Width": 3.6,
+     "Range": 4.0,
+     "Rarity": "Epic",
+     "Speed": 45.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Ability Crown Tower Damage": 254.0,
+     "Ability Damage": 508.0,
+     "Area Damage": 289.0,
+     "Damage per second": 115.0,
+     "Hitpoints": 2081.0
+    },
+    "title": "Bowler/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 289.0,
+    "Damage per second": 115.0,
+    "Hitpoints": 2081.0
+   },
+   "title": "Bowler",
+   "url": "https://clashroyale.fandom.com/wiki/Bowler"
+  },
+  "Cannon": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 1.0,
+    "Lifetime": 30.0,
+    "Projectile Speed": 1000.0,
+    "Range": 5.5,
+    "Rarity": "Common",
+    "Target": "Ground",
+    "Type": "Building"
+   },
+   "evolution": {
+    "abilities": [
+     "knockback"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 1.0,
+     "Hit Speed": 1.0,
+     "Lifetime": 30.0,
+     "Projectile Speed": 1000.0,
+     "Range": 5.5,
+     "Rarity": "Common",
+     "Target": "Ground",
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "Barrage Count": 9.0,
+      "Barrage Radius": 2.0,
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Barrage Crown Tower Damage": 89.0,
+     "Barrage Damage": 304.0,
+     "Damage": 212.0,
+     "Damage Per Second": 212.0,
+     "Hitpoints": 824.0,
+     "Hitpoints lost per second": 27.5
+    },
+    "title": "Cannon/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 212.0,
+    "Damage Per Second": 212.0,
+    "Hitpoints": 824.0,
+    "Hitpoints lost per second": 27.5
+   },
+   "title": "Cannon",
+   "url": "https://clashroyale.fandom.com/wiki/Cannon"
+  },
+  "Cannon Cart": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 0.9,
+    "Projectile Speed": 1000.0,
+    "Range": 5.5,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Activation": 50.0,
+     "Count": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 0.9,
+     "Lifetime": 15.0,
+     "Projectile Speed": 1000.0,
+     "Range": 5.5,
+     "Target": "Ground",
+     "Type": "Building",
+     "section": "Broken Cannon Cart Attributes"
+    }
+   ],
+   "stats": {
+    "Broken Cannon Cart Hitpoints Lost per Second": 60.3,
+    "Damage": 212.0,
+    "Damage per Second": 235.0,
+    "Hitpoints": 1809.0
+   },
+   "title": "Cannon Cart",
+   "url": "https://clashroyale.fandom.com/wiki/Cannon_Cart"
+  },
+  "Clone": {
+   "abilities": [
+    "shield"
+   ],
+   "attributes": {
+    "Clone Hitpoints": 1.0,
+    "Clone Shield Hitpoints": 1.0,
+    "Cost": 3.0,
+    "Radius": 3.0,
+    "Rarity": "Epic",
+    "Target": "Friendly Troops",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Cloned Champion Level": 11.0,
+    "Cloned Common Level": 11.0,
+    "Cloned Epic Level": 11.0,
+    "Cloned Legendary Level": 11.0,
+    "Cloned Rare Level": 11.0
+   },
+   "title": "Clone",
+   "url": "https://clashroyale.fandom.com/wiki/Clone"
+  },
+  "Dark Prince": {
+   "abilities": [
+    "charge",
+    "jump",
+    "shield"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.4,
+    "Range": 1.2,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Splash Radius": 1.1,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [
+     "charge",
+     "jump",
+     "shield"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.4,
+     "Range": 1.2,
+     "Rarity": "Epic",
+     "Speed": 60.0,
+     "Splash Radius": 1.1,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Charge Range": 3.0,
+      "Speed": 120.0,
+      "Splash Radius": 1.1,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Charge Attributes"
+     },
+     {
+      "Charge Range": 2.5,
+      "Charge Speed": 120.0,
+      "Cost": 3.0,
+      "Hit Speed": 1.6,
+      "Range": 0.8,
+      "Speed": 60.0,
+      "Target": "Buildings",
+      "Transport": "Ground",
+      "section": "Rhino Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 266.0,
+     "Charge Damage": 532.0,
+     "Damage per second": 204.0,
+     "Hitpoints": 1200.0,
+     "Rhino Charge Damage": 358.0,
+     "Rhino Damage": 179.0,
+     "Rhino Hitpoints": 1356.0,
+     "Rhino Spawn Damage": 307.0,
+     "Shield Hitpoints": 256.0
+    },
+    "title": "Dark Prince/Hero"
+   },
+   "secondary": [
+    {
+     "Charge Range": 3.0,
+     "Speed": 120.0,
+     "Splash Radius": 1.1,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Charge Attributes"
+    }
+   ],
+   "stats": {
+    "Area Damage": 266.0,
+    "Charge Damage": 532.0,
+    "Damage per second": 204.0,
+    "Hitpoints": 1200.0,
+    "Shield Hitpoints": 256.0
+   },
+   "title": "Dark Prince",
+   "url": "https://clashroyale.fandom.com/wiki/Dark_Prince"
+  },
+  "Dart Goblin": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.35,
+    "Hit Speed": 0.8,
+    "Projectile Speed": 800.0,
+    "Range": 6.5,
+    "Rarity": "Rare",
+    "Speed": 120.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.35,
+     "Hit Speed": 0.8,
+     "Projectile Speed": 800.0,
+     "Range": 6.5,
+     "Rarity": "Rare",
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Number Darts for Poison": "1-4-7",
+      "Poison Duration": 1.0,
+      "Poison Radius": 1.5,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 156.0,
+     "Damage per second": 195.0,
+     "Hitpoints": 261.0,
+     "Poison Crown Tower Damage per second (Stage 1)": 13.0,
+     "Poison Crown Tower Damage per second (Stage 2)": 29.0,
+     "Poison Crown Tower Damage per second (Stage 3)": 77.0,
+     "Poison Damage per second (Stage 1)": 51.0,
+     "Poison Damage per second (Stage 2)": 115.0,
+     "Poison Damage per second (Stage 3)": 307.0
+    },
+    "title": "Dart Goblin/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 156.0,
+    "Damage Per Second": 195.0,
+    "Hitpoints": 261.0
+   },
+   "title": "Dart Goblin",
+   "url": "https://clashroyale.fandom.com/wiki/Dart_Goblin"
+  },
+  "Earthquake": {
+   "abilities": [
+    "slow"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Duration": 3.0,
+    "Radius": 3.5,
+    "Rarity": "Rare",
+    "Slowdown": "-50%",
+    "Target": "Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 252.0,
+    "Building Damage": 861.0,
+    "Crown Tower Damage": 159.0
+   },
+   "title": "Earthquake",
+   "url": "https://clashroyale.fandom.com/wiki/Earthquake"
+  },
+  "Electro Dragon": {
+   "abilities": [
+    "pull",
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.8,
+    "Hit Speed": 2.3,
+    "Range": 3.5,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "chain",
+     "damage_reduction",
+     "pull",
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.8,
+     "Hit Speed": 2.3,
+     "Range": 3.5,
+     "Rarity": "Epic",
+     "Speed": 60.0,
+     "Stun Duration": 0.5,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 1.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": "267 x3",
+     "Damage after 5 chains": 64.0,
+     "Damage per second": 116.0,
+     "Hitpoints": 1451.0
+    },
+    "title": "Electro Dragon/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": "192 x3",
+    "Damage Per Second": 83.0,
+    "Hitpoints": 1049.0
+   },
+   "title": "Electro Dragon",
+   "url": "https://clashroyale.fandom.com/wiki/Electro_Dragon"
+  },
+  "Electro Giant": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 7.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 1.8,
+    "Range": 1.2,
+    "Rarity": "Epic",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Radius": 3.0,
+     "Stun Duration": 0.5,
+     "Target": "Air & Ground",
+     "section": "Zap Pack Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 163.0,
+    "Damage per Second": 77.0,
+    "Hitpoints": 3952.0,
+    "Reflected Damage": 192.0,
+    "Reflected Tower Damage": 97.0
+   },
+   "title": "Electro Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Electro_Giant"
+  },
+  "Electro Spirit": {
+   "abilities": [
+    "jump",
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 1.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Range": 2.5,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": "99 x9",
+    "Hitpoints": 215.0
+   },
+   "title": "Electro Spirit",
+   "url": "https://clashroyale.fandom.com/wiki/Electro_Spirit"
+  },
+  "Electro Wizard": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.8,
+    "Radius": 3.0,
+    "Range": 5.0,
+    "Rarity": "Legendary",
+    "Speed": 90.0,
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 230.0,
+    "Damage per second": 126.0,
+    "Hitpoints": 714.0,
+    "Zap Damage": 192.0
+   },
+   "title": "Electro Wizard",
+   "url": "https://clashroyale.fandom.com/wiki/Electro_Wizard"
+  },
+  "Elite Barbarians": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 2.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.4,
+    "Range": 1.2,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 384.0,
+    "Damage Per Second": 274.0,
+    "Hitpoints": 1341.0
+   },
+   "title": "Elite Barbarians",
+   "url": "https://clashroyale.fandom.com/wiki/Elite_Barbarians"
+  },
+  "Elixir Collector": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 6.0,
+    "Deploy Time": 1.0,
+    "Lifetime": "1 min 50 sec",
+    "Production Speed": 15.0,
+    "Rarity": "Rare",
+    "Type": "Building"
+   },
+   "secondary": [],
+   "stats": {
+    "Hitpoints": 1070.0,
+    "Hitpoints lost per second": 9.7
+   },
+   "title": "Elixir Collector",
+   "url": "https://clashroyale.fandom.com/wiki/Elixir_Collector"
+  },
+  "Elixir Golem": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.8,
+    "Hit Speed": 1.1,
+    "Range": 0.8,
+    "Rarity": "Rare",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 2.0,
+     "First Hit Speed": 0.8,
+     "Hit Speed": 1.1,
+     "Range": 0.8,
+     "Speed": 60.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Elixir Golemite Attributes"
+    },
+    {
+     "Count": 4.0,
+     "First Hit Speed": 0.8,
+     "Hit Speed": 1.1,
+     "Range": 0.8,
+     "Speed": 90.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Elixir Blob Attributes"
+    }
+   ],
+   "stats": {
+    "Elixir Blob Damage": 64.0,
+    "Elixir Blob Damage per second": 58.0,
+    "Elixir Blob Hitpoints": 360.0,
+    "Elixir Golem Damage": 253.0,
+    "Elixir Golem Damage per second": 229.0,
+    "Elixir Golem Hitpoints": 1569.0,
+    "Elixir Golemite Damage": 128.0,
+    "Elixir Golemite Damage per second": 116.0,
+    "Elixir Golemite Hitpoints": 762.0
+   },
+   "title": "Elixir Golem",
+   "url": "https://clashroyale.fandom.com/wiki/Elixir_Golem"
+  },
+  "Executioner": {
+   "abilities": [],
+   "attributes": {
+    "Axe Time": 1.5,
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 0.9,
+    "Projectile Range": 7.0,
+    "Projectile Speed": 550.0,
+    "Projectile Width": 2.0,
+    "Range": 4.5,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Axe Time": 1.5,
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 0.9,
+     "Projectile Range": 7.0,
+     "Projectile Speed": 550.0,
+     "Projectile Width": 2.0,
+     "Range": 4.5,
+     "Rarity": "Epic",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Axe Smash Range": 2.5,
+      "Cycles": 1.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 336.0,
+     "Axe Smash Damage": 588.0,
+     "Axe Smash Damage per second": 244.0,
+     "Damage per second": 140.0,
+     "Hitpoints": 1280.0
+    },
+    "title": "Executioner/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 336.0,
+    "Damage per second": 140.0,
+    "Hitpoints": 1280.0
+   },
+   "title": "Executioner",
+   "url": "https://clashroyale.fandom.com/wiki/Executioner"
+  },
+  "Fire Spirit": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 1.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Range": 2.5,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Splash Radius": 2.3,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 207.0,
+    "Hitpoints": 215.0
+   },
+   "title": "Fire Spirit",
+   "url": "https://clashroyale.fandom.com/wiki/Fire_Spirit"
+  },
+  "Fireball": {
+   "abilities": [
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Projectile Speed": 600.0,
+    "Radius": 2.5,
+    "Rarity": "Rare",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 688.0,
+    "Crown Tower Damage": 159.0
+   },
+   "title": "Fireball",
+   "url": "https://clashroyale.fandom.com/wiki/Fireball"
+  },
+  "Firecracker": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.65,
+    "Hit Speed": 3.0,
+    "Projectile Radius": 0.4,
+    "Projectile Range": 11.0,
+    "Projectile Speed": 550.0,
+    "Range": 6.0,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "slow"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.65,
+     "Hit Speed": 3.0,
+     "Projectile Radius": 0.4,
+     "Projectile Range": 11.0,
+     "Projectile Speed": 550.0,
+     "Range": 6.0,
+     "Rarity": "Common",
+     "Speed": 90.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Big Spark Duration": 3.0,
+      "Big Spark Radius": 2.5,
+      "Cycles": 2.0,
+      "Slowdown": "-15%",
+      "Small Spark Count": 5.0,
+      "Small Spark Duration": 2.5,
+      "Small Spark Radius": 1.2,
+      "Spark Hit Speed": 0.25,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Big Spark Crown Tower Damage": 180.0,
+     "Big Spark Damage": 576.0,
+     "Damage per second": 105.0,
+     "Hitpoints": 304.0,
+     "Ranged Damage": 320.0,
+     "Small Spark Crown Tower Damage": 150.0,
+     "Small Spark Damage": 480.0,
+     "Spark Crown Tower Damage per second": 60.0,
+     "Spark Damage per second": 192.0
+    },
+    "title": "Firecracker/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 320.0,
+    "Damage per second": 105.0,
+    "Hitpoints": 304.0
+   },
+   "title": "Firecracker",
+   "url": "https://clashroyale.fandom.com/wiki/Firecracker"
+  },
+  "Fisherman": {
+   "abilities": [
+    "charge",
+    "pull"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.1,
+    "Hit Speed": 1.3,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Hook Projectile Speed": 800.0,
+     "Hook Range": "3.5-7",
+     "Hook Time": 1.3,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Hook Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 194.0,
+    "Damage per second": 149.0,
+    "Hitpoints": 870.0
+   },
+   "title": "Fisherman",
+   "url": "https://clashroyale.fandom.com/wiki/Fisherman"
+  },
+  "Flying Machine": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.1,
+    "Projectile Speed": 800.0,
+    "Range": 6.0,
+    "Rarity": "Rare",
+    "Speed": 90.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 171.0,
+    "Damage Per Second": 155.0,
+    "Hitpoints": 614.0
+   },
+   "title": "Flying Machine",
+   "url": "https://clashroyale.fandom.com/wiki/Flying_Machine"
+  },
+  "Freeze": {
+   "abilities": [
+    "freeze",
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Freeze Duration": 4.0,
+    "Radius": 3.0,
+    "Rarity": "Epic",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 115.0,
+    "Crown Tower Damage": 35.0
+   },
+   "title": "Freeze",
+   "url": "https://clashroyale.fandom.com/wiki/Freeze"
+  },
+  "Furnace": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": "1x",
+    "Deploy Time": 1.0,
+    "Hit Speed": 1.8,
+    "Range": 6.0,
+    "Rarity": "Rare",
+    "Spawn Speed": 7.0,
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "spawner"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": "1x",
+     "Deploy Time": 1.0,
+     "Hit Speed": 1.8,
+     "Range": 6.0,
+     "Rarity": "Rare",
+     "Spawn Speed": 7.0,
+     "Speed": 45.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Hot Spawn Speed": 2.4,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Range": 2.5,
+      "Speed": 120.0,
+      "Target": "Air & Ground",
+      "Transport": "Ground",
+      "section": "Fire Spirit Attributes"
+     }
+    ],
+    "stats": {
+     "Fire Spirit Area Damage": 207.0,
+     "Fire Spirit Hitpoints": 230.0,
+     "Furnace Damage": 179.0,
+     "Furnace Damage per second": 99.0,
+     "Furnace Hitpoints": 727.0
+    },
+    "title": "Furnace/Evolution"
+   },
+   "secondary": [
+    {
+     "Range": 2.5,
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "section": "Fire Spirit Attributes"
+    }
+   ],
+   "stats": {
+    "Fire Spirit Area Damage": 207.0,
+    "Fire Spirit Hitpoints": 230.0,
+    "Furnace Damage": 179.0,
+    "Furnace Damage per second": 99.0,
+    "Furnace Hitpoints": 727.0
+   },
+   "title": "Furnace",
+   "url": "https://clashroyale.fandom.com/wiki/Furnace"
+  },
+  "Giant": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.5,
+    "Range": 1.2,
+    "Rarity": "Rare",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "heal",
+     "rage"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.5,
+     "Range": 1.2,
+     "Rarity": "Rare",
+     "Speed": 45.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Activation": 50.0,
+      "Cycles": 1.0,
+      "Rage Duration": 1.5,
+      "Rage Radius": "2-3.5",
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 253.0,
+     "Damage Per Second": 168.0,
+     "Hitpoints": 3968.0
+    },
+    "title": "Giant/Evolution"
+   },
+   "hero": {
+    "abilities": [
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.5,
+     "Range": 1.2,
+     "Rarity": "Rare",
+     "Speed": 45.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Ability Target": "Air & Ground",
+      "Cast Time": 0.933,
+      "Cost": 2.0,
+      "Throwback Range": 9.0,
+      "Unit Stun Duration": "2 secs",
+      "Units Affected": 1.0,
+      "section": "Heroic Hurl Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 253.0,
+     "Damage Per Second": 168.0,
+     "Hitpoints": 3968.0,
+     "Impact Damage": 135.0
+    },
+    "title": "Giant/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 253.0,
+    "Damage Per Second": 168.0,
+    "Hitpoints": 3968.0
+   },
+   "title": "Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Giant"
+  },
+  "Giant Skeleton": {
+   "abilities": [
+    "death_damage",
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 1.0,
+    "Death Damage Splash Radius": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 1.3,
+    "Range": 0.8,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 276.0,
+    "Damage per Second": 197.0,
+    "Death Damage": 688.0,
+    "Hitpoints": 3361.0
+   },
+   "title": "Giant Skeleton",
+   "url": "https://clashroyale.fandom.com/wiki/Giant_Skeleton"
+  },
+  "Giant Snowball": {
+   "abilities": [
+    "knockback",
+    "slow"
+   ],
+   "attributes": {
+    "Cost": 2.0,
+    "Radius": 2.5,
+    "Rarity": "Common",
+    "Slow Duration": 3.0,
+    "Slowdown": "-30%",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "evolution": {
+    "abilities": [
+     "pull",
+     "slow"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Radius": 2.5,
+     "Rarity": "Common",
+     "Slow Duration": 4.0,
+     "Slowdown": "-30%",
+     "Target": "Air & Ground",
+     "Type": "Spell"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Range": 4.5,
+      "Rolling Speed": 300.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 179.0,
+     "Crown Tower Damage": 54.0
+    },
+    "title": "Giant Snowball/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 179.0,
+    "Crown Tower Damage": 45.0
+   },
+   "title": "Giant Snowball",
+   "url": "https://clashroyale.fandom.com/wiki/Giant_Snowball"
+  },
+  "Goblin Barrel": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Radius": 1.5,
+    "Rarity": "Epic",
+    "Type": "Spell"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 3.0,
+     "Radius": 1.5,
+     "Rarity": "Epic",
+     "Type": "Spell"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 3.0,
+      "Deploy Time": 1.1,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Goblin Attributes"
+     },
+     {
+      "Count": 3.0,
+      "Deploy Time": 1.1,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Decoy Goblin Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 120.0,
+     "Damage Per Second": 109.0,
+     "Decoy Goblin Damage": 89.0,
+     "Decoy Goblin Damage per second": 80.0,
+     "Decoy Goblin Hitpoints": 81.0,
+     "Hitpoints": 202.0
+    },
+    "title": "Goblin Barrel/Evolution"
+   },
+   "secondary": [
+    {
+     "Count": 3.0,
+     "Deploy Time": 1.1,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 120.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 120.0,
+    "Damage Per Second": 109.0,
+    "Hitpoints": 202.0
+   },
+   "title": "Goblin Barrel",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Barrel"
+  },
+  "Goblin Cage": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "Lifetime": 20.0,
+    "Rarity": "Rare",
+    "Type": "Building"
+   },
+   "evolution": {
+    "abilities": [
+     "pull"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Deploy Time": 1.0,
+     "Lifetime": 20.0,
+     "Rarity": "Rare",
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Hit Speed": 1.0,
+      "Range": 3.0,
+      "Target": "Ground",
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 1.0,
+      "First Hit Speed": 0.2,
+      "Hit Speed": 1.1,
+      "Range": 0.8,
+      "Speed": 90.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Evolved Goblin Brawler Attributes"
+     }
+    ],
+    "stats": {
+     "Goblin Brawler Damage": 337.0,
+     "Goblin Brawler Damage per second": 306.0,
+     "Goblin Brawler Hitpoints": 1080.0,
+     "Goblin Cage Damage": 337.0,
+     "Goblin Cage Damage per second": 337.0,
+     "Goblin Cage Hitpoints": 780.0,
+     "Goblin Cage Hitpoints lost per second": 39.0
+    },
+    "title": "Goblin Cage/Evolution"
+   },
+   "secondary": [
+    {
+     "Count": 1.0,
+     "First Hit Speed": 0.2,
+     "Hit Speed": 1.1,
+     "Range": 0.8,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Goblin Brawler Attributes"
+    }
+   ],
+   "stats": {
+    "Goblin Brawler Damage": 337.0,
+    "Goblin Brawler Damage per second": 306.0,
+    "Goblin Brawler Hitpoints": 1080.0,
+    "Goblin Cage Hitpoints": 780.0,
+    "Goblin Cage Hitpoints lost per second": 39.0
+   },
+   "title": "Goblin Cage",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Cage"
+  },
+  "Goblin Curse": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Duration": 6.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.1,
+    "Radius": 3.0,
+    "Range": 0.5,
+    "Rarity": "Epic",
+    "Speed": 120.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 210.0,
+    "Crown Tower Damage": 60.0,
+    "Goblin Damage": 120.0,
+    "Goblin Damage per second": 109.0,
+    "Goblin Hitpoints": 202.0
+   },
+   "title": "Goblin Curse",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Curse"
+  },
+  "Goblin Demolisher": {
+   "abilities": [
+    "charge",
+    "death_damage",
+    "knockback"
+   ],
+   "attributes": {
+    "Activation": 50.0,
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Death Damage Splash Radius": 2.5,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.2,
+    "Lifetime": 10.0,
+    "Projectile Speed": 400.0,
+    "Range": 5.0,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Splash Radius": 1.5,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 186.0,
+    "Damage Per Second": 155.0,
+    "Death Damage": 404.0,
+    "Hitpoints": 1300.0,
+    "Kamikaze Goblin Demolisher Hitpoints lost per second": 65.0
+   },
+   "title": "Goblin Demolisher",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Demolisher"
+  },
+  "Goblin Drill": {
+   "abilities": [
+    "knockback",
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "Lifetime": 10.0,
+    "Rarity": "Epic",
+    "Spawn Speed": 3.0,
+    "Type": "Building"
+   },
+   "evolution": {
+    "abilities": [
+     "spawner"
+    ],
+    "attributes": {
+     "Activation": "33% and 66%",
+     "Cost": 4.0,
+     "Cycles": 2.0,
+     "Deploy Time": 1.0,
+     "Lifetime": 10.0,
+     "Rarity": "Epic",
+     "Spawn Speed": 3.0,
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "First Hit Speed": 0.4,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Goblin Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 120.0,
+     "Damage Per Second": 109.0,
+     "Goblin Drill Hitpoints": 202.0,
+     "Goblin Drill Hitpoints lost per second": 20.2,
+     "Goblin Drill Spawn Damage": 84.0,
+     "Goblin Drill Spawn Tower Damage": 26.0,
+     "Hitpoints": 202.0
+    },
+    "title": "Goblin Drill/Evolution"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 120.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 120.0,
+    "Damage Per Second": 109.0,
+    "Goblin Drill Hitpoints": 1313.0,
+    "Goblin Drill Hitpoints lost per second": 20.2,
+    "Goblin Drill Spawn Damage": 84.0,
+    "Goblin Drill Spawn Tower Damage": 26.0,
+    "Hitpoints": 202.0
+   },
+   "title": "Goblin Drill",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Drill"
+  },
+  "Goblin Gang": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.1,
+    "Range": 0.5,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 3.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 500.0,
+     "Range": 5.0,
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "section": "Spear Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Goblin Damage": 120.0,
+    "Goblin Damage per second": 109.0,
+    "Goblin Hitpoints": 202.0,
+    "Spear Goblin Damage": 81.0,
+    "Spear Goblin Damage per second": 47.0,
+    "Spear Goblin Hitpoints": 133.0
+   },
+   "title": "Goblin Gang",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Gang"
+  },
+  "Goblin Giant": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.8,
+    "Hit Speed": 1.5,
+    "Range": 1.2,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "spawner"
+    ],
+    "attributes": {
+     "Cost": 6.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.8,
+     "Hit Speed": 1.5,
+     "Range": 1.2,
+     "Rarity": "Epic",
+     "Speed": 60.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Activation": 50.0,
+      "Cycles": 1.0,
+      "Spawn Speed": 2.2,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 1.0,
+      "First Hit Speed": 0.4,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Goblin Attributes"
+     },
+     {
+      "Count": 2.0,
+      "First Hit Speed": 0.5,
+      "Hit Speed": 1.7,
+      "Projectile Speed": 500.0,
+      "Range": 5.0,
+      "Target": "Air & Ground",
+      "section": "Backpack Spear Goblin Attributes"
+     },
+     {
+      "Count": 2.0,
+      "Deploy Time": 0.7,
+      "First Hit Speed": 0.5,
+      "Hit Speed": 1.7,
+      "Projectile Speed": 500.0,
+      "Range": 5.0,
+      "Speed": 120.0,
+      "Target": "Air & Ground",
+      "Transport": "Ground",
+      "section": "Spear Goblin Attributes"
+     }
+    ],
+    "stats": {
+     "Goblin Damage": 120.0,
+     "Goblin Damage per second": 109.0,
+     "Goblin Giant Damage": 176.0,
+     "Goblin Giant Damage per second": 117.0,
+     "Goblin Giant Hitpoints": 3223.0,
+     "Goblin Hitpoints": 202.0,
+     "Spear Goblin Damage": 81.0,
+     "Spear Goblin Damage per second": 47.0,
+     "Spear Goblin Hitpoints": 133.0
+    },
+    "title": "Goblin Giant/Evolution"
+   },
+   "secondary": [
+    {
+     "Count": 2.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 500.0,
+     "Range": 5.0,
+     "Target": "Air & Ground",
+     "section": "Backpack Spear Goblin Attributes"
+    },
+    {
+     "Count": 2.0,
+     "Deploy Time": 0.7,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 500.0,
+     "Range": 5.0,
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "section": "Spear Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Goblin Giant Damage": 176.0,
+    "Goblin Giant Damage per Second": 117.0,
+    "Goblin Giant Hitpoints": 3022.0,
+    "Spear Goblin Damage": 81.0,
+    "Spear Goblin Damage per Second": 47.0,
+    "Spear Goblin Hitpoints": 133.0
+   },
+   "title": "Goblin Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Giant"
+  },
+  "Goblin Hut": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "Lifetime": 30.0,
+    "Rarity": "Rare",
+    "Spawn Delay": 0.5,
+    "Spawn Range": 6.0,
+    "Spawn Speed": 2.2,
+    "Type": "Building"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 500.0,
+     "Range": 5.0,
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "section": "Spear Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 47.0,
+    "Hitpoints": 1228.0,
+    "Hitpoints lost per second": 40.9
+   },
+   "title": "Goblin Hut",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Hut"
+  },
+  "Goblin Machine": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.2,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 1.5,
+     "Hit Speed": 3.5,
+     "Projectile Speed": 250.0,
+     "Radius": 1.5,
+     "Range": "2.5-5",
+     "Target": "Air & Ground",
+     "section": "Rocket Launcher Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 212.0,
+    "Damage per Second": 176.0,
+    "Hitpoints": 2150.0,
+    "Rocket Launcher Crown Tower Damage": 152.0,
+    "Rocket Launcher Damage": 304.0,
+    "Rocket Launcher Damage per Second": 86.0
+   },
+   "title": "Goblin Machine",
+   "url": "https://clashroyale.fandom.com/wiki/Goblin_Machine"
+  },
+  "Goblins": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.1,
+    "Range": 0.5,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Banner Lifetime": 5.0,
+     "Brigade Count": 2.0,
+     "Cost": 2.0,
+     "Count": 4.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Rarity": "Common",
+     "Speed": 120.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Brigade Damage": 125.0,
+     "Brigade Damage Per Second": 113.0,
+     "Brigade Hitpoints": 202.0,
+     "Damage": 125.0,
+     "Damage Per Second": 113.0,
+     "Hitpoints": 202.0
+    },
+    "title": "Goblins/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 125.0,
+    "Damage Per Second": 113.0,
+    "Hitpoints": 202.0
+   },
+   "title": "Goblins",
+   "url": "https://clashroyale.fandom.com/wiki/Goblins"
+  },
+  "Goblinstein": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.8,
+    "Range": 5.5,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 1.0,
+     "First Hit Speed": 0.8,
+     "Hit Speed": 1.5,
+     "Range": 1.2,
+     "Speed": 60.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Monster Attributes"
+    },
+    {
+     "Ability Cooldown": "None",
+     "Cast Time": 0.933,
+     "Cost": 2.0,
+     "Duration": "3.5s",
+     "Hit Speed": 0.5,
+     "Radius": 2.0,
+     "Target": "Air & Ground",
+     "section": "Lightning Link Attributes"
+    }
+   ],
+   "stats": {
+    "Doctor Damage": 92.0,
+    "Doctor Damage per Second": 51.0,
+    "Doctor Hitpoints": 721.0,
+    "Lightning Link Crown Tower Damage": 23.0,
+    "Lightning Link Damage": 107.0,
+    "Monster Damage": 128.0,
+    "Monster Damage per Second": 85.0,
+    "Monster Hitpoints": 2240.0
+   },
+   "title": "Goblinstein",
+   "url": "https://clashroyale.fandom.com/wiki/Goblinstein"
+  },
+  "Golden Knight": {
+   "abilities": [
+    "dash"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.2,
+    "Hit Speed": 0.9,
+    "Range": 1.2,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Ability Cooldown": 12.0,
+     "Cast Time": 0.766,
+     "Cost": 1.0,
+     "Maximum Dash Distance": 5.5,
+     "Maximum Dashes": 10.0,
+     "Speed": 120.0,
+     "section": "Dashing Dash Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 161.0,
+    "Damage per second": 178.0,
+    "Dashing Dash Damage": 335.0,
+    "Hitpoints": 1799.0
+   },
+   "title": "Golden Knight",
+   "url": "https://clashroyale.fandom.com/wiki/Golden_Knight"
+  },
+  "Golem": {
+   "abilities": [
+    "death_damage",
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 8.0,
+    "Count": 1.0,
+    "Death Damage Splash Radius": 2.0,
+    "Deploy Time": 3.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 2.5,
+    "Range": 0.75,
+    "Rarity": "Epic",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 2.0,
+     "Death Damage Splash Radius": 2.0,
+     "First Hit Speed": 1.0,
+     "Hit Speed": 2.5,
+     "Range": 0.25,
+     "Speed": 45.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Golemite Attributes"
+    }
+   ],
+   "stats": {
+    "Golem Damage": 312.0,
+    "Golem Damage per second": 124.0,
+    "Golem Death Damage": 225.0,
+    "Golem Hitpoints": 5120.0,
+    "Golemite Damage": 84.0,
+    "Golemite Damage per second": 33.0,
+    "Golemite Death Damage": 99.0,
+    "Golemite Hitpoints": 1039.0
+   },
+   "title": "Golem",
+   "url": "https://clashroyale.fandom.com/wiki/Golem"
+  },
+  "Graveyard": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Duration": 9.0,
+    "Radius": 4.0,
+    "Rarity": "Legendary",
+    "Spawn Speed": 0.5,
+    "Type": "Spell"
+   },
+   "secondary": [
+    {
+     "Count": 12.0,
+     "Deploy Time": 2.2,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Skeleton Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 73.0,
+    "Hitpoints": 81.0
+   },
+   "title": "Graveyard",
+   "url": "https://clashroyale.fandom.com/wiki/Graveyard"
+  },
+  "Guards": {
+   "abilities": [
+    "shield"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.0,
+    "Range": 1.6,
+    "Rarity": "Epic",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 117.0,
+    "Damage per second": 117.0,
+    "Hitpoints": 81.0,
+    "Shield Hitpoints": 256.0
+   },
+   "title": "Guards",
+   "url": "https://clashroyale.fandom.com/wiki/Guards"
+  },
+  "Heal Spirit": {
+   "abilities": [
+    "heal"
+   ],
+   "attributes": {
+    "Cost": 1.0,
+    "Deploy Time": 1.0,
+    "Heal Speed": "4 pulses every 1 second",
+    "Radius": 2.5,
+    "Range": 2.5,
+    "Rarity": "Rare",
+    "Speed": 120.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Time Between Pulses": 0.25,
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 110.0,
+    "Healing Per Pulse": 100.0,
+    "Healing Per Second": 400.0,
+    "Hitpoints": 215.0
+   },
+   "title": "Heal Spirit",
+   "url": "https://clashroyale.fandom.com/wiki/Heal_Spirit"
+  },
+  "Hog Rider": {
+   "abilities": [
+    "jump"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.6,
+    "Range": 0.8,
+    "Rarity": "Rare",
+    "Speed": 120.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 317.0,
+    "Damage Per Second": 198.0,
+    "Hitpoints": 1697.0
+   },
+   "title": "Hog Rider",
+   "url": "https://clashroyale.fandom.com/wiki/Hog_Rider"
+  },
+  "Hunter": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.7,
+    "Hit Speed": 2.2,
+    "Projectile Range": 6.5,
+    "Projectile Speed": 550.0,
+    "Range": 4.0,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "freeze"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.7,
+     "Hit Speed": 2.2,
+     "Projectile Range": 6.5,
+     "Projectile Speed": 550.0,
+     "Range": 4.0,
+     "Rarity": "Epic",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Net Duration": 3.0,
+      "Net Hit Speed": 5.0,
+      "Net Range": 4.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 840.0,
+     "Damage per second": 380.0,
+     "Hitpoints": 885.0
+    },
+    "title": "Hunter/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 840.0,
+    "Damage per second": 380.0,
+    "Hitpoints": 885.0
+   },
+   "title": "Hunter",
+   "url": "https://clashroyale.fandom.com/wiki/Hunter"
+  },
+  "Ice Golem": {
+   "abilities": [
+    "death_damage",
+    "slow"
+   ],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 2.5,
+    "Range": 0.75,
+    "Rarity": "Rare",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [
+     "death_damage",
+     "slow"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 1.5,
+     "Hit Speed": 2.5,
+     "Range": 1.2,
+     "Rarity": "Rare",
+     "Speed": 45.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Blasts": 3.0,
+      "Cost": 2.0,
+      "Radius": 4.0,
+      "Slowdown": 30.0,
+      "Slowdown Duration": "2 seconds",
+      "Target": "Air & Ground",
+      "section": "Snowstorm Ability Attributes"
+     }
+    ],
+    "stats": {
+     "Blizzard Pulse Damage": 207.0,
+     "Damage": 84.0,
+     "Damage per second": 33.0,
+     "Death Damage": 84.0,
+     "Hitpoints": 1315.0
+    },
+    "title": "Ice Golem/Hero"
+   },
+   "secondary": [
+    {
+     "Radius": 2.0,
+     "Slow Duration": 2.5,
+     "Slowdown": "-30%",
+     "Target": "Air & Ground",
+     "section": "Death Nova Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 92.0,
+    "Damage per second": 36.0,
+    "Death Damage": 92.0,
+    "Hitpoints": 1315.0
+   },
+   "title": "Ice Golem",
+   "url": "https://clashroyale.fandom.com/wiki/Ice_Golem"
+  },
+  "Ice Spirit": {
+   "abilities": [
+    "freeze",
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 1.0,
+    "Deploy Time": 1.0,
+    "Freeze Duration": 1.1,
+    "Range": 2.5,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "freeze",
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 1.0,
+     "Deploy Time": 1.0,
+     "Freeze Duration": 1.1,
+     "Range": 2.5,
+     "Rarity": "Common",
+     "Speed": 120.0,
+     "Splash Radius": 2.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 110.0,
+     "Hitpoints": 215.0,
+     "Ice Blast Damage": 110.0
+    },
+    "title": "Ice Spirit/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 110.0,
+    "Hitpoints": 215.0
+   },
+   "title": "Ice Spirit",
+   "url": "https://clashroyale.fandom.com/wiki/Ice_Spirit"
+  },
+  "Ice Wizard": {
+   "abilities": [
+    "slow"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.7,
+    "Projectile Speed": 700.0,
+    "Range": 5.5,
+    "Rarity": "Legendary",
+    "Slow Duration": 2.5,
+    "Slowdown": "-30%",
+    "Speed": 60.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Radius": 3.0,
+     "Slowdown": "-30%",
+     "Spawn Slow Duration": 1.0,
+     "Target": "Air & Ground",
+     "section": "Spawn Damage Attributes"
+    }
+   ],
+   "stats": {
+    "Area Damage": 89.0,
+    "Damage per second": 52.0,
+    "Hitpoints": 688.0,
+    "Spawn Damage": 84.0
+   },
+   "title": "Ice Wizard",
+   "url": "https://clashroyale.fandom.com/wiki/Ice_Wizard"
+  },
+  "Inferno Dragon": {
+   "abilities": [
+    "pull"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Hit Speed": 0.4,
+    "Range": 3.5,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "pull",
+     "reset",
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "Hit Speed": 0.4,
+     "Range": 3.5,
+     "Rarity": "Legendary",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "1 stage Damage": 35.0,
+     "1 stage Damage Per Second": 87.0,
+     "2 stage Damage": 120.0,
+     "2 stage Damage Per Second": 300.0,
+     "3 stage Damage": 422.0,
+     "3 stage Damage Per Second": 1055.0,
+     "4 stage Damage": 844.0,
+     "4 stage Damage Per Second": 2110.0,
+     "Hitpoints": 1295.0
+    },
+    "title": "Inferno Dragon/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "1 stage Damage": 35.0,
+    "1 stage Damage Per Second": 87.0,
+    "2 stage Damage": 120.0,
+    "2 stage Damage Per Second": 300.0,
+    "3 stage Damage": 422.0,
+    "3 stage Damage Per Second": 1055.0,
+    "Hitpoints": 1295.0
+   },
+   "title": "Inferno Dragon",
+   "url": "https://clashroyale.fandom.com/wiki/Inferno_Dragon"
+  },
+  "Inferno Tower": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Deploy Time": 1.0,
+    "Hit Speed": 0.4,
+    "Lifetime": 30.0,
+    "Range": 6.0,
+    "Rarity": "Rare",
+    "Target": "Air & Ground",
+    "Type": "Building"
+   },
+   "secondary": [],
+   "stats": {
+    "1 stage Damage": 43.0,
+    "1 stage Damage Per Second": 107.0,
+    "2 stage Damage": 158.0,
+    "2 stage Damage Per Second": 395.0,
+    "3 stage Damage": 847.0,
+    "3 stage Damage Per Second": 2117.0,
+    "Hitpoints": 1748.0,
+    "Hitpoints lost per second": 58.3
+   },
+   "title": "Inferno Tower",
+   "url": "https://clashroyale.fandom.com/wiki/Inferno_Tower"
+  },
+  "Knight": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.2,
+    "Range": 1.2,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "damage_reduction"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.2,
+     "Range": 1.2,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Damage Reduction": 60.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 202.0,
+     "Damage Per Second": 168.0,
+     "Hitpoints": 1766.0
+    },
+    "title": "Knight/Evolution"
+   },
+   "hero": {
+    "abilities": [
+     "shield",
+     "taunt"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.2,
+     "Range": 1.2,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Ability Duration": 5.0,
+      "Cast Time": 0.933,
+      "Cost": 2.0,
+      "Taunt Range": 7.5,
+      "section": "Triumphant Taunt Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 202.0,
+     "Damage Per Second": 168.0,
+     "Hitpoints": 1766.0,
+     "Shield Hitpoints": 512.0
+    },
+    "title": "Knight/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 202.0,
+    "Damage Per Second": 168.0,
+    "Hitpoints": 1766.0
+   },
+   "title": "Knight",
+   "url": "https://clashroyale.fandom.com/wiki/Knight"
+  },
+  "Lava Hound": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 7.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 1.3,
+    "Projectile Speed": 400.0,
+    "Range": 3.5,
+    "Rarity": "Legendary",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 6.0,
+     "First Hit Speed": 1.0,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 500.0,
+     "Range": 1.6,
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "section": "Lava Pup Attributes"
+    }
+   ],
+   "stats": {
+    "Lava Hound Damage": 53.0,
+    "Lava Hound Damage per second": 40.0,
+    "Lava Hound Hitpoints": 3581.0,
+    "Lava Pup Damage": 81.0,
+    "Lava Pup Damage per second": 47.0,
+    "Lava Pup Hitpoints": 217.0
+   },
+   "title": "Lava Hound",
+   "url": "https://clashroyale.fandom.com/wiki/Lava_Hound"
+  },
+  "Lightning": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {},
+   "secondary": [],
+   "stats": {
+    "Area Damage": 1057.0,
+    "Crown Tower Damage": 286.0
+   },
+   "title": "Lightning",
+   "url": "https://clashroyale.fandom.com/wiki/Lightning"
+  },
+  "Little Prince": {
+   "abilities": [
+    "dash"
+   ],
+   "attributes": {
+    "Ability Cooldown": 30.0,
+    "Cast Time": 0.944,
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Dash Range": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed (Stage 1)": 1.2,
+    "Hit Speed (Stage 2)": 0.6,
+    "Hit Speed (Stage 3)": 0.4,
+    "Projectile Speed": 800.0,
+    "Range": 5.5,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Deploy Time": 0.3,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.2,
+     "Range": 1.2,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Guardienne Attributes"
+    }
+   ],
+   "stats": {
+    "Guardienne Damage": 217.0,
+    "Guardienne Damage per Second": 180.0,
+    "Guardienne Hitpoints": 1600.0,
+    "Little Prince Damage": 104.0,
+    "Little Prince Damage per Second (Stage 1)": 86.0,
+    "Little Prince Damage per Second (Stage 2)": 173.0,
+    "Little Prince Damage per Second (Stage 3)": 260.0,
+    "Little Prince Hitpoints": 698.0,
+    "Royal Rescue Damage": 256.0
+   },
+   "title": "Little Prince",
+   "url": "https://clashroyale.fandom.com/wiki/Little_Prince"
+  },
+  "Lumberjack": {
+   "abilities": [
+    "rage"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 0.8,
+    "Range": 0.7,
+    "Rarity": "Legendary",
+    "Speed": 120.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "heal",
+     "rage"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 0.8,
+     "Range": 0.7,
+     "Rarity": "Legendary",
+     "Speed": 120.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Boost": "+30%",
+      "Duration": 5.5,
+      "Radius": 3.0,
+      "Target": "Friendly Troops & Buildings",
+      "section": "Rage Attributes"
+     },
+     {
+      "Count": 1.0,
+      "First Hit Speed": 0.4,
+      "Hit Speed": 0.8,
+      "Range": 0.7,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Ghost Attributes"
+     }
+    ],
+    "stats": {
+     "Ghost Crown Damage": 128.0,
+     "Ghost Crown Damage per second": 160.0,
+     "Ghost Damage": 256.0,
+     "Ghost Damage per second": 320.0,
+     "Hitpoints": 1282.0,
+     "Lumberjack Damage": 256.0,
+     "Lumberjack Damage per second": 320.0,
+     "Rage Crown Tower Damage": 54.0,
+     "Rage Damage": 179.0
+    },
+    "title": "Lumberjack/Evolution"
+   },
+   "secondary": [
+    {
+     "Boost": "+30%",
+     "Duration": 5.5,
+     "Radius": 3.0,
+     "Target": "Friendly Troops & Buildings",
+     "section": "Rage Attributes"
+    }
+   ],
+   "stats": {
+    "Hitpoints": 1282.0,
+    "Lumberjack Damage": 256.0,
+    "Lumberjack Damage per second": 320.0,
+    "Rage Crown Tower Damage": 54.0,
+    "Rage Damage": 179.0
+   },
+   "title": "Lumberjack",
+   "url": "https://clashroyale.fandom.com/wiki/Lumberjack"
+  },
+  "Magic Archer": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.7,
+    "Hit Speed": 1.1,
+    "Projectile Range": 11.0,
+    "Projectile Speed": 1000.0,
+    "Projectile Width": 0.5,
+    "Range": 7.0,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Decoy Duration": 7.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.7,
+     "Hit Speed": 1.1,
+     "Projectile Range": 11.0,
+     "Projectile Speed": 1000.0,
+     "Projectile Width": 0.5,
+     "Range": 7.0,
+     "Rarity": "Legendary",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Teleport Range": "3.5 Tiles",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Area Damage": 135.0,
+     "Damage per second": 122.0,
+     "Decoy Hitpoints": 271.0,
+     "Hitpoints": 529.0,
+     "Triple Shot Damage": "48 x3"
+    },
+    "title": "Magic Archer/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 133.0,
+    "Damage per second": 120.0,
+    "Hitpoints": 529.0
+   },
+   "title": "Magic Archer",
+   "url": "https://clashroyale.fandom.com/wiki/Magic_Archer"
+  },
+  "Mega Knight": {
+   "abilities": [
+    "charge",
+    "jump",
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 7.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.7,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Splash Radius": 1.3,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "jump"
+    ],
+    "attributes": {
+     "Cost": 7.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.7,
+     "Range": 1.2,
+     "Rarity": "Legendary",
+     "Speed": 60.0,
+     "Splash Radius": 1.3,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 1.0,
+      "Throwback Range": 4.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Jump Range": "3.5-5",
+      "Jump Speed": 250.0,
+      "Jump Time": 0.9,
+      "Splash Radius": 2.2,
+      "Target": "Ground",
+      "Transport": "Air",
+      "section": "Jump Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 268.0,
+     "Damage per second": 157.0,
+     "Hitpoints": 3993.0,
+     "Jump Damage": 537.0,
+     "Spawn Damage": 430.0
+    },
+    "title": "Mega Knight/Evolution"
+   },
+   "secondary": [
+    {
+     "Jump Range": "3.5-5",
+     "Jump Speed": 250.0,
+     "Jump Time": 0.9,
+     "Splash Radius": 2.2,
+     "Target": "Ground",
+     "Transport": "Air",
+     "section": "Jump Attributes"
+    }
+   ],
+   "stats": {
+    "Area Damage": 268.0,
+    "Damage per second": 157.0,
+    "Hitpoints": 3993.0,
+    "Jump Damage": 537.0,
+    "Spawn Damage": 430.0
+   },
+   "title": "Mega Knight",
+   "url": "https://clashroyale.fandom.com/wiki/Mega_Knight"
+  },
+  "Mega Minion": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.5,
+    "Projectile Speed": 1000.0,
+    "Range": 1.6,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Crown Tower Damage": 25.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.5,
+     "Projectile Speed": 1000.0,
+     "Range": 1.6,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Teleport Range": "Infinite",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Damage": 312.0,
+     "Damage Per Second": 208.0,
+     "Hitpoints": 837.0,
+     "Warp Damage": 399.0
+    },
+    "title": "Mega Minion/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 312.0,
+    "Damage Per Second": 208.0,
+    "Hitpoints": 837.0
+   },
+   "title": "Mega Minion",
+   "url": "https://clashroyale.fandom.com/wiki/Mega_Minion"
+  },
+  "Mighty Miner": {
+   "abilities": [
+    "charge",
+    "knockback",
+    "pull",
+    "tunnel"
+   ],
+   "attributes": {
+    "Ability Cooldown": 13.0,
+    "Cast Time": 0.933,
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Damage Charge Speed": 2.0,
+    "Deploy Time": 1.0,
+    "Hit Speed": 0.4,
+    "Range": 1.6,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "1 stage Damage": 40.0,
+    "1 stage Damage Per Second": 100.0,
+    "2 stage Damage": 204.0,
+    "2 stage Damage Per Second": 510.0,
+    "3 stage Damage": 409.0,
+    "3 stage Damage Per Second": 1022.0,
+    "Explosive Escape Damage": 332.0,
+    "Hitpoints": 2250.0
+   },
+   "title": "Mighty Miner",
+   "url": "https://clashroyale.fandom.com/wiki/Mighty_Miner"
+  },
+  "Miner": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.3,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Crown Tower Damage": 48.0,
+    "Crown Tower Damage per second": 36.0,
+    "Damage": 194.0,
+    "Damage per second": 149.0,
+    "Hitpoints": 1210.0
+   },
+   "title": "Miner",
+   "url": "https://clashroyale.fandom.com/wiki/Miner"
+  },
+  "Mini P.E.K.K.A": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.6,
+    "Range": 0.8,
+    "Rarity": "Rare",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "hero": {
+    "abilities": [
+     "heal"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.6,
+     "Range": 0.8,
+     "Rarity": "Rare",
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Ability Range": "Himself",
+      "Cast Time": 0.933,
+      "Cost": 1.0,
+      "Heal Percentage": 30.0,
+      "Level Increase from Pancake Bar": "0 bars filled = +1 level 1 bar filled = +1 level/ 2 levels altogether 2 bars filled = +1 level/ 3 levels altogether 3 bars filled = + 2 levels/ 5 levels altogether",
+      "section": "Breakfast Boost Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 755.0,
+     "Damage Per Second": 471.0,
+     "Hitpoints": 1433.0
+    },
+    "title": "Mini P.E.K.K.A./Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 755.0,
+    "Damage Per Second": 471.0,
+    "Hitpoints": 1390.0
+   },
+   "title": "Mini P.E.K.K.A.",
+   "url": "https://clashroyale.fandom.com/wiki/Mini_P.E.K.K.A."
+  },
+  "Minion Giant": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": "Unknown",
+    "Hit Speed": 1.7,
+    "Range": 4.0,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 168.0,
+    "Damage per second": 126.0,
+    "Hitpoints": 1817.0
+   },
+   "title": "Minion Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Minion_Giant"
+  },
+  "Minion Horde": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 6.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.1,
+    "Projectile Speed": 1000.0,
+    "Range": 2.5,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 107.0,
+    "Damage Per Second": 89.0,
+    "Hitpoints": 230.0
+   },
+   "title": "Minion Horde",
+   "url": "https://clashroyale.fandom.com/wiki/Minion_Horde"
+  },
+  "Minions": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.2,
+    "Projectile Speed": 1000.0,
+    "Range": 2.5,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 107.0,
+    "Damage Per Second": 89.0,
+    "Hitpoints": 230.0
+   },
+   "title": "Minions",
+   "url": "https://clashroyale.fandom.com/wiki/Minions"
+  },
+  "Mirror": {
+   "abilities": [],
+   "attributes": {
+    "Cost": "Cost of previous card played +1",
+    "Rarity": "Epic",
+    "Type": "Spell"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": "Cost of previous card played +1",
+     "Rarity": "Epic",
+     "Type": "Spell"
+    },
+    "secondary": [],
+    "stats": {
+     "Mirrored Champion Level": 12.0,
+     "Mirrored Common Level": 12.0,
+     "Mirrored Epic Level": 12.0,
+     "Mirrored Legendary Level": 12.0,
+     "Mirrored Rare Level": 12.0
+    },
+    "title": "Mirror/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Mirrored Champion Level": 12.0,
+    "Mirrored Common Level": 12.0,
+    "Mirrored Epic Level": 12.0,
+    "Mirrored Legendary Level": 12.0,
+    "Mirrored Rare Level": 12.0
+   },
+   "title": "Mirror",
+   "url": "https://clashroyale.fandom.com/wiki/Mirror"
+  },
+  "Monk": {
+   "abilities": [
+    "damage_reduction",
+    "knockback"
+   ],
+   "attributes": {
+    "Ability Cooldown": 17.0,
+    "Cast Time": 0.933,
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Damage Reduced": "-65%",
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.2,
+    "Hit Speed": 0.8,
+    "Invulnerability Duration": 4.0,
+    "Range": 1.2,
+    "Rarity": "Champion",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Combo Damage": 422.0,
+    "Damage": 140.0,
+    "Damage per second": 175.0,
+    "Hitpoints": 2214.0
+   },
+   "title": "Monk",
+   "url": "https://clashroyale.fandom.com/wiki/Monk"
+  },
+  "Mortar": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 3.5,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 5.0,
+    "Lifetime": 30.0,
+    "Projectile Speed": 300.0,
+    "Range": "3.5-11.5",
+    "Rarity": "Common",
+    "Splash Radius": 2.0,
+    "Target": "Ground",
+    "Type": "Building"
+   },
+   "evolution": {
+    "abilities": [
+     "chain"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Deploy Time": 3.5,
+     "First Hit Speed": 1.0,
+     "Hit Speed": 4.0,
+     "Lifetime": 30.0,
+     "Projectile Speed": 300.0,
+     "Range": "3.5-11.5",
+     "Rarity": "Common",
+     "Splash Radius": 2.0,
+     "Target": "Ground",
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 1.0,
+      "Deploy Time": 0.2,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Goblin Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 266.0,
+     "Damage Per Second": 66.0,
+     "Goblin Damage": 120.0,
+     "Goblin Damage per second": 109.0,
+     "Goblin Hitpoints": 202.0,
+     "Hitpoints": 1369.0,
+     "Hitpoints lost per second": 45.6
+    },
+    "title": "Mortar/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 266.0,
+    "Damage Per Second": 53.0,
+    "Hitpoints": 1369.0,
+    "Hitpoints lost per second": 45.6
+   },
+   "title": "Mortar",
+   "url": "https://clashroyale.fandom.com/wiki/Mortar"
+  },
+  "Mother Witch": {
+   "abilities": [
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Curse Duration": 5.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 1.0,
+    "Projectile Speed": 600.0,
+    "Range": 5.5,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Deploy Time": 0.2,
+     "First Hit Speed": 0.25,
+     "Hit Speed": 1.2,
+     "Range": 0.75,
+     "Speed": 120.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Cursed Hog Attributes"
+    }
+   ],
+   "stats": {
+    "Cursed Hog Damage": 53.0,
+    "Cursed Hog Damage per second": 44.0,
+    "Cursed Hog Hitpoints": 629.0,
+    "Mother Witch Damage": 133.0,
+    "Mother Witch Damage per second": 133.0,
+    "Mother Witch Hitpoints": 529.0
+   },
+   "title": "Mother Witch",
+   "url": "https://clashroyale.fandom.com/wiki/Mother_Witch"
+  },
+  "Musketeer": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.7,
+    "Hit Speed": 1.0,
+    "Projectile Speed": 1000.0,
+    "Range": 6.0,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.7,
+     "Hit Speed": 1.0,
+     "Projectile Speed": 1000.0,
+     "Range": 6.0,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Sniper Ammo": 3.0,
+      "Sniper Hit Speed": 1.0,
+      "Sniper Projectile Speed": 2650.0,
+      "Sniper Range": "6-30",
+      "Sniper Width": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 217.0,
+     "Damage Per Second": 217.0,
+     "Hitpoints": 721.0,
+     "Sniper Damage": 1170.0
+    },
+    "title": "Musketeer/Evolution"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.0,
+     "Range": 6.0,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cost": 3.0,
+      "Deploy Time": "1 second",
+      "Turret Lifetime": "10 seconds",
+      "Turret Range": 4.0,
+      "Turret Target": "Air & Ground",
+      "section": "Trusty Turret Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 217.0,
+     "Damage Per Second": 217.0,
+     "Hitpoints": 721.0,
+     "Turret Damage": 140.0,
+     "Turret Damage Per Second": 280.0,
+     "Turret Hitpoints": 721.0,
+     "Turret Hitpoints lost per second": 153.6,
+     "Turret Spawn Damage": 204.0
+    },
+    "title": "Musketeer/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 217.0,
+    "Damage Per Second": 217.0,
+    "Hitpoints": 721.0
+   },
+   "title": "Musketeer",
+   "url": "https://clashroyale.fandom.com/wiki/Musketeer"
+  },
+  "Night Witch": {
+   "abilities": [
+    "invisible",
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.75,
+    "Hit Speed": 1.3,
+    "Range": 1.6,
+    "Rarity": "Legendary",
+    "Spawn Speed": 5.0,
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.3,
+     "Range": 1.2,
+     "Speed": 120.0,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "section": "Bat Attributes"
+    }
+   ],
+   "stats": {
+    "Bat Damage": 81.0,
+    "Bat Damage per second": 62.0,
+    "Bat Hitpoints": 81.0,
+    "Night Witch Damage": 314.0,
+    "Night Witch Damage per second": 241.0,
+    "Night Witch Hitpoints": 906.0
+   },
+   "title": "Night Witch",
+   "url": "https://clashroyale.fandom.com/wiki/Night_Witch"
+  },
+  "P.E.K.K.A": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 7.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.8,
+    "Range": 1.2,
+    "Rarity": "Epic",
+    "Speed": 45.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "heal"
+    ],
+    "attributes": {
+     "Cost": 7.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.8,
+     "Range": 1.2,
+     "Rarity": "Epic",
+     "Speed": 45.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 1.0,
+      "Heal Speed": "1 pulses every 0.55 sec",
+      "Time Between pulses": 0.5,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 842.0,
+     "Damage per Second": 467.0,
+     "Heal Per Death (Stage 1)": 160.0,
+     "Heal Per Death (Stage 2)": 305.0,
+     "Heal Per Death (Stage 3)": 577.0,
+     "Hitpoint Threshold (Stage 1)": 990.0,
+     "Hitpoint Threshold (Stage 2)": 1991.0,
+     "Hitpoints": 3760.0,
+     "Max Hitpoints": 5640.0
+    },
+    "title": "P.E.K.K.A./Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 842.0,
+    "Damage Per Second": 467.0,
+    "Hitpoints": 3760.0
+   },
+   "title": "P.E.K.K.A.",
+   "url": "https://clashroyale.fandom.com/wiki/P.E.K.K.A."
+  },
+  "Phoenix": {
+   "abilities": [
+    "death_damage",
+    "knockback",
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Death Damage Splash Radius": 1.5,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.0,
+    "Range": 1.6,
+    "Rarity": "Legendary",
+    "Spawn Speed": 3.8,
+    "Speed": 60.0,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 217.0,
+    "Damage per second": 217.0,
+    "Death Damage": 163.0,
+    "Hitpoints": 1052.0,
+    "Phoenix Egg Hitpoints": 240.0
+   },
+   "title": "Phoenix",
+   "url": "https://clashroyale.fandom.com/wiki/Phoenix"
+  },
+  "Poison": {
+   "abilities": [],
+   "attributes": {},
+   "secondary": [],
+   "stats": {
+    "Area Damage": 736.0,
+    "Crown Tower Damage": 176.0
+   },
+   "title": "Poison",
+   "url": "https://clashroyale.fandom.com/wiki/Poison"
+  },
+  "Prince": {
+   "abilities": [
+    "charge",
+    "jump"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.4,
+    "Range": 1.6,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Charge Range": 2.5,
+     "Speed": 120.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Charge Attributes"
+    }
+   ],
+   "stats": {
+    "Charge Damage": 783.0,
+    "Damage": 391.0,
+    "Damage per second": 279.0,
+    "Hitpoints": 1920.0
+   },
+   "title": "Prince",
+   "url": "https://clashroyale.fandom.com/wiki/Prince"
+  },
+  "Princess": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.2,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 3.0,
+    "Projectile Speed": 600.0,
+    "Range": 9.0,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Splash Radius": 2.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 168.0,
+    "Damage per second": 56.0,
+    "Hitpoints": 261.0
+   },
+   "title": "Princess",
+   "url": "https://clashroyale.fandom.com/wiki/Princess"
+  },
+  "Rage": {
+   "abilities": [
+    "rage"
+   ],
+   "attributes": {
+    "Boost": "+30%",
+    "Cost": 2.0,
+    "Deploy Time": 0.5,
+    "Duration": 4.5,
+    "Radius": 3.0,
+    "Rarity": "Epic",
+    "Target": "Friendly Troops & Buildings",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 179.0,
+    "Crown Tower Damage": 54.0
+   },
+   "title": "Rage",
+   "url": "https://clashroyale.fandom.com/wiki/Rage"
+  },
+  "Ram Rider": {
+   "abilities": [
+    "charge",
+    "jump",
+    "slow"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.8,
+    "Range": 0.8,
+    "Rarity": "Legendary",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Charge Range": 2.5,
+     "Speed": 120.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "section": "Charge Attributes"
+    },
+    {
+     "Count": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.1,
+     "Projectile Speed": 600.0,
+     "Range": 5.5,
+     "Slowdown": "-70%",
+     "Snare Duration": 2.0,
+     "Target": "Air & Ground ( Troops only)",
+     "section": "Rider Attributes"
+    }
+   ],
+   "stats": {
+    "Hitpoints": 1766.0,
+    "Ram Charge Damage": 542.0,
+    "Ram Damage": 271.0,
+    "Ram Damage per second": 159.0,
+    "Rider Damage": 104.0,
+    "Rider Damage per second": 94.0
+   },
+   "title": "Ram Rider",
+   "url": "https://clashroyale.fandom.com/wiki/Ram_Rider"
+  },
+  "Rascals": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.5,
+    "Range": 0.8,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 2.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.0,
+     "Projectile Speed": 800.0,
+     "Range": 5.0,
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "section": "Rascal Girl Attributes"
+    }
+   ],
+   "stats": {
+    "Rascal Boy Damage": 217.0,
+    "Rascal Boy Damage per second": 144.0,
+    "Rascal Boy Hitpoints": 1868.0,
+    "Rascal Girl Damage": 125.0,
+    "Rascal Girl Damage per second": 125.0,
+    "Rascal Girl Hitpoints": 261.0
+   },
+   "title": "Rascals",
+   "url": "https://clashroyale.fandom.com/wiki/Rascals"
+  },
+  "Rocket": {
+   "abilities": [
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 6.0,
+    "Projectile Speed": 350.0,
+    "Radius": 2.0,
+    "Rarity": "Rare",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 1484.0,
+    "Crown Tower Damage": 371.0
+   },
+   "title": "Rocket",
+   "url": "https://clashroyale.fandom.com/wiki/Rocket"
+  },
+  "Ronin": {
+   "abilities": [
+    "parry"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.3,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Parry Cooldown": 3.5,
+     "Parry Damage": 200.0,
+     "Target": "Melee",
+     "section": "Statistics"
+    }
+   ],
+   "stats": {
+    "Damage": 371.0,
+    "Damage per second": 285.0,
+    "Hitpoints": 1779.0
+   },
+   "title": "Ronin",
+   "url": "https://clashroyale.fandom.com/wiki/Ronin"
+  },
+  "Royal Delivery": {
+   "abilities": [
+    "shield"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Deploy Time": 3.0,
+    "Radius": 3.0,
+    "Rarity": "Common",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [
+    {
+     "Count": 1.0,
+     "Deploy Time": 0.25,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.3,
+     "Range": 1.6,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Royal Recruit Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 133.0,
+    "Damage Per Second": 102.0,
+    "Hitpoints": 547.0,
+    "Royal Delivery Area Damage": 437.0,
+    "Shield Hitpoints": 240.0
+   },
+   "title": "Royal Delivery",
+   "url": "https://clashroyale.fandom.com/wiki/Royal_Delivery"
+  },
+  "Royal Ghost": {
+   "abilities": [
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.6,
+    "Hit Speed": 1.8,
+    "Invisibility Time": 2.0,
+    "Range": 1.2,
+    "Rarity": "Legendary",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "invisible"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.8,
+     "Invisibility Time": 2.0,
+     "Range": 1.2,
+     "Rarity": "Legendary",
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 261.0,
+     "Damage per second": 145.0,
+     "Hitpoints": 1210.0,
+     "Souldeiers Hitpoints": 81.0,
+     "Souldeiers Spawn Damage": 81.0,
+     "Souldiers Area Damage": 81.0,
+     "Souldiers Damage per second": 45.0
+    },
+    "title": "Royal Ghost/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 261.0,
+    "Damage Per Second": 145.0,
+    "Hitpoints": 1210.0
+   },
+   "title": "Royal Ghost",
+   "url": "https://clashroyale.fandom.com/wiki/Royal_Ghost"
+  },
+  "Royal Giant": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.9,
+    "Hit Speed": 1.8,
+    "Projectile Speed": 1000.0,
+    "Range": 5.0,
+    "Rarity": "Common",
+    "Speed": 45.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "knockback"
+    ],
+    "attributes": {
+     "Cost": 6.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.9,
+     "Hit Speed": 1.7,
+     "Projectile Speed": 1000.0,
+     "Range": 5.0,
+     "Rarity": "Common",
+     "Speed": 45.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 1.0,
+      "Recoil Radius": 2.5,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 307.0,
+     "Damage Per Second": 180.0,
+     "Hitpoints": 3164.0,
+     "Recoil Damage": 81.0
+    },
+    "title": "Royal Giant/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 307.0,
+    "Damage Per Second": 170.0,
+    "Hitpoints": 3164.0
+   },
+   "title": "Royal Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Royal_Giant"
+  },
+  "Royal Hogs": {
+   "abilities": [
+    "jump"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.2,
+    "Range": 0.7,
+    "Rarity": "Rare",
+    "Speed": 120.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 4.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.2,
+     "Range": 0.7,
+     "Rarity": "Rare",
+     "Speed": 120.0,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 74.0,
+     "Damage Per Second": 61.0,
+     "Hitpoints": 837.0,
+     "Landing Damage": 115.0
+    },
+    "title": "Royal Hogs/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 74.0,
+    "Damage Per Second": 61.0,
+    "Hitpoints": 837.0
+   },
+   "title": "Royal Hogs",
+   "url": "https://clashroyale.fandom.com/wiki/Royal_Hogs"
+  },
+  "Royal Recruits": {
+   "abilities": [
+    "shield"
+   ],
+   "attributes": {
+    "Cost": 7.0,
+    "Count": 6.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.3,
+    "Range": 1.6,
+    "Rarity": "Common",
+    "Speed": 60.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "charge",
+     "shield"
+    ],
+    "attributes": {
+     "Cost": 7.0,
+     "Count": 6.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.3,
+     "Range": 1.6,
+     "Rarity": "Common",
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Charge Range": 2.5,
+      "Cycles": 1.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Charge Damage": 266.0,
+     "Damage": 133.0,
+     "Damage Per Second": 102.0,
+     "Hitpoints": 547.0,
+     "Shield Hitpoints": 240.0
+    },
+    "title": "Royal Recruits/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 133.0,
+    "Damage Per Second": 102.0,
+    "Hitpoints": 547.0,
+    "Shield Hitpoints": 240.0
+   },
+   "title": "Royal Recruits",
+   "url": "https://clashroyale.fandom.com/wiki/Royal_Recruits"
+  },
+  "Rune Giant": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.5,
+    "Range": 1.2,
+    "Rarity": "Epic",
+    "Speed": 60.0,
+    "Target": "Building",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Enchant Limit": 2.0,
+     "Enchant Range": 8.5,
+     "Enchant Shot": "Every 3rd Attack",
+     "Enchant duration after she dies": 5.0,
+     "section": "Enchant"
+    }
+   ],
+   "stats": {
+    "Bonus Damage": 220.0,
+    "Damage": 120.0,
+    "Damage per Second": 80.0,
+    "Hitpoints": 2662.0
+   },
+   "title": "Rune Giant",
+   "url": "https://clashroyale.fandom.com/wiki/Rune_Giant"
+  },
+  "Skeleton Army": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 15.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.1,
+    "Range": 0.5,
+    "Rarity": "Epic",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "shield"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 15.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Rarity": "Epic",
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Deploy Time": 1.0,
+      "First Hit Speed": 0.5,
+      "Hit Speed": 1.0,
+      "Range": 1.6,
+      "Speed": 90.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "Type": "Troop",
+      "section": "General Gerry Attributes"
+     }
+    ],
+    "stats": {
+     "General Gerry Hitpoints": 81.0,
+     "General Gerry Shield Hitpoints": 81.0,
+     "Skeleton Damage": 81.0,
+     "Skeleton Damage per second": 73.0,
+     "Skeleton Hitpoints": 81.0
+    },
+    "title": "Skeleton Army/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 73.0,
+    "Hitpoints": 81.0
+   },
+   "title": "Skeleton Army",
+   "url": "https://clashroyale.fandom.com/wiki/Skeleton_Army"
+  },
+  "Skeleton Barrel": {
+   "abilities": [
+    "death_damage",
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Death Damage Splash Radius": 2.0,
+    "Deploy Time": 1.0,
+    "Range": 0.35,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Buildings",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "chain",
+     "death_damage"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Count": 2.0,
+     "Death Damage Splash Radius": 2.0,
+     "Deploy Time": 1.0,
+     "Range": 0.35,
+     "Rarity": "Common",
+     "Speed": 90.0,
+     "Target": "Buildings",
+     "Transport": "Air",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "1st Barrel Activation": 75.0,
+      "Barrel Count": 2.0,
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 7.0,
+      "Deploy Time": 0.5,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 90.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Skeleton Attributes"
+     }
+    ],
+    "stats": {
+     "Skeleton Barrel Death Damage": 384.0,
+     "Skeleton Barrel Hitpoints": 665.0,
+     "Skeleton Damage": 81.0,
+     "Skeleton Damage per second": 73.0,
+     "Skeleton Hitpoints": 81.0
+    },
+    "title": "Skeleton Barrel/Evolution"
+   },
+   "secondary": [
+    {
+     "Count": 7.0,
+     "Deploy Time": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Skeleton Attributes"
+    }
+   ],
+   "stats": {
+    "Skeleton Barrel Death Damage": 145.0,
+    "Skeleton Barrel Hitpoints": 532.0,
+    "Skeleton Damage": 81.0,
+    "Skeleton Damage per second": 73.0,
+    "Skeleton Hitpoints": 81.0
+   },
+   "title": "Skeleton Barrel",
+   "url": "https://clashroyale.fandom.com/wiki/Skeleton_Barrel"
+  },
+  "Skeleton Dragons": {
+   "abilities": [
+    "pull"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 2.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 2.0,
+    "Projectile Speed": 500.0,
+    "Range": 3.5,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Air",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 161.0,
+    "Damage Per Second": 80.0,
+    "Hitpoints": 560.0
+   },
+   "title": "Skeleton Dragons",
+   "url": "https://clashroyale.fandom.com/wiki/Skeleton_Dragons"
+  },
+  "Skeleton King": {
+   "abilities": [],
+   "attributes": {
+    "Ability Cooldown": 20.0,
+    "Cast Time": 0.933,
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.3,
+    "Hit Speed": 1.6,
+    "Range": 1.2,
+    "Rarity": "Champion",
+    "Skeleton Count": "6-16",
+    "Skeleton Hitpoints": 1.0,
+    "Speed": 60.0,
+    "Splash Radius": 1.3,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Skeleton Attributes"
+    }
+   ],
+   "stats": {
+    "Skeleton Damage": 81.0,
+    "Skeleton Damage per second": 73.0,
+    "Skeleton King Damage": 204.0,
+    "Skeleton King Damage per second": 127.0,
+    "Skeleton King Hitpoints": 2298.0
+   },
+   "title": "Skeleton King",
+   "url": "https://clashroyale.fandom.com/wiki/Skeleton_King"
+  },
+  "Skeletons": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 1.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.1,
+    "Range": 0.5,
+    "Rarity": "Common",
+    "Speed": 90.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 1.0,
+     "Count": 3.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Rarity": "Common",
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Max Count": 8.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 81.0,
+     "Damage Per Second": 73.0,
+     "Hitpoints": 81.0
+    },
+    "title": "Skeletons/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 73.0,
+    "Hitpoints": 81.0
+   },
+   "title": "Skeletons",
+   "url": "https://clashroyale.fandom.com/wiki/Skeletons"
+  },
+  "Sparky": {
+   "abilities": [
+    "charge",
+    "reset",
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 6.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 1.0,
+    "Hit Speed": 4.0,
+    "Projectile Speed": 1400.0,
+    "Range": 5.0,
+    "Rarity": "Legendary",
+    "Speed": 45.0,
+    "Splash Radius": 1.8,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 1331.0,
+    "Damage per second": 332.0,
+    "Hitpoints": 1451.0
+   },
+   "title": "Sparky",
+   "url": "https://clashroyale.fandom.com/wiki/Sparky"
+  },
+  "Spear Goblins": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.6,
+    "Projectile Speed": 500.0,
+    "Range": 5.0,
+    "Rarity": "Common",
+    "Speed": 120.0,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 50.0,
+    "Hitpoints": 133.0
+   },
+   "title": "Spear Goblins",
+   "url": "https://clashroyale.fandom.com/wiki/Spear_Goblins"
+  },
+  "Spirit Empress": {
+   "abilities": [],
+   "attributes": {
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Rarity": "Legendary",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Cost": 6.0,
+     "First Hit Speed": 0.6,
+     "Hit Speed": 1.4,
+     "Range": 5.0,
+     "Speed": 60.0,
+     "Target": "Air & Ground",
+     "Transport": "Air",
+     "section": "Air Form Attributes"
+    },
+    {
+     "Cost": 3.0,
+     "First Hit Speed": 0.3,
+     "Hit Speed": 1.2,
+     "Range": 1.2,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Ground Form Attributes"
+    }
+   ],
+   "stats": {
+    "Air Form Damage per second": 228.0,
+    "Damage": 320.0,
+    "Ground Form Damage per second": 266.0,
+    "Hitpoints": 1121.0
+   },
+   "title": "Spirit Empress",
+   "url": "https://clashroyale.fandom.com/wiki/Spirit_Empress"
+  },
+  "Suspicious Bush": {
+   "abilities": [
+    "invisible"
+   ],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "Range": 0.5,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Count": 2.0,
+     "Deploy Time": 1.0,
+     "Hit Speed": 1.4,
+     "Range": 0.8,
+     "Speed": 60.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Bush Goblin Attributes"
+    }
+   ],
+   "stats": {
+    "Bush Goblin Damage": 256.0,
+    "Bush Goblin Damage per second": 182.0,
+    "Bush Goblin Hitpoints": 304.0,
+    "Bush Hitpoints": 81.0
+   },
+   "title": "Suspicious Bush",
+   "url": "https://clashroyale.fandom.com/wiki/Suspicious_Bush"
+  },
+  "Tesla": {
+   "abilities": [
+    "freeze",
+    "tunnel"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.5,
+    "Hit Speed": 1.1,
+    "Lifetime": 25.0,
+    "Range": 5.5,
+    "Rarity": "Common",
+    "Target": "Air & Ground",
+    "Type": "Building"
+   },
+   "evolution": {
+    "abilities": [
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Lifetime": 25.0,
+     "Range": 5.5,
+     "Rarity": "Common",
+     "Target": "Air & Ground",
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Pulse Radius": 6.0,
+      "Pulse Stun Duration": 0.5,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 220.0,
+     "Damage Per Second": 199.0,
+     "Hitpoints": 1152.0,
+     "Hitpoints lost per second": 46.1,
+     "Pulse Damage": 174.0
+    },
+    "title": "Tesla/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 220.0,
+    "Damage Per Second": 199.0,
+    "Hitpoints": 1152.0,
+    "Hitpoints lost per second": 46.1
+   },
+   "title": "Tesla",
+   "url": "https://clashroyale.fandom.com/wiki/Tesla"
+  },
+  "The Log": {
+   "abilities": [
+    "knockback"
+   ],
+   "attributes": {
+    "Cost": 2.0,
+    "Range": 10.1,
+    "Rarity": "Legendary",
+    "Target": "Ground",
+    "Type": "Spell",
+    "Width": 3.9
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 268.0,
+    "Crown Tower Damage": 35.0
+   },
+   "title": "The Log",
+   "url": "https://clashroyale.fandom.com/wiki/The_Log"
+  },
+  "Three Musketeers": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 9.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.7,
+    "Hit Speed": 1.3,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [
+    {
+     "Range": 6.0,
+     "Target": "Air & Ground",
+     "section": "Ranged Attack"
+    },
+    {
+     "Range": "Melee: Long",
+     "Target": "Ground",
+     "section": "Melee Attack"
+    }
+   ],
+   "stats": {
+    "Hitpoints": 883.0,
+    "Melee Damage": 314.0,
+    "Melee Damage Per Second": 241.0,
+    "Ranged Damage": 204.0,
+    "Ranged Damage Per Second": 156.0
+   },
+   "title": "Three Musketeers",
+   "url": "https://clashroyale.fandom.com/wiki/Three_Musketeers"
+  },
+  "Tombstone": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Deploy Time": 1.0,
+    "Lifetime": 30.0,
+    "Rarity": "Rare",
+    "Spawn Speed": 4.0,
+    "Type": "Building"
+   },
+   "hero": {
+    "abilities": [
+     "spawner"
+    ],
+    "attributes": {
+     "Cost": 3.0,
+     "Deploy Time": 1.0,
+     "Lifetime": 30.0,
+     "Rarity": "Rare",
+     "Spawn Speed": 4.0,
+     "Type": "Building"
+    },
+    "secondary": [
+     {
+      "First Hit Speed": 0.5,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 90.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "section": "Skeleton Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 81.0,
+     "Damage Per Second": 73.0,
+     "Hitpoints": 529.0,
+     "Hitpoints lost per second": 17.6,
+     "Queen Damage": 422.0,
+     "Queen Hitpoints": 4224.0
+    },
+    "title": "Tombstone/Hero"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "section": "Skeleton Attributes"
+    }
+   ],
+   "stats": {
+    "Damage": 81.0,
+    "Damage Per Second": 73.0,
+    "Hitpoints": 529.0,
+    "Hitpoints lost per second": 17.6
+   },
+   "title": "Tombstone",
+   "url": "https://clashroyale.fandom.com/wiki/Tombstone"
+  },
+  "Tornado": {
+   "abilities": [
+    "pull"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Duration": 1.05,
+    "Radius": 5.5,
+    "Rarity": "Epic",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 84.0,
+    "Crown Tower Damage": 29.0
+   },
+   "title": "Tornado",
+   "url": "https://clashroyale.fandom.com/wiki/Tornado"
+  },
+  "Valkyrie": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.1,
+    "Hit Speed": 1.5,
+    "Range": 1.2,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Splash Radius": 2.0,
+    "Target": "Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "pull"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.1,
+     "Hit Speed": 1.5,
+     "Range": 1.2,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Splash Radius": 2.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Duration": 0.5,
+      "Radius": 5.5,
+      "Target": "Air & Ground",
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 266.0,
+     "Damage Per Second": 177.0,
+     "Hitpoints": 1907.0,
+     "Tornado Crown Tower Damage": 37.0,
+     "Tornado Damage": 84.0
+    },
+    "title": "Valkyrie/Evolution"
+   },
+   "hero": {
+    "abilities": [
+     "damage_reduction",
+     "dash"
+    ],
+    "attributes": {
+     "Cost": 4.0,
+     "Count": 1.0,
+     "Crown Tower Damage": "-50%",
+     "Damage reduction": 15.0,
+     "Dash Distance": 5.5,
+     "Deploy Time": 1.0,
+     "Duration": 3.5,
+     "First Hit Speed": 0.1,
+     "Hit Speed": 1.5,
+     "Radius": 2.5,
+     "Range": 1.2,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Splash Radius": 2.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [],
+    "stats": {
+     "Ability Damage": 97.0,
+     "Area Damage": 266.0,
+     "Damage Per Second": 177.0,
+     "Hitpoints": 1907.0
+    },
+    "title": "Valkyrie/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 266.0,
+    "Damage Per Second": 177.0,
+    "Hitpoints": 1907.0
+   },
+   "title": "Valkyrie",
+   "url": "https://clashroyale.fandom.com/wiki/Valkyrie"
+  },
+  "Vines": {
+   "abilities": [
+    "freeze"
+   ],
+   "attributes": {
+    "Cost": 3.0,
+    "Count": 3.0,
+    "Deploy Time": "0.9s",
+    "Duration": 2.0,
+    "Radius": 2.5,
+    "Rarity": "Epic",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 306.0,
+    "Crown Tower Damage": 78.0
+   },
+   "title": "Vines",
+   "url": "https://clashroyale.fandom.com/wiki/Vines"
+  },
+  "Void": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Duration": 4.0,
+    "Radius": 2.5,
+    "Rarity": "Epic",
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "secondary": [],
+   "stats": {
+    "2-4 Targets Crown Tower Damage": 153.0,
+    "2-4 Targets Damage": 921.0,
+    "5 Or More Targets Crown Tower Damage": 105.0,
+    "5 Or More Targets Damage": 459.0,
+    "Single Target Crown Tower Damage": 291.0,
+    "Single Target Damage": 2088.0
+   },
+   "title": "Void",
+   "url": "https://clashroyale.fandom.com/wiki/Void"
+  },
+  "Wall Breakers": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 2.0,
+    "Count": 2.0,
+    "Deploy Time": 1.0,
+    "Range": 0.5,
+    "Rarity": "Epic",
+    "Speed": 120.0,
+    "Splash Radius": 1.5,
+    "Target": "Buildings",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "death_damage"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Count": 2.0,
+     "Deploy Time": 1.0,
+     "Range": 0.5,
+     "Rarity": "Epic",
+     "Speed": 120.0,
+     "Splash Radius": 1.5,
+     "Target": "Buildings",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "section": "Evolution Attributes"
+     },
+     {
+      "Count": 2.0,
+      "Deploy Time": 1.0,
+      "Range": 0.5,
+      "Speed": 120.0,
+      "Splash Radius": 1.5,
+      "Target": "Buildings",
+      "Transport": "Ground",
+      "section": "Runner Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 391.0,
+     "Crown Tower Death Damage": 193.0,
+     "Death Damage": 291.0,
+     "Hitpoints": 330.0,
+     "Runner Area Damage": 196.0,
+     "Runner Hitpoints": 164.0
+    },
+    "title": "Wall Breakers/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 302.0,
+    "Hitpoints": 330.0
+   },
+   "title": "Wall Breakers",
+   "url": "https://clashroyale.fandom.com/wiki/Wall_Breakers"
+  },
+  "Witch": {
+   "abilities": [
+    "spawner"
+   ],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.7,
+    "Hit Speed": 1.1,
+    "Projectile Speed": 600.0,
+    "Range": 5.5,
+    "Rarity": "Epic",
+    "Spawn Speed": 7.0,
+    "Speed": 60.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "heal",
+     "spawner"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.7,
+     "Hit Speed": 1.1,
+     "Projectile Speed": 600.0,
+     "Range": 5.5,
+     "Rarity": "Epic",
+     "Spawn Speed": 7.0,
+     "Speed": 60.0,
+     "Splash Radius": 1.5,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "First Hit Speed": 0.5,
+      "Hit Speed": 1.1,
+      "Range": 0.5,
+      "Speed": 90.0,
+      "Target": "Ground",
+      "Transport": "Ground",
+      "Type": "Troop",
+      "section": "Skeleton Attributes"
+     },
+     {
+      "Cycles": 1.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 135.0,
+     "Damage per second": 122.0,
+     "Hitpoints": 839.0,
+     "Max Hitpoints": 1039.0,
+     "Skeleton Damage": 81.0,
+     "Skeleton Damage per second": 73.0,
+     "Skeleton Death Heal": 76.0,
+     "Skeleton Hitpoints": 81.0
+    },
+    "title": "Witch/Evolution"
+   },
+   "secondary": [
+    {
+     "First Hit Speed": 0.5,
+     "Hit Speed": 1.1,
+     "Range": 0.5,
+     "Speed": 90.0,
+     "Target": "Ground",
+     "Transport": "Ground",
+     "Type": "Troop",
+     "section": "Skeleton Attributes"
+    }
+   ],
+   "stats": {
+    "Area Damage": 135.0,
+    "Damage per second": 122.0,
+    "Hitpoints": 839.0,
+    "Skeleton Damage": 81.0,
+    "Skeleton Damage per second": 73.0,
+    "Skeleton Hitpoints": 81.0
+   },
+   "title": "Witch",
+   "url": "https://clashroyale.fandom.com/wiki/Witch"
+  },
+  "Wizard": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 5.0,
+    "Count": 1.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 1.4,
+    "Projectile Speed": 600.0,
+    "Range": 5.5,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Splash Radius": 1.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "evolution": {
+    "abilities": [
+     "death_damage",
+     "knockback",
+     "shield"
+    ],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.4,
+     "Projectile Speed": 600.0,
+     "Range": 5.5,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Splash Radius": 1.5,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cycles": 1.0,
+      "Shield Damage Splash Radius": 3.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 281.0,
+     "Damage Per Second": 200.0,
+     "Hitpoints": 832.0,
+     "Shield Death Damage": 281.0,
+     "Shield Hitpoints": 192.0
+    },
+    "title": "Wizard/Evolution"
+   },
+   "hero": {
+    "abilities": [],
+    "attributes": {
+     "Cost": 5.0,
+     "Count": 1.0,
+     "Deploy Time": 1.0,
+     "First Hit Speed": 0.4,
+     "Hit Speed": 1.4,
+     "Projectile Speed": 600.0,
+     "Range": 5.5,
+     "Rarity": "Rare",
+     "Speed": 60.0,
+     "Splash Radius": 1.5,
+     "Target": "Air & Ground",
+     "Transport": "Ground",
+     "Type": "Troop"
+    },
+    "secondary": [
+     {
+      "Cost": 1.0,
+      "Flight Speed Increase": "+50%",
+      "Radius": 4.0,
+      "Target": "Air & Ground",
+      "Tornado Duration": "2 seconds",
+      "Transport": "Air",
+      "section": "Tornado Ability Attributes"
+     }
+    ],
+    "stats": {
+     "Damage": 281.0,
+     "Damage Per Second": 200.0,
+     "Hitpoints": 832.0,
+     "Tornado Damage": 43.0
+    },
+    "title": "Wizard/Hero"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 281.0,
+    "Damage Per Second": 200.0,
+    "Hitpoints": 832.0
+   },
+   "title": "Wizard",
+   "url": "https://clashroyale.fandom.com/wiki/Wizard"
+  },
+  "X-Bow": {
+   "abilities": [],
+   "attributes": {
+    "Cost": 6.0,
+    "Deploy Time": 3.5,
+    "First Hit Speed": 0.4,
+    "Hit Speed": 0.4,
+    "Lifetime": 30.0,
+    "Range": 11.5,
+    "Rarity": "Epic",
+    "Target": "Ground",
+    "Type": "Building"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 61.0,
+    "Damage Per Second": 153.0,
+    "Hitpoints": 1600.0,
+    "Hitpoints lost per second": 53.3
+   },
+   "title": "X-Bow",
+   "url": "https://clashroyale.fandom.com/wiki/X-Bow"
+  },
+  "Zap": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 2.0,
+    "Radius": 2.5,
+    "Rarity": "Common",
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Type": "Spell"
+   },
+   "evolution": {
+    "abilities": [
+     "stun"
+    ],
+    "attributes": {
+     "Cost": 2.0,
+     "Radius": 2.5,
+     "Rarity": "Common",
+     "Stun Duration": 0.5,
+     "Target": "Air & Ground",
+     "Type": "Spell"
+    },
+    "secondary": [
+     {
+      "Cycles": 2.0,
+      "Radius": "2.5-3",
+      "Zap Count": 2.0,
+      "section": "Evolution Attributes"
+     }
+    ],
+    "stats": {
+     "Area Damage": 384.0,
+     "Crown Tower Damage": 116.0
+    },
+    "title": "Zap/Evolution"
+   },
+   "secondary": [],
+   "stats": {
+    "Area Damage": 192.0,
+    "Crown Tower Damage": 48.0
+   },
+   "title": "Zap",
+   "url": "https://clashroyale.fandom.com/wiki/Zap"
+  },
+  "Zappies": {
+   "abilities": [
+    "stun"
+   ],
+   "attributes": {
+    "Cost": 4.0,
+    "Count": 3.0,
+    "Deploy Time": 1.0,
+    "First Hit Speed": 0.8,
+    "Hit Speed": 2.2,
+    "Range": 4.5,
+    "Rarity": "Rare",
+    "Speed": 60.0,
+    "Stun Duration": 0.5,
+    "Target": "Air & Ground",
+    "Transport": "Ground",
+    "Type": "Troop"
+   },
+   "secondary": [],
+   "stats": {
+    "Damage": 117.0,
+    "Damage Per Second": 53.0,
+    "Hitpoints": 529.0
+   },
+   "title": "Zappies",
+   "url": "https://clashroyale.fandom.com/wiki/Zappies"
+  }
+ },
+ "fetched": "2026-11-13T19:03:42Z",
+ "level": 11,
+ "missing": [],
+ "source": "Clash Royale Wiki (clashroyale.fandom.com), licencia CC BY-SA"
+}

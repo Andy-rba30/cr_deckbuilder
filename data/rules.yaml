@@ -5,10 +5,11 @@ deck:
   max_champions: 1
   avg_elixir: [2.6, 4.3]    # rango permitido del promedio de elixir
   role_limits:              # RESTRICCIONES DURAS por mazo
-    win_condition: {min: 1, max: 2}
     air_defense:   {min: 2}
     tank:          {max: 1}
     building:      {max: 2}
+  recommended:              # RECOMENDACIONES: se pueden romper pagando `penalty` por cada carta de más o de menos
+    win_condition: {min: 1, max: 2, penalty: 0.30}
   spell_roles: [small_spell, big_spell]
   min_spells: 1
   max_spells: 3
@@ -31,3 +32,28 @@ level:
 evo_bonus_default: 0.25        # si la API dice que tienes la evolución pero el catálogo no tiene bonus
 champion_bonus: 0.05
 unknown_card: {meta: 0.40, sens: 0.50}   # cartas nuevas que aún no están en cards.yaml
+
+# META CON BATALLAS REALES (pestaña 📊 Meta o: python cli.py --tag "#TU_TAG" --mode meta)
+# Solo se usa si existe data/battles.json. Puedes cambiar estos valores sin volver a descargar.
+battle_meta:
+  battle_types: [PvP, pathOfLegend, riverRacePvP]   # tipos de batalla 1 contra 1 que cuentan
+  max_age_days: 28          # ignora batallas más antiguas (el balance cambia cada mes)
+  ridge: 10                 # prudencia de la regresión: más alto = efectos más pequeños con pocos datos
+  popularity_weight: 0.3    # 0 = solo win rate, 1 = solo popularidad, para ordenar las cartas
+  prior_games: 100          # con esta cantidad de partidas, el dato pesa igual que cards.yaml
+  synergy:
+    min_together: 5         # partidas mínimas de una carta (y de un par) para medir sinergias
+    min_pair_games: 30      # mazos con las dos cartas para estimar cuánto más ganan juntas
+    max_pair_effects: 300   # máximo de pares cuyo efecto se estima (los más jugados)
+    pair_ridge: 25          # prudencia con el efecto de un par (más alto = efectos más pequeños)
+    effect_scale: 0.5       # peso por unidad de efecto (log-odds); 0.2 ≈ +5 puntos de victoria → +0.10
+    smoothing: 5            # suaviza el lift de pares con pocos mazos
+    cooc_scale: 0.008       # peso (pequeño) por cada vez que se DUPLICA lo esperado de jugarse juntas
+    clip: [-0.25, 0.15]     # límites del peso de un par
+    min_weight: 0.02        # ignora pares con peso menor que esto
+    max_pairs: 300          # máximo de pares de datos que se usan
+
+# BONUS POR CARTAS QUE YA JUEGAS (las sabes usar). Sale de tus últimas batallas y de tu mazo actual.
+comfort:
+  weight: 0.10          # bonus de una carta que usas en el 100% de tus batallas (0 = sin bonus)
+  current_deck: 0.6     # las cartas de tu mazo equipado cuentan como usadas al menos en este % (0 a 1)

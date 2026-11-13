@@ -33,6 +33,7 @@ class Synergy:
     b: str
     weight: float
     reason: str
+    source: str = "catálogo"   # "catálogo" (synergies.yaml), "batallas" o "ambos"
 
 
 @dataclass
@@ -50,7 +51,13 @@ class GameData:
     interactions: list[Interaction]
     rules: dict
     archetypes: dict
-    _by_norm: dict = field(default_factory=dict)
+    unknown_meta: dict[str, float] = field(default_factory=dict)  # meta de cartas que no están en cards.yaml
+    battle_meta: object = None                                     # BattleMeta si se aplicaron batallas reales
+    meta_detail: dict[str, dict] = field(default_factory=dict)     # nombre -> meta del catálogo, de datos y final
+    threats: dict = field(default_factory=dict)                    # data/threats.yaml
+    needs: dict = field(default_factory=dict)                      # data/needs.yaml
+    fichas: dict = field(default_factory=dict)                     # motor v4: fichas de puntos por carta
+    engine: str = "clasico"                                        # "clasico" (v3) o "atributos" (v4)
 
     def info(self, name: str) -> CardInfo | None:
         return self.cards.get(norm(name))
@@ -85,4 +92,5 @@ def load_game_data(data_dir: Path = DATA_DIR) -> GameData:
     ]
     rules = _load(data_dir / "rules.yaml")
     archetypes = _load(data_dir / "archetypes.yaml")["archetypes"]
-    return GameData(cards, syn, inter, rules, archetypes)
+    opt = lambda f: _load(data_dir / f) if (data_dir / f).exists() else {}
+    return GameData(cards, syn, inter, rules, archetypes, threats=opt("threats.yaml"), needs=opt("needs.yaml"))

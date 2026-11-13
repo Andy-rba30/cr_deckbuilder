@@ -15,7 +15,10 @@ def roles(deck, role):
 def check_rules(d):
     r = GAME.rules["deck"]
     assert len(d["cards"]) == 8
-    assert 1 <= roles(d["cards"], "win_condition") <= 2
+    # 1–2 win conditions es una recomendación: se puede romper, pero el mazo lo avisa y lo paga.
+    if not 1 <= roles(d["cards"], "win_condition") <= 2:
+        assert any(w.startswith("Recomendación") for w in d["warnings"])
+        assert d["parts"]["recomendaciones"] < 0
     assert roles(d["cards"], "air_defense") >= 2
     assert sum(PLAYER.cards[c].champion for c in d["cards"]) <= 1
     assert len(d["evos"]) <= r["evo_slots"]
@@ -44,6 +47,49 @@ def test_archetype_core_is_included():
     res = solve(PLAYER, GAME, EVALS, SolveRequest(archetypes=["log_bait"], time_limit=10))
     assert res.ok and "Goblin Barrel" in res.decks[0]["cards"]
     assert "Hog Rider" not in res.decks[0]["cards"]
+
+
+def test_alternatives_change_at_least_min_diff_cards():
+    a = solve(PLAYER, GAME, EVALS, SolveRequest(time_limit=10)).decks[0]["cards"]
+    b = solve(PLAYER, GAME, EVALS, SolveRequest(exclude_decks=[a], min_diff=3, time_limit=10)).decks[0]["cards"]
+    c = solve(PLAYER, GAME, EVALS, SolveRequest(exclude_decks=[a, b], min_diff=3, time_limit=10)).decks[0]["cards"]
+    assert len(set(b) - set(a)) >= 3
+    assert len(set(c) - set(a)) >= 3 and len(set(c) - set(b)) >= 3
+
+
+def test_no_more_alternatives_is_explained():
+    a = solve(PLAYER, GAME, EVALS, SolveRequest(time_limit=10)).decks[0]["cards"]
+    # Con 7 cartas obligatorias solo puede cambiar 1: pedir 3 distintas es imposible.
+    res = solve(PLAYER, GAME, EVALS, SolveRequest(locked=a[:7], exclude_decks=[a], min_diff=3, time_limit=10))
+    assert not res.ok
+    assert any("alternativas" in n for n in res.notes)
+
+
+def test_archetypes_only_use_their_own_win_conditions():
+    from crdeck.catalog import norm
+    from crdeck.solver import archetype_wincons
+    for key, arch in GAME.archetypes.items():
+        res = solve(PLAYER, GAME, EVALS, SolveRequest(archetypes=[key], time_limit=10))
+        if not res.ok:
+            continue
+        allowed = {norm(c) for c in archetype_wincons(arch)}
+        wincons = [c for c in res.decks[0]["cards"] if "win_condition" in PLAYER.cards[c].roles]
+        assert all(norm(c) in allowed for c in wincons), (key, wincons)
+
+
+def test_locked_card_overrides_archetype_win_conditions():
+    res = solve(PLAYER, GAME, EVALS, SolveRequest(archetypes=["graveyard"], locked=["Hog Rider"], time_limit=10))
+    assert res.ok and {"Graveyard", "Hog Rider"} <= set(res.decks[0]["cards"])
+
+
+def test_rank_archetypes_sorted_and_complete():
+    from crdeck.ranking import rank_archetypes
+    best, rows = rank_archetypes(PLAYER, GAME, EVALS, time_limit=10)
+    assert best is not None
+    assert {r.key for r in rows} == set(GAME.archetypes)
+    scores = [r.score for r in rows if r.ok]
+    assert scores == sorted(scores, reverse=True)
+    assert all(r.ok for r in rows[:len(scores)])   # los imposibles van al final
 
 
 def test_lock_and_ban():

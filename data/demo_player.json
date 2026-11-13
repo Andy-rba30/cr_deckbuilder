@@ -666,5 +666,63 @@
    "count": 0,
    "iconUrls": {}
   }
+ ],
+ "currentDeck": [
+  {
+   "name": "Goblin Barrel",
+   "id": 28000004,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic"
+  },
+  {
+   "name": "Princess",
+   "id": 26000026,
+   "level": 3,
+   "maxLevel": 8,
+   "rarity": "legendary"
+  },
+  {
+   "name": "Goblin Gang",
+   "id": 26000041,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common"
+  },
+  {
+   "name": "Knight",
+   "id": 26000000,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common"
+  },
+  {
+   "name": "Inferno Tower",
+   "id": 27000003,
+   "level": 11,
+   "maxLevel": 14,
+   "rarity": "rare"
+  },
+  {
+   "name": "Rocket",
+   "id": 28000003,
+   "level": 12,
+   "maxLevel": 14,
+   "rarity": "rare"
+  },
+  {
+   "name": "The Log",
+   "id": 28000011,
+   "level": 7,
+   "maxLevel": 8,
+   "rarity": "legendary"
+  },
+  {
+   "name": "Ice Spirit",
+   "id": 26000030,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common"
+  }
  ]
 }

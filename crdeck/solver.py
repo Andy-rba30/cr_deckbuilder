@@ -1,6 +1,7 @@
 """Modelo ILP (OR-Tools CP-SAT) para armar 1 mazo o los 4 mazos de Guerra de Clanes."""
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 
 from ortools.sat.python import cp_model
@@ -8,8 +9,11 @@ from ortools.sat.python import cp_model
 from .catalog import GameData, norm
 from .collection import Player
 from .scoring import CardEval, evaluate_deck, synergy_index
+from .needs import profiles
+from .threats import answers
 
-SCALE = 1000  # CP-SAT solo trabaja con enteros
+SCALE = 10000      # CP-SAT solo trabaja con enteros
+COVER_STEPS = 20   # cobertura de amenazas en pasos de 5%
 
 
 @dataclass
@@ -20,6 +24,7 @@ class SolveRequest:
     locked: list[str] = field(default_factory=list)              # cartas obligatorias
     banned: list[str] = field(default_factory=list)              # cartas prohibidas
     exclude_decks: list[list[str]] = field(default_factory=list) # mazos ya mostrados (para alternativas)
+    min_diff: int = 3                          # alternativas: cartas que deben cambiar respecto a cada mazo excluido
     balance_weight: int = 10                   # Guerra: peso del mazo más débil
     time_limit: float = 20.0
 
@@ -35,6 +40,14 @@ class SolveResult:
 def _resolve(names, player: Player) -> list[str]:
     by_norm = {norm(n): n for n in player.cards}
     return [by_norm[norm(x)] for x in names if norm(x) in by_norm]
+
+
+def archetype_wincons(arch: dict) -> list[str]:
+    """Condiciones de victoria que admite un arquetipo: las que aparecen en su plantilla
+    (core, core_any, groups) más las de `extra_wincons`. Cualquier otra queda prohibida."""
+    names = arch.get("core", []) + arch.get("core_any", []) + arch.get("extra_wincons", [])
+    names += [c for g in arch.get("groups", []) for c in g["from"]]
+    return names
 
 
 def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: SolveRequest) -> SolveResult:
@@ -55,7 +68,8 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     for c in _resolve(req.banned, player):
         for d in D:
             m.Add(x[c, d] == 0)
-    for c in _resolve(req.locked, player):
+    locked = _resolve(req.locked, player)
+    for c in locked:
         if req.n_decks == 1:
             m.Add(x[c, 0] == 1)
         else:
@@ -65,14 +79,37 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         return bool(player.cards[c].roles & set(roles))
 
     syn = synergy_index(game, set(ids))
-    deck_scores = []
+    ans = answers(game, player)
+    threat_w = game.threats.get("weight", 0.0)
+    needs, provides = profiles(game, player)
+    need_w = game.needs.get("weight", 0.0)
+    deck_scores, deck_recs = [], []
 
     for d in D:
         X = lambda cs: sum(x[c, d] for c in cs)
         m.Add(X(ids) == rules["size"])
 
         arch = game.archetypes.get(archs[d]) if archs[d] else None
-        role_limits = {**rules["role_limits"], **((arch or {}).get("role_limits", {}))}
+        arch_limits = (arch or {}).get("role_limits", {})
+        # Recomendaciones (p. ej. 1–2 win conditions): un arquetipo puede ajustarlas; se pagan, no se prohíben.
+        recommended = {r: dict(l) for r, l in rules.get("recommended", {}).items()}
+        for r, l in arch_limits.items():
+            if r in recommended:
+                recommended[r].update(l)
+        deck_recs.append(recommended)
+        soft = []
+        for role, lim in recommended.items():
+            n_role = X([c for c in ids if role in player.cards[c].roles])
+            pen = round(lim.get("penalty", 0.0) * SCALE)
+            if "min" in lim:
+                under = m.NewIntVar(0, rules["size"], f"under[{role}][{d}]")
+                m.Add(under >= lim["min"] - n_role)
+                soft.append(-pen * under)
+            if "max" in lim:
+                over = m.NewIntVar(0, rules["size"], f"over[{role}][{d}]")
+                m.Add(over >= n_role - lim["max"])
+                soft.append(-pen * over)
+        role_limits = {**rules["role_limits"], **{r: l for r, l in arch_limits.items() if r not in recommended}}
         for role, lim in role_limits.items():
             group = [c for c in ids if role in player.cards[c].roles]
             if "min" in lim:
@@ -87,11 +124,13 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         lo, hi = rules["avg_elixir"]
         if arch:
             lo, hi = arch.get("avg_elixir", [lo, hi])
-            label = f"Mazo {d + 1} ({arch['name']})"
+            label = arch["name"] if req.n_decks == 1 else f"Mazo {d + 1} ({arch['name']})"
             core = arch.get("core", [])
             owned_core = _resolve(core, player)
             if len(owned_core) < len(core):
-                return SolveResult(False, "SIN_CARTAS", [], [f"{label}: no tienes {', '.join(set(core) - set(owned_core))}."])
+                owned_norm = {norm(c) for c in owned_core}
+                missing = [c for c in core if norm(c) not in owned_norm]
+                return SolveResult(False, "SIN_CARTAS", [], [f"{label}: no tienes {', '.join(missing)}."])
             for c in owned_core:
                 m.Add(x[c, d] == 1)
             if arch.get("core_any"):
@@ -108,6 +147,12 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
                     m.Add(X(opts) >= need)
             for c in _resolve(arch.get("forbid", []), player):
                 m.Add(x[c, d] == 0)
+            # Coherencia: solo las condiciones de victoria del propio arquetipo
+            # (o las que el usuario dejó como obligatorias).
+            allowed = set(_resolve(archetype_wincons(arch), player)) | set(locked)
+            for c in ids:
+                if "win_condition" in player.cards[c].roles and c not in allowed:
+                    m.Add(x[c, d] == 0)
 
         elix10 = sum(round(player.cards[c].elixir * 10) * x[c, d] for c in ids)
         m.Add(elix10 >= round(lo * 10 * rules["size"]))
@@ -118,7 +163,7 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
             m.Add(v <= x[c, d])
         m.Add(sum(v for _, v in evo_d) <= rules["evo_slots"])
 
-        terms = [round(evals[c].value * SCALE) * x[c, d] for c in ids]
+        terms = soft + [round(evals[c].value * SCALE) * x[c, d] for c in ids]
         terms += [round(evals[c].evo_bonus * SCALE) * v for c, v in evo_d]
 
         for (a, b), (w, _) in syn.items():
@@ -137,9 +182,34 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
                 m.Add(z <= X(group))
                 terms.append(round(rb["bonus"] * SCALE) * z)
 
+        # Cobertura de amenazas: u/COVER_STEPS = min(1, suma de respuestas / need).
+        for key, t in game.threats.get("threats", {}).items():
+            resp = ans.get(key, {})
+            if not resp or threat_w <= 0:
+                continue
+            u = m.NewIntVar(0, COVER_STEPS, f"cov[{key}][{d}]")
+            m.Add(round(float(t["need"]) * 100) * u
+                  <= COVER_STEPS * sum(round(a * 100) * x[c, d] for c, a in resp.items()))
+            terms.append(round(threat_w * SCALE / COVER_STEPS) * u)
+
+        # Complementos: cada necesidad de una carta elegida vale de −50% (nada la cubre) a +50% (cubierta).
+        for c, nd in needs.items():
+            for key, amount in nd.items():
+                coef = need_w * amount
+                terms.append(-round(0.5 * coef * SCALE) * x[c, d])
+                provs = {p_: v for p_, v in provides.get(key, {}).items() if p_ != c}
+                if not provs or coef <= 0:
+                    continue
+                v = m.NewIntVar(0, COVER_STEPS, f"need[{c}][{key}][{d}]")
+                m.Add(v <= COVER_STEPS * x[c, d])
+                need100 = round(float(game.needs["needs"][key].get("need", 1.0)) * 100)
+                m.Add(need100 * v <= COVER_STEPS * sum(round(a * 100) * x[p_, d] for p_, a in provs.items()))
+                terms.append(round(coef * SCALE / COVER_STEPS) * v)
+
         for prev in req.exclude_decks:
+            # Cada alternativa debe cambiar al menos `min_diff` cartas respecto a cada mazo ya mostrado.
             prev_ids = _resolve(prev, player)
-            m.Add(X(prev_ids) <= len(prev_ids) - 1)
+            m.Add(X(prev_ids) <= max(0, len(prev_ids) - max(1, req.min_diff)))
 
         deck_scores.append(sum(terms))
 
@@ -155,14 +225,26 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     else:
         m.Maximize(deck_scores[0])
 
+    if req.n_decks > 1 and req.war_unique:
+        hint = _greedy_decks(player, game, evals, req, archs)
+        for d, (cards, evos) in enumerate(hint or []):
+            for c in ids:
+                m.AddHint(x[c, d], int(c in cards))
+                if (c, d) in e:
+                    m.AddHint(e[c, d], int(c in evos))
+
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = req.time_limit
-    solver.parameters.num_workers = 8
+    solver.parameters.num_workers = max(8, os.cpu_count() or 8)
     status = solver.Solve(m)
     status_name = solver.StatusName(status)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        notes.append("No existe un mazo que cumpla todas las reglas con tus cartas. "
-                     "Prueba a relajar el rango de elixir, quitar cartas bloqueadas o cambiar de arquetipo.")
+        if req.exclude_decks:
+            notes.append(f"No hay más alternativas que cambien al menos {max(1, req.min_diff)} cartas "
+                         "respecto a los mazos anteriores. Baja ese número o quita cartas obligatorias.")
+        else:
+            notes.append("No existe un mazo que cumpla todas las reglas con tus cartas. "
+                         "Prueba a relajar el rango de elixir, quitar cartas bloqueadas o cambiar de arquetipo.")
         return SolveResult(False, status_name, [], notes)
     if status == cp_model.FEASIBLE:
         best, bound = solver.ObjectiveValue(), solver.BestObjectiveBound()
@@ -175,7 +257,25 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         evos = [c for (c, dd), v in e.items() if dd == d and solver.Value(v)]
         # Orden para el enlace del juego: evoluciones primero (ocupan los primeros espacios).
         cards.sort(key=lambda c: (c not in evos, -evals[c].value))
-        ev = evaluate_deck(cards, evos, player, game, evals)
+        ev = evaluate_deck(cards, evos, player, game, evals, recommended=deck_recs[d])
         ev["archetype"] = game.archetypes[archs[d]]["name"] if archs[d] else None
         decks.append(ev)
+    if req.n_decks > 1 and len(set(archs)) == 1:
+        decks.sort(key=lambda dk: -dk["score"])   # mazos intercambiables: el más fuerte primero
     return SolveResult(True, status_name, decks, notes)
+
+
+def _greedy_decks(player: Player, game: GameData, evals: dict[str, CardEval], req: SolveRequest,
+                  archs: list) -> list[tuple[set, set]] | None:
+    """Guerra: arma los mazos uno por uno (cada uno sin las cartas de los anteriores).
+    No es el óptimo, pero es un buen punto de partida para el modelo conjunto."""
+    used, out = set(), []
+    for d in range(req.n_decks):
+        sub = SolveRequest(archetypes=[archs[d]] if archs[d] else [], banned=list(req.banned) + sorted(used),
+                           time_limit=min(2.0, req.time_limit))
+        r = solve(player, game, evals, sub)
+        if not r.ok:
+            return None
+        out.append((set(r.decks[0]["cards"]), set(r.decks[0]["evos"])))
+        used |= out[-1][0]
+    return out

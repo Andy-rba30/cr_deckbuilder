@@ -1,0 +1,147 @@
+# MOTOR v4 (atributos): reglas sobre las fichas de las cartas.
+#
+# Los stats salen de la wiki (data/card_stats.json, nivel 11). Cada carta tiene una FICHA de puntos
+# de 0 a 10 por tipo, y las reglas de abajo dicen qué tipos de puntos se necesitan, se cubren o
+# hacen sinergia entre sí. Todo se puede editar; las fórmulas son expresiones simples.
+#
+# Variables disponibles en las fórmulas
+#   Stats:   coste, hp (vida total), dps (daño por segundo total), dano_hechizo, dano_torre,
+#            dano_edificios, radio, rango (casillas), vel (45 lenta … 120 muy rápida), cantidad
+#   Tipo:    tropa, edificio, hechizo, aereo (vuela), ataca_aire, ataca_edificios, area (1/0)
+#   Habilidades (1/0): aturde, congela, ralentiza, empuja, reinicia, atrae, invoca, carga, salta,
+#            escudo, cura, furia, invisible, provoca, desvia, reduce_dano, rampa, tunel, raiz,
+#            dano_muerte, cadena
+#   Roles de cards.yaml (1/0): rol_win_condition, rol_tank, rol_bait, ... (si la carta los tiene)
+#   Puntos de la ficha (0..10): los de la sección points (tanque, dano, area, ...)
+#   Funciones: escala(x, mín, máx) y escala_log(x, mín, máx) → 0..10 · clip(x, mín=0, máx=1) · min · max
+#   En las reglas de pares: a.<variable> y b.<variable> son las dos cartas.
+
+# ------------------------------------------------------------------ puntos de la ficha (0..10)
+points:
+  tanque:    {name: Tanque,          expr: "escala_log(hp, 300, 6000) * (1 - hechizo)"}
+  dano:      {name: Daño,            expr: "escala_log(dps, 60, 600) * (1 - hechizo)"}
+  area:      {name: Daño en área,    expr: "area * max(4, escala(radio, 0, 3.5)) * clip(max(dano_hechizo, dps) / 150)"}
+  antiaereo: {name: Antiaéreo,       expr: "ataca_aire * max(escala_log(dps, 60, 600) * (1 - hechizo), 0.6 * hechizo * escala_log(dano_hechizo, 150, 1300))"}
+  alcance:   {name: Alcance,         expr: "escala(rango, 0.5, 7) * (1 - hechizo)"}
+  velocidad: {name: Velocidad,       expr: "escala(vel, 45, 120) * tropa"}
+  ciclo:     {name: Ciclo,           expr: "escala(coste, 6, 1)"}
+  enjambre:  {name: Enjambre,        expr: "max(escala(cantidad, 1, 6) * (1 - hechizo), 6 * invoca)"}
+  hechizo_p: {name: Daño de hechizo, expr: "hechizo * escala_log(dano_hechizo, 150, 1300)"}
+  torre:     {name: Daño a torre,    expr: "max(escala_log(dano_torre, 30, 400), max(ataca_edificios, rol_win_condition) * escala_log(dps, 60, 600))"}
+  derribo:   {name: Rompe edificios, expr: "max(escala_log(dano_edificios, 200, 900), hechizo * escala_log(dano_hechizo, 400, 1500))"}
+  control:   {name: Control,         expr: "max(10 * aturde, 10 * congela, 10 * reinicia, 7 * provoca, 6 * ralentiza, 6 * atrae, 6 * raiz, 4 * empuja)"}
+
+# Evoluciones y héroes: su ficha es la de su página de la wiki y además suman por sus habilidades.
+variant_bonus:
+  reduce_dano: {tanque: 2}
+  escudo:      {tanque: 1.5}
+  provoca:     {control: 3}
+  cura:        {tanque: 1}
+  invoca:      {enjambre: 2}
+
+# ------------------------------------------------------------------ roles automáticos
+# Para cartas que no están en cards.yaml (por ejemplo, las nuevas): sus roles salen de la ficha.
+roles:
+  win_condition: "ataca_edificios or (tropa and torre >= 7)"
+  tank:          "tropa and tanque >= 8"
+  mini_tank:     "tropa and 6 <= tanque < 8"
+  building:      "edificio"
+  air_defense:   "antiaereo >= 4"
+  small_spell:   "hechizo and coste <= 3 and dano_hechizo > 0"
+  big_spell:     "hechizo and coste >= 4 and dano_hechizo > 0"
+  splash:        "area >= 4"
+  anti_tank_dps: "not hechizo and dano >= 7.5"
+  dps:           "tropa and dano >= 5"
+  ranged_dps:    "tropa and rango >= 4 and dano >= 4"
+  cycle:         "coste <= 2"
+  cheap_defense: "tropa and coste <= 3 and tanque >= 4"
+  swarm:         "cantidad >= 3"
+  reset:         "aturde or reinicia"
+  support:       "invoca or cura or furia or provoca"
+
+# ------------------------------------------------------------------ necesidades (complementos)
+# need: cuánto lo necesita la carta (0..1) · provide: cuánto lo cubre (0..1). Textos como en needs.yaml.
+weight: 0.20
+warn_below: 0.5
+needs:
+  clear_buildings:
+    name: Quitar edificios
+    good: "{p} quita los edificios que frenan a {c}"
+    bad: "Nada quita los edificios que frenan a {c}"
+    need: "tropa * ataca_edificios * clip(0.3 + velocidad / 15)"
+    provide: "derribo / 10"
+  clear_air_defense:
+    name: Despejar antiaéreas
+    good: "{p} elimina las antiaéreas que paran a {c}"
+    bad: "Nada elimina las antiaéreas que paran a {c}"
+    need: "aereo * ataca_edificios"
+    provide: "max(clip((hechizo_p - 4) / 5), 0.8 * congela * hechizo)"
+  clear_swarms:
+    name: Limpiar enjambres
+    good: "{p} limpia los enjambres que frenan a {c}"
+    bad: "Nada limpia los enjambres que frenan a {c}"
+    need: "tropa * (area < 1) * (enjambre < 3) * clip((tanque + dano - 8) / 8)"
+    provide: "area / 10"
+  reset_infernos:
+    name: Anular Infernos
+    good: "{p} anula los Infernos que derriten a {c}"
+    bad: "Nada anula los Infernos que derriten a {c}"
+    need: "tropa * clip((tanque - 6.5) / 2.5)"
+    provide: "max(aturde, reinicia, 0.8 * congela, 0.3 * (enjambre >= 6))"
+  tank_in_front:
+    name: Un tanque delante
+    good: "{p} tanquea delante de {c}"
+    bad: "Nada tanquea delante de {c}"
+    need: "tropa * max((rango >= 4) * clip((7 - tanque) / 5) * clip((coste - 1) / 4), aereo * ataca_edificios * 0.5)"
+    provide: "tropa * clip((tanque - 5) / 4)"
+  support_behind:
+    name: Apoyo detrás del tanque
+    good: "{p} apoya detrás de {c}"
+    bad: "Nada apoya detrás de {c}"
+    need: "tropa * clip((tanque - 7) / 2) * clip((7 - dano) / 4)"
+    provide: "tropa * (tanque < 7) * clip((dano + alcance - 6) / 10)"
+  spell_bait:
+    name: Sobrecargar hechizos pequeños
+    need_total: 1.5
+    good: "{p} también atrae los hechizos pequeños que paran a {c}"
+    bad: "Nada más atrae los hechizos pequeños que paran a {c}"
+    need: "max(rol_bait, (cantidad >= 3) * (hp / max(1, cantidad) < 350)) * clip(0.4 + torre / 15)"
+    provide: "max(0.7 * rol_bait, (cantidad >= 3) * (hp / max(1, cantidad) < 350) * 0.6)"
+
+# ------------------------------------------------------------------ respuesta a amenazas
+# answer: qué tan bien responde la carta (0..1). Mismas amenazas que threats.yaml.
+threat_weight: 0.15
+threat_warn_below: 0.5
+threats:
+  air:     {name: Aéreos,            need: 2,   examples: "Globo, Sabueso de lava, esbirros", answer: "clip(antiaereo / 8)"}
+  swarm:   {name: Enjambres,         need: 2,   examples: "Ejército de esqueletos, Pandilla, Horda", answer: "area / 10"}
+  tank:    {name: Tanques,           need: 2,   examples: "Gólem, Gigante, P.E.K.K.A", answer: "(1 - ataca_edificios) * max(clip((dano - 4) / 5) * (1 - hechizo), 0.6 * edificio * (dps > 0), 0.5 * (enjambre >= 6))"}
+  bridge:  {name: Presión rápida,    need: 2,   examples: "Montapuercos, Ariete, Bandida", answer: "(1 - ataca_edificios) * max(edificio * (dps > 0), tropa * (coste <= 3) * clip(tanque / 7), 0.5 * (enjambre >= 4), 0.8 * atrae)"}
+  siege:   {name: Asedio,            need: 1.5, examples: "Ballesta, Mortero", answer: "max(derribo / 10, tropa * clip((tanque - 4) / 5))"}
+  support: {name: Tropas de apoyo,   need: 1.5, examples: "Bruja, Mago, Mosquetera", answer: "max(clip((hechizo_p - 4) / 5), tropa * (vel >= 90) * clip((dano - 3) / 5))"}
+  reset:   {name: Infernos y cargas, need: 1,   examples: "Torre infernal, Dragón infernal, Chispitas", answer: "max(aturde, reinicia, 0.7 * congela, 0.5 * (enjambre >= 4))"}
+
+# ------------------------------------------------------------------ reglas entre pares de cartas
+pairs:
+  - name: Dos tanques pesados
+    when: "a.tropa and b.tropa and min(a.tanque, b.tanque) >= 8.5"
+    value: -0.30
+    reason: "Dos tanques pesados: demasiado elixir en el mismo empuje"
+  - name: Dos cartas muy caras
+    when: "a.coste >= 6 and b.coste >= 6"
+    value: -0.15
+    reason: "Dos cartas de 6+ de elixir: el mazo pierde ritmo"
+  - name: Presión por aire y por tierra
+    when: "a.ataca_edificios and b.ataca_edificios and a.aereo != b.aereo"
+    value: 0.10
+    reason: "Atacan edificios por aire y por tierra a la vez: difícil de defender con una sola carta"
+  - name: Control para el que empuja
+    when: "a.ataca_edificios and a.tropa and (b.aturde or b.congela)"
+    value: 0.05
+    reason: "El control asegura que la win condition llegue a la torre"
+
+# ------------------------------------------------------------------ puntos de quiebre reales
+# Hechizos de un solo golpe que se comparan con la vida de cada tropa (stats de la wiki, +10% por nivel).
+breakpoints:
+  spells: [Fireball, The Log, Zap, Giant Snowball, Barbarian Barrel, Arrows, Rocket, Royal Delivery]
+  max_diff: 2          # solo umbrales a ±2 niveles (los que de verdad cambian algo)
