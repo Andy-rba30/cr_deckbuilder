@@ -9,6 +9,7 @@ from ortools.sat.python import cp_model
 from .catalog import GameData, norm
 from .collection import Player
 from .scoring import CardEval, evaluate_deck, synergy_index
+from .needs import profiles
 from .threats import answers
 
 SCALE = 10000      # CP-SAT solo trabaja con enteros
@@ -80,14 +81,35 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     syn = synergy_index(game, set(ids))
     ans = answers(game, player)
     threat_w = game.threats.get("weight", 0.0)
-    deck_scores = []
+    needs, provides = profiles(game, player)
+    need_w = game.needs.get("weight", 0.0)
+    deck_scores, deck_recs = [], []
 
     for d in D:
         X = lambda cs: sum(x[c, d] for c in cs)
         m.Add(X(ids) == rules["size"])
 
         arch = game.archetypes.get(archs[d]) if archs[d] else None
-        role_limits = {**rules["role_limits"], **((arch or {}).get("role_limits", {}))}
+        arch_limits = (arch or {}).get("role_limits", {})
+        # Recomendaciones (p. ej. 1–2 win conditions): un arquetipo puede ajustarlas; se pagan, no se prohíben.
+        recommended = {r: dict(l) for r, l in rules.get("recommended", {}).items()}
+        for r, l in arch_limits.items():
+            if r in recommended:
+                recommended[r].update(l)
+        deck_recs.append(recommended)
+        soft = []
+        for role, lim in recommended.items():
+            n_role = X([c for c in ids if role in player.cards[c].roles])
+            pen = round(lim.get("penalty", 0.0) * SCALE)
+            if "min" in lim:
+                under = m.NewIntVar(0, rules["size"], f"under[{role}][{d}]")
+                m.Add(under >= lim["min"] - n_role)
+                soft.append(-pen * under)
+            if "max" in lim:
+                over = m.NewIntVar(0, rules["size"], f"over[{role}][{d}]")
+                m.Add(over >= n_role - lim["max"])
+                soft.append(-pen * over)
+        role_limits = {**rules["role_limits"], **{r: l for r, l in arch_limits.items() if r not in recommended}}
         for role, lim in role_limits.items():
             group = [c for c in ids if role in player.cards[c].roles]
             if "min" in lim:
@@ -141,7 +163,7 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
             m.Add(v <= x[c, d])
         m.Add(sum(v for _, v in evo_d) <= rules["evo_slots"])
 
-        terms = [round(evals[c].value * SCALE) * x[c, d] for c in ids]
+        terms = soft + [round(evals[c].value * SCALE) * x[c, d] for c in ids]
         terms += [round(evals[c].evo_bonus * SCALE) * v for c, v in evo_d]
 
         for (a, b), (w, _) in syn.items():
@@ -169,6 +191,20 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
             m.Add(round(float(t["need"]) * 100) * u
                   <= COVER_STEPS * sum(round(a * 100) * x[c, d] for c, a in resp.items()))
             terms.append(round(threat_w * SCALE / COVER_STEPS) * u)
+
+        # Complementos: cada necesidad de una carta elegida vale de −50% (nada la cubre) a +50% (cubierta).
+        for c, nd in needs.items():
+            for key, amount in nd.items():
+                coef = need_w * amount
+                terms.append(-round(0.5 * coef * SCALE) * x[c, d])
+                provs = {p_: v for p_, v in provides.get(key, {}).items() if p_ != c}
+                if not provs or coef <= 0:
+                    continue
+                v = m.NewIntVar(0, COVER_STEPS, f"need[{c}][{key}][{d}]")
+                m.Add(v <= COVER_STEPS * x[c, d])
+                need100 = round(float(game.needs["needs"][key].get("need", 1.0)) * 100)
+                m.Add(need100 * v <= COVER_STEPS * sum(round(a * 100) * x[p_, d] for p_, a in provs.items()))
+                terms.append(round(coef * SCALE / COVER_STEPS) * v)
 
         for prev in req.exclude_decks:
             # Cada alternativa debe cambiar al menos `min_diff` cartas respecto a cada mazo ya mostrado.
@@ -221,7 +257,7 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         evos = [c for (c, dd), v in e.items() if dd == d and solver.Value(v)]
         # Orden para el enlace del juego: evoluciones primero (ocupan los primeros espacios).
         cards.sort(key=lambda c: (c not in evos, -evals[c].value))
-        ev = evaluate_deck(cards, evos, player, game, evals)
+        ev = evaluate_deck(cards, evos, player, game, evals, recommended=deck_recs[d])
         ev["archetype"] = game.archetypes[archs[d]]["name"] if archs[d] else None
         decks.append(ev)
     if req.n_decks > 1 and len(set(archs)) == 1:

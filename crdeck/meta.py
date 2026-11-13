@@ -43,6 +43,12 @@ class PairStat:
     expected: float            # mazos esperados si se eligieran por separado
     win_rate: float | None     # win rate de los mazos con las dos (None si hay muy pocos)
     weight: float              # sinergia que aporta al modelo
+    effect: float | None = None  # cuánto más ganan juntas de lo que predicen por separado (log-odds)
+
+    @property
+    def effect_points(self) -> float | None:
+        """El efecto en puntos de probabilidad de ganar (0.05 = +5 puntos)."""
+        return None if self.effect is None else 1.0 / (1.0 + math.exp(-self.effect)) - 0.5
 
     @property
     def lift(self) -> float:
@@ -61,9 +67,10 @@ class BattleMeta:
     pairs: list[PairStat]      # los que superan min_weight, de mayor a menor |peso|
     # Para estimar la probabilidad de ganar de un mazo (ver win_probability):
     index: dict[str, int] = field(default_factory=dict, repr=False)   # carta -> columna de la regresión
-    coef: np.ndarray | None = field(default=None, repr=False)        # fuerzas + efecto de nivel (al final)
+    coef: np.ndarray | None = field(default=None, repr=False)        # cartas, pares y efecto de nivel (al final)
     cov: np.ndarray | None = field(default=None, repr=False)         # covarianza aproximada de coef
-    mean_x: np.ndarray | None = field(default=None, repr=False)      # mazo medio del meta (uso de cada carta)
+    mean_x: np.ndarray | None = field(default=None, repr=False)      # mazo medio del meta (uso de cartas y pares)
+    pair_index: dict[tuple, int] = field(default_factory=dict, repr=False)  # par (ordenado) -> columna
 
     @property
     def level_win_gain(self) -> float:
@@ -80,6 +87,9 @@ class BattleMeta:
         for c in deck:
             if c in self.index:
                 v[self.index[c]] += 1.0
+        for pair in combinations(sorted(set(deck)), 2):
+            if pair in self.pair_index:
+                v[self.pair_index[pair]] += 1.0
         logit = float(v @ self.coef)
         sd = math.sqrt(max(0.0, float(v @ self.cov @ v)))
         sig = lambda t: 1.0 / (1.0 + math.exp(-t))
@@ -121,37 +131,50 @@ def compute_meta(battles: list[dict], cfg: dict, now=None) -> BattleMeta | None:
     names = sorted(games)
     n_decks = 2 * len(battles)
     index = {n: i for i, n in enumerate(names)}
-    coef, cov = _fit(rows, level_diffs, index, cfg["ridge"])
-    strength, level_effect = coef[:-1], float(coef[-1])
+    # Pares con suficientes mazos juntos: se estima cuánto más ganan juntas (efecto de interacción).
+    syn = cfg["synergy"]
+    frequent = sorted((p for p, n in pair_n.items() if n >= syn["min_pair_games"]), key=lambda p: -pair_n[p])
+    pair_index = {p: len(names) + i for i, p in enumerate(frequent[: syn["max_pair_effects"]])}
+    coef, cov = _fit(rows, level_diffs, index, cfg["ridge"], pair_index, syn["pair_ridge"])
+    strength, level_effect = coef[: len(names)], float(coef[-1])
+    effects = {p: float(coef[i]) for p, i in pair_index.items()}
 
     cards = {}
     for i, n in enumerate(names):
         cards[n] = CardStat(n, games[n], int(wins[n]), int(draws[n]), games[n] / n_decks,
                             (wins[n] + 0.5 * draws[n]) / games[n], float(strength[i]))
 
-    pairs = _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg["synergy"])
+    pairs = _pair_weights(names, games, pair_n, pair_w, effects, n_decks, syn)
     times = [b["time"] for b in battles]
-    mean_x = np.array([games[n] / n_decks for n in names])   # = uso de cada carta
+    # Mazo medio: uso de cada carta y de cada par frecuente.
+    mean_x = np.array([games[n] / n_decks for n in names] + [pair_n[p] / n_decks for p in pair_index])
     return BattleMeta(len(battles), n_decks, len(players), min(times), max(times),
-                      level_effect, cards, pairs, index, coef, cov, mean_x)
+                      level_effect, cards, pairs, index, coef, cov, mean_x, pair_index)
 
 
-def _fit(rows, level_diffs, idx, ridge: float, iters: int = 50):
-    """Regresión logística con regularización L2 (Newton). Cada fila: cartas del ganador − del perdedor.
-    Devuelve (coeficientes: fuerzas de cartas + efecto de nivel al final, covarianza aproximada)."""
-    k = len(idx)
+def _fit(rows, level_diffs, idx, ridge: float, pair_index: dict | None = None, pair_ridge: float = 25.0,
+         iters: int = 50):
+    """Regresión logística con regularización L2 (Newton). Cada fila: mazo del ganador − del perdedor.
+    Columnas: cartas, pares frecuentes (ambas cartas en el mazo) y diferencia de nivel (al final).
+    Devuelve (coeficientes, covarianza aproximada)."""
+    pair_index = pair_index or {}
+    k = len(idx) + len(pair_index)
+    lam = np.full(k + 1, float(ridge))
+    lam[len(idx):k] = float(pair_ridge)   # los pares, con más prudencia: hay menos datos de cada uno
+    lam[k] = 1e-3                         # el efecto del nivel casi no se regulariza
     if not rows:
-        lam = np.full(k + 1, float(ridge))
         return np.zeros(k + 1), np.diag(1.0 / lam)
     X = np.zeros((len(rows), k + 1))
     for r, (win, lose) in enumerate(rows):
-        for c in win:
-            X[r, idx[c]] += 1.0
-        for c in lose:
-            X[r, idx[c]] -= 1.0
+        for sign, deck in ((1.0, win), (-1.0, lose)):
+            for c in deck:
+                X[r, idx[c]] += sign
+            if pair_index:
+                for pair in combinations(deck, 2):   # los mazos llegan ordenados
+                    col = pair_index.get(pair)
+                    if col is not None:
+                        X[r, col] += sign
         X[r, k] = level_diffs[r]
-    lam = np.full(k + 1, float(ridge))
-    lam[k] = 1e-3                      # el efecto del nivel casi no se regulariza
     w = np.zeros(k + 1)
     for _ in range(iters):
         p = 1.0 / (1.0 + np.exp(-(X @ w)))
@@ -166,23 +189,22 @@ def _fit(rows, level_diffs, idx, ridge: float, iters: int = 50):
     return w, np.linalg.inv(hess)      # aproximación de Laplace: covarianza = inversa del hessiano
 
 
-def _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg) -> list[PairStat]:
+def _pair_weights(names, games, pair_n, pair_w, effects, n_decks, cfg) -> list[PairStat]:
+    """Peso de cada par = efecto aprendido (ganan más juntas) + un poco de "se juegan juntas"."""
     s, lo, hi = cfg["smoothing"], cfg["clip"][0], cfg["clip"][1]
     candidates = [n for n in names if games[n] >= cfg["min_together"]]   # cartas casi nunca vistas: sin datos de pares
     out = []
     for a, b in combinations(candidates, 2):
         n = pair_n.get((a, b), 0)
         expected = games[a] * games[b] / n_decks
+        effect = effects.get((a, b))
         weight = cfg["cooc_scale"] * math.log2((n + s) / (expected + s))
-        wr = None
-        if n >= cfg["min_together"]:
-            wr = pair_w[a, b] / n
-            base = (cards[a].win_rate + cards[b].win_rate) / 2
-            shrunk = (pair_w[a, b] + cfg["win_prior"] * base) / (n + cfg["win_prior"])
-            weight += cfg["win_scale"] * (shrunk - base)
+        if effect is not None:
+            weight += cfg["effect_scale"] * effect
         weight = min(hi, max(lo, weight))
+        wr = pair_w[a, b] / n if n >= cfg["min_together"] else None
         if abs(weight) >= cfg["min_weight"]:
-            out.append(PairStat(a, b, n, expected, wr, weight))
+            out.append(PairStat(a, b, n, expected, wr, weight, effect))
     # Mitad del cupo para combos y mitad para "casi nunca juntas": los negativos tienen pesos
     # más grandes (log de cocientes pequeños) y si no, se llevarían todo el cupo.
     out.sort(key=lambda p: -abs(p.weight))
@@ -205,6 +227,10 @@ def _percentiles(values: list[float]) -> np.ndarray:
 
 
 def pair_reason(p: PairStat) -> str:
+    if p.effect is not None and abs(p.effect_points) >= 0.01:
+        verb = "ganan" if p.effect > 0 else "pierden"
+        return (f"Juntas {verb} {abs(p.effect_points) * 100:.0f} puntos más de lo que predice cada una "
+                f"por separado ({p.together} mazos)")
     if p.weight >= 0:
         wr = f", {p.win_rate:.0%} de victorias" if p.win_rate is not None else ""
         return f"Se juegan juntas {p.lift:.1f}× más de lo esperado ({p.together} mazos{wr})"

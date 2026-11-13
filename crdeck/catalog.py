@@ -55,6 +55,7 @@ class GameData:
     battle_meta: object = None                                     # BattleMeta si se aplicaron batallas reales
     meta_detail: dict[str, dict] = field(default_factory=dict)     # nombre -> meta del catálogo, de datos y final
     threats: dict = field(default_factory=dict)                    # data/threats.yaml
+    needs: dict = field(default_factory=dict)                      # data/needs.yaml
 
     def info(self, name: str) -> CardInfo | None:
         return self.cards.get(norm(name))
@@ -89,5 +90,5 @@ def load_game_data(data_dir: Path = DATA_DIR) -> GameData:
     ]
     rules = _load(data_dir / "rules.yaml")
     archetypes = _load(data_dir / "archetypes.yaml")["archetypes"]
-    threats = _load(data_dir / "threats.yaml") if (data_dir / "threats.yaml").exists() else {}
-    return GameData(cards, syn, inter, rules, archetypes, threats=threats)
+    opt = lambda f: _load(data_dir / f) if (data_dir / f).exists() else {}
+    return GameData(cards, syn, inter, rules, archetypes, threats=opt("threats.yaml"), needs=opt("needs.yaml"))

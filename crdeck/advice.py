@@ -4,10 +4,12 @@ from __future__ import annotations
 from .catalog import GameData, norm
 from .collection import Player
 from .scoring import CardEval, evaluate_deck, pick_evos, rule_checks, synergy_index
+from .needs import profiles
 from .threats import answers
 
 PART_NAMES = {"cartas": "cartas", "comodidad": "cartas que juegas", "evoluciones": "evoluciones",
-              "sinergias": "sinergias", "roles": "roles", "amenazas": "cobertura"}
+              "sinergias": "sinergias", "complementos": "complementos", "roles": "roles",
+              "amenazas": "cobertura", "recomendaciones": "recomendaciones"}
 
 
 def suggest_swaps(deck: list[str], player: Player, game: GameData, evals: dict[str, CardEval],
@@ -18,10 +20,11 @@ def suggest_swaps(deck: list[str], player: Player, game: GameData, evals: dict[s
     """
     syn_idx = synergy_index(game, set(player.cards))
     ans = answers(game, player)
+    prof = profiles(game, player)
     slots = game.rules["deck"]["evo_slots"]
 
     def score(cards):
-        return evaluate_deck(cards, pick_evos(cards, player, evals, slots), player, game, evals, syn_idx, ans)
+        return evaluate_deck(cards, pick_evos(cards, player, evals, slots), player, game, evals, syn_idx, ans, prof)
 
     base = score(deck)
     fixed = {norm(c) for c in locked}
@@ -34,7 +37,7 @@ def suggest_swaps(deck: list[str], player: Player, game: GameData, evals: dict[s
         cands = []
         for new in pool:
             cards = [new if c == old else c for c in deck]
-            if not all(ok for _, ok in rule_checks(cards, player, game)):
+            if not all(ok for _, ok, hard in rule_checks(cards, player, game) if hard):
                 continue
             d = score(cards)
             if d["score"] - base["score"] >= min_gain:

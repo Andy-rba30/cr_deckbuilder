@@ -5,10 +5,11 @@ deck:
   max_champions: 1
   avg_elixir: [2.6, 4.3]    # rango permitido del promedio de elixir
   role_limits:              # RESTRICCIONES DURAS por mazo
-    win_condition: {min: 1, max: 2}
     air_defense:   {min: 2}
     tank:          {max: 1}
     building:      {max: 2}
+  recommended:              # RECOMENDACIONES: se pueden romper pagando `penalty` por cada carta de más o de menos
+    win_condition: {min: 1, max: 2, penalty: 0.30}
   spell_roles: [small_spell, big_spell]
   min_spells: 1
   max_spells: 3
@@ -42,11 +43,13 @@ battle_meta:
   prior_games: 100          # con esta cantidad de partidas, el dato pesa igual que cards.yaml
   synergy:
     min_together: 5         # partidas mínimas de una carta (y de un par) para medir sinergias
+    min_pair_games: 30      # mazos con las dos cartas para estimar cuánto más ganan juntas
+    max_pair_effects: 300   # máximo de pares cuyo efecto se estima (los más jugados)
+    pair_ridge: 25          # prudencia con el efecto de un par (más alto = efectos más pequeños)
+    effect_scale: 0.5       # peso por unidad de efecto (log-odds); 0.2 ≈ +5 puntos de victoria → +0.10
     smoothing: 5            # suaviza el lift de pares con pocos mazos
-    cooc_scale: 0.015       # peso por cada vez que se DUPLICA lo esperado de jugarse juntas
-    win_prior: 100          # prudencia con el win rate de un par (mazos "imaginarios" al 50%)
-    win_scale: 1.0          # peso por punto de win rate extra al ir juntas (0.03 → +0.03)
-    clip: [-0.25, 0.10]     # límites del peso de un par
+    cooc_scale: 0.008       # peso (pequeño) por cada vez que se DUPLICA lo esperado de jugarse juntas
+    clip: [-0.25, 0.15]     # límites del peso de un par
     min_weight: 0.02        # ignora pares con peso menor que esto
     max_pairs: 300          # máximo de pares de datos que se usan
 

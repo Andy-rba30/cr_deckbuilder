@@ -151,6 +151,11 @@ def any_tile(name: str, note: str = "", show_name: bool = True) -> str:
                         show_name=show_name)
 
 
+def complement_chips(d: dict) -> str:
+    """Lo que se complementa (verde) y los defectos que nada cubre (rojo)."""
+    return ui.chips([(txt, "good", det) for txt, _, det in d["works"][:6]]
+                    + [(txt, "bad", det) for txt, _, det in d["missing"][:4]])
+
 def show_deck(title: str, d: dict, subtitle: str | None = None):
     sub = subtitle if subtitle is not None else (d.get("archetype") or "")
     st.html(ui.deck_html(title, d, player, evals, copy_link(d["cards"], player), subtitle=sub))
@@ -161,6 +166,11 @@ def show_deck(title: str, d: dict, subtitle: str | None = None):
             st.html(ui.chips(syn))
         else:
             st.caption("Ninguna")
+        st.markdown("**Cómo se complementan**")
+        if d["works"] or d["missing"]:
+            st.html(complement_chips(d))
+        else:
+            st.caption("Ninguna carta de este mazo tiene necesidades especiales.")
         st.markdown("**Respuesta a amenazas** (pasa el ratón para ver qué cartas responden)")
         st.html(ui.coverage_chips(d["coverage"], es))
         st.markdown("**Roles cubiertos**")
@@ -171,8 +181,10 @@ def show_deck(title: str, d: dict, subtitle: str | None = None):
         else:
             st.caption("Ninguno")
         p = d["parts"]
-        st.caption(f"Desglose del puntaje: cartas {p['cartas']:.2f} + cartas que ya juegas {p['comodidad']:.2f} + "
-                   f"evoluciones {p['evoluciones']:.2f} + sinergias {p['sinergias']:.2f} + roles {p['roles']:.2f}")
+        st.caption("Desglose del puntaje: " + " + ".join(f"{k} {v:.2f}" for k, v in [
+            ("cartas", p["cartas"]), ("cartas que ya juegas", p["comodidad"]), ("evoluciones", p["evoluciones"]),
+            ("sinergias", p["sinergias"]), ("complementos", p["complementos"]), ("roles", p["roles"]),
+            ("amenazas", p["amenazas"]), ("recomendaciones", p["recomendaciones"])]))
 
 
 def solve_with_alternatives(req: SolveRequest, n_alternatives: int = 0,
@@ -331,8 +343,11 @@ def builder_order(cards: list[str]) -> tuple[list[str], list[str]]:
 
 
 def rule_chips(cards: list[str]) -> str:
-    return ui.chips([(f"{'✓' if ok else '✗'} {txt}", "good" if ok else "bad", "")
-                     for txt, ok in rule_checks(cards, player, game)])
+    """✓ se cumple · ✗ regla obligatoria rota · ⚠ recomendación no cumplida (se puede, pero cuesta puntos)."""
+    return ui.chips([(f"{'✓' if ok else '✗' if hard else '⚠ recomendación:'} {txt}",
+                      "good" if ok else "bad" if hard else "warn", "" if hard else "Recomendación, no obligatoria")
+                     for txt, ok, hard in rule_checks(cards, player, game)])
+
 
 
 def apply_swap(old: str, new: str):
@@ -372,6 +387,11 @@ with tab_build:
                              subtitle=f"{len(sel)}/8 cartas", empty_slots=8 - len(sel)))
         st.markdown("**Reglas del mazo**")
         st.html(rule_chips(sel))
+        st.markdown("**Cómo se complementan** (verde: una carta cubre el defecto de otra · rojo: nada lo cubre)")
+        if d["works"] or d["missing"]:
+            st.html(complement_chips(d))
+        else:
+            st.caption("Ninguna carta de este mazo tiene necesidades especiales.")
         st.markdown("**Respuesta a amenazas** (pasa el ratón para ver qué cartas responden)")
         st.html(ui.coverage_chips(d["coverage"], es))
         if len(sel) == 8:
@@ -497,13 +517,18 @@ with tab_meta:
                               for n in top]))
 
         def combo(p):
+            detail = f"{p.together} mazos juntas · {p.lift:.1f}× lo esperado · peso {p.weight:+.2f}"
+            if p.effect is not None:
+                detail = f"{p.effect_points * 100:+.0f} pts de victoria juntas · " + detail
             return ui.combo_html(any_tile(p.a, show_name=False), any_tile(p.b, show_name=False),
-                                 f"{es(p.a)} + {es(p.b)}",
-                                 f"{p.lift:.1f}× lo esperado · {p.together} mazos · peso {p.weight:+.2f}")
+                                 f"{es(p.a)} + {es(p.b)}", detail)
 
-        pos = [p for p in BM.pairs if p.weight > 0][:12]
-        neg = [p for p in BM.pairs if p.weight < 0][:8]
-        for title, group in [("Combos que más se juegan juntos", pos), ("Casi nunca van juntas", neg)]:
+        measured = [p for p in BM.pairs if p.effect is not None]
+        better = sorted((p for p in measured if p.effect > 0), key=lambda p: -p.effect)[:12]
+        worse = sorted((p for p in measured if p.effect < 0), key=lambda p: p.effect)[:8]
+        st.caption("Efecto de cada par = cuánto más (o menos) ganan juntas de lo que predice cada carta por "
+                   "separado, solo para pares con suficientes mazos. Con más batallas, más pares y más precisión.")
+        for title, group in [("Combos que más ganan juntos", better), ("Rinden peor juntas", worse)]:
             st.markdown(f"#### {title}")
             if group:
                 st.html(ui.combos_html([combo(p) for p in group]))

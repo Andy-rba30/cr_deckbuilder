@@ -82,10 +82,12 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
   en ⭐ Óptimo para comparar (y se puede cargar en 🛠️ Creador).
 
 **Modelo ILP** (`crdeck/solver.py`) — variables sí/no por carta y mazo:
-- Restricciones duras: 8 cartas, 1–2 condiciones de victoria, ≥2 antiaéreas, 1–3 hechizos,
-  máx. 1 tanque, máx. 2 estructuras, máx. 1 campeón, rango de elixir, espacios de evolución.
-- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + roles cubiertos
-  + **cobertura de amenazas** (ver abajo).
+- Restricciones duras: 8 cartas, ≥2 antiaéreas, 1–3 hechizos, máx. 1 tanque, máx. 2 estructuras,
+  máx. 1 campeón, rango de elixir, espacios de evolución.
+- **Recomendación** (no obligatoria): 1–2 condiciones de victoria. Se puede romper si el mazo lo
+  compensa; cada una de más o de menos resta 0.30 y la app lo avisa (`deck.recommended` en rules.yaml).
+- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + **complementos**
+  + roles cubiertos + **cobertura de amenazas** (ver abajo).
 - Guerra: además, cada carta en un solo mazo, y se maximiza **el mazo más débil** (×10) + el total.
 - Arquetipos: solo admiten las condiciones de victoria de su plantilla (`core`, `core_any`, `groups`
   o `extra_wincons`), para que no se cuele, por ejemplo, un Montapuercos en un Graveyard.
@@ -94,6 +96,15 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
 
 Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución del óptimo teórico.
 En Guerra, el modelo arranca desde 4 mazos armados uno por uno, así llega antes a buenas soluciones.
+
+**Cómo se complementan** (`data/needs.yaml`, `crdeck/needs.py`): en vez de reglas fijas de qué va
+con qué, cada carta tiene necesidades (defectos que otra debe cubrir o algo que la potencia) y otras
+cartas las cubren: quitar edificios (Montapuercos ← Terremoto), despejar antiaéreas (Globo ← Bola de
+fuego, Hielo), limpiar enjambres, anular Infernos (Gólem ← Descarga, Rayo), un tanque delante
+(Cementerio, Chispitas), apoyo detrás del tanque y sobrecargar hechizos pequeños (cebo). Cada
+necesidad suma de −50% (nada la cubre) a +50% (cubierta) de su peso: una carta exigente vale menos
+sola y más bien acompañada. La app lo explica en cada mazo ("El Terremoto quita los edificios que
+frenan al Montapuercos" / "Nada elimina las antiaéreas que paran al Globo"). Son estimaciones editables.
 
 **Respuesta a amenazas** (`data/threats.yaml`, `crdeck/threats.py`): 7 amenazas típicas (aéreos,
 enjambres, tanques, presión rápida, asedio, tropas de apoyo, infernos y cargas). Cada carta tiene
@@ -120,9 +131,11 @@ y las de más de 28 días se descartan, porque el balance cambia cada mes.
   pesan igual; con pocas manda el catálogo. Los datos deciden el orden de las cartas y la escala sale
   de `cards.yaml`, para no desbalancear el modelo. Las cartas nuevas que faltan en el catálogo
   también reciben su meta de los datos.
-- **Sinergias**: cuántas veces más se juegan dos cartas juntas de lo esperado si fuera al azar, más
-  (con mucha prudencia) cuánto más ganan juntas. Se suman a las de `synergies.yaml`. La mitad del
-  cupo es para combos y la otra mitad para cartas que casi nunca van juntas.
+- **Sinergias (realzan juntas)**: la misma regresión estima, para los pares con suficientes mazos
+  (30+), cuánto más **ganan** dos cartas juntas de lo que predice cada una por separado. Así suben
+  los combos que funcionan aunque sean raros y bajan las mezclas populares que no. Un poco de peso
+  va también a "se juegan juntas más de lo esperado". Se suma a `synergies.yaml` y entra en la
+  victoria estimada. Con más batallas, más pares medidos y más precisión.
 - **Victoria estimada**: con la misma regresión, la probabilidad de que un mazo le gane a un rival
   típico de tu nivel (el mazo medio del meta, al nivel de referencia), con un rango del 90%. Tiene en
   cuenta la fuerza de cada carta y tu nivel medio; no las sinergias.

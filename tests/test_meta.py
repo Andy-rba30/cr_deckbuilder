@@ -162,3 +162,16 @@ def test_decks_get_win_probability_only_with_battle_data():
     assert d["win"] is not None and 0 < d["win"][0] < 1
     d0 = solve(player, GAME, evaluate_cards(player, GAME, 15), SolveRequest(time_limit=10)).decks[0]
     assert d0["win"] is None
+
+
+# ---------------------------------------------------------------- efecto de pares (realzan juntas)
+def test_pair_effect_is_learned_from_battles():
+    from fake_battles import make_random_battles
+    raw = make_random_battles(3000, now=NOW)
+    bm = compute_meta([parse_battle(r, CFG["battle_types"]) for r in raw], CFG, now=NOW)
+    effects = {frozenset((p.a, p.b)): p.effect for p in bm.pairs if p.effect is not None}
+    planted = effects[frozenset(("Earthquake", "Hog Rider"))]
+    others = [e for k, e in effects.items() if k != frozenset(("Earthquake", "Hog Rider"))]
+    assert planted > 0.4 and planted > max(others) + 0.2          # real: +0.8; el resto es ruido
+    base = ["Hog Rider", "Musketeer", "Cannon", "Ice Golem", "Skeletons", "Ice Spirit", "Fireball"]
+    assert bm.win_probability(base + ["Earthquake"], 0)[0] > bm.win_probability(base + ["Zap"], 0)[0] + 0.03

@@ -15,7 +15,10 @@ def roles(deck, role):
 def check_rules(d):
     r = GAME.rules["deck"]
     assert len(d["cards"]) == 8
-    assert 1 <= roles(d["cards"], "win_condition") <= 2
+    # 1–2 win conditions es una recomendación: se puede romper, pero el mazo lo avisa y lo paga.
+    if not 1 <= roles(d["cards"], "win_condition") <= 2:
+        assert any(w.startswith("Recomendación") for w in d["warnings"])
+        assert d["parts"]["recomendaciones"] < 0
     assert roles(d["cards"], "air_defense") >= 2
     assert sum(PLAYER.cards[c].champion for c in d["cards"]) <= 1
     assert len(d["evos"]) <= r["evo_slots"]

@@ -56,3 +56,27 @@ def make_battles(n=1500, seed=1, now=None, battle_type="PvP"):
         out.append({"type": battle_type, "battleTime": (now - timedelta(minutes=i)).strftime("%Y%m%dT%H%M%S.000Z"),
                     "team": [players[0]], "opponent": [players[1]]})
     return out
+
+
+RANDOM_POOL = ["Hog Rider", "Earthquake", "Musketeer", "Cannon", "Ice Golem", "Skeletons", "Ice Spirit", "Fireball",
+               "The Log", "Knight", "Archers", "Valkyrie", "Baby Dragon", "Zap", "Arrows", "Minions", "Bats",
+               "Tesla", "Goblin Gang", "Mega Minion"]
+PAIR_EFFECT = {("Earthquake", "Hog Rider"): 0.8}   # juntas ganan más de lo que suma cada una
+
+
+def make_random_battles(n=3000, seed=2, now=None, pair_effect=PAIR_EFFECT):
+    """Mazos al azar de un grupo pequeño de cartas: todas las parejas aparecen juntas y por separado,
+    así se puede medir el efecto de un par. Sin efectos de cartas solas ni de nivel."""
+    rng = random.Random(seed)
+    now = now or datetime.now(timezone.utc)
+    out = []
+    for i in range(n):
+        decks = [rng.sample(RANDOM_POOL, 8), rng.sample(RANDOM_POOL, 8)]
+        z = sum(eff * ((a in decks[0] and b in decks[0]) - (a in decks[1] and b in decks[1]))
+                for (a, b), eff in pair_effect.items())
+        first_wins = rng.random() < 1 / (1 + math.exp(-z))
+        players = [{"tag": tag(2 * i + s), "crowns": int(first_wins == (s == 0)),
+                    "cards": [{"name": c, "level": 14, "maxLevel": 16} for c in decks[s]]} for s in range(2)]
+        out.append({"type": "PvP", "battleTime": (now - timedelta(minutes=i)).strftime("%Y%m%dT%H%M%S.000Z"),
+                    "team": [players[0]], "opponent": [players[1]]})
+    return out

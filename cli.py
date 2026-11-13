@@ -39,6 +39,8 @@ def print_deck(i, d, player):
         p, lo, hi = d["win"]
         print(f"  Victoria estimada contra un rival típico de tu nivel: {p:.0%} ({lo:.0%}–{hi:.0%})")
     print("  Amenazas: " + ", ".join(f"{t['name']} {t['cov']:.0%}" for t in d["coverage"]))
+    for txt, *_ in d["works"][:4]:
+        print(f"  ✓ {txt}")
     for a, b, w, r in d["synergies"]:
         print(f"  {'+' if w > 0 else '−'} {a} + {b} ({w:+.2f}): {r}")
     for w in d["warnings"]:
@@ -52,17 +54,17 @@ def print_meta(bm: BattleMeta, game, top: int = 15):
     es = lambda n: game.info(n).es if game.info(n) else n
     print(f"\nMeta: {bm.n_battles} batallas de {bm.n_players} jugadores ({bm.first[:10]} a {bm.last[:10]})")
     print(f"1 nivel medio de ventaja ≈ {bm.level_win_gain * 100:+.1f} puntos de probabilidad de ganar")
-    print(f"\nCartas (meta final; entre paréntesis el de cards.yaml):")
+    print("\nCartas (meta final; entre paréntesis el de cards.yaml):")
     for n, d in sorted(game.meta_detail.items(), key=lambda kv: -kv[1]["final"])[:top]:
         c = bm.cards[n]
         print(f"  {es(n):<24} {d['final']:.2f} ({d['catalogo']:.2f})  uso {c.usage:5.1%}  "
               f"win rate {c.win_rate:5.1%}  {c.games} partidas")
-    pos = [p for p in bm.pairs if p.weight > 0][:10]
-    neg = [p for p in bm.pairs if p.weight < 0][:5]
-    print("\nSinergias de las batallas:")
-    for p in pos + neg:
-        print(f"  {'+' if p.weight > 0 else '−'} {es(p.a)} + {es(p.b)} ({p.weight:+.3f}): {p.lift:.1f}× lo esperado, "
-              f"{p.together} mazos")
+    measured = sorted((p for p in bm.pairs if p.effect is not None), key=lambda p: -p.effect)
+    print("\nPares que más ganan juntos (y los que rinden peor):")
+    for p in measured[:10] + measured[-5:]:
+        print(f"  {es(p.a)} + {es(p.b)}: {p.effect_points * 100:+.0f} pts de victoria juntas, {p.together} mazos")
+    if not measured:
+        print("  Aún no hay pares con suficientes mazos; descarga más batallas.")
 
 
 def main(argv=None):
@@ -140,7 +142,7 @@ def main(argv=None):
     evals = evaluate_cards(player, game, ref, a.level_weight, comfort)
     if a.mode == "ranking":
         best, rows = rank_archetypes(player, game, evals, time_limit=min(a.time_limit, 10.0))
-        print(f"\nRanking de arquetipos" + (f" (óptimo libre: {best:.2f})" if best is not None else ""))
+        print("\nRanking de arquetipos" + (f" (óptimo libre: {best:.2f})" if best is not None else ""))
         for pos, r in enumerate(rows, 1):
             if r.ok:
                 delta = f"{r.score - best:+.2f}" if best is not None else ""
