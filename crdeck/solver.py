@@ -1,6 +1,7 @@
 """Modelo ILP (OR-Tools CP-SAT) para armar 1 mazo o los 4 mazos de Guerra de Clanes."""
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 
 from ortools.sat.python import cp_model
@@ -174,9 +175,17 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     else:
         m.Maximize(deck_scores[0])
 
+    if req.n_decks > 1 and req.war_unique:
+        hint = _greedy_decks(player, game, evals, req, archs)
+        for d, (cards, evos) in enumerate(hint or []):
+            for c in ids:
+                m.AddHint(x[c, d], int(c in cards))
+                if (c, d) in e:
+                    m.AddHint(e[c, d], int(c in evos))
+
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = req.time_limit
-    solver.parameters.num_workers = 8
+    solver.parameters.num_workers = max(8, os.cpu_count() or 8)
     status = solver.Solve(m)
     status_name = solver.StatusName(status)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
@@ -202,3 +211,19 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         ev["archetype"] = game.archetypes[archs[d]]["name"] if archs[d] else None
         decks.append(ev)
     return SolveResult(True, status_name, decks, notes)
+
+
+def _greedy_decks(player: Player, game: GameData, evals: dict[str, CardEval], req: SolveRequest,
+                  archs: list) -> list[tuple[set, set]] | None:
+    """Guerra: arma los mazos uno por uno (cada uno sin las cartas de los anteriores).
+    No es el óptimo, pero es un buen punto de partida para el modelo conjunto."""
+    used, out = set(), []
+    for d in range(req.n_decks):
+        sub = SolveRequest(archetypes=[archs[d]] if archs[d] else [], banned=list(req.banned) + sorted(used),
+                           time_limit=min(2.0, req.time_limit))
+        r = solve(player, game, evals, sub)
+        if not r.ok:
+            return None
+        out.append((set(r.decks[0]["cards"]), set(r.decks[0]["evos"])))
+        used |= out[-1][0]
+    return out

@@ -33,6 +33,7 @@ class Synergy:
     b: str
     weight: float
     reason: str
+    source: str = "catálogo"   # "catálogo" (synergies.yaml), "batallas" o "ambos"
 
 
 @dataclass
@@ -50,7 +51,9 @@ class GameData:
     interactions: list[Interaction]
     rules: dict
     archetypes: dict
-    _by_norm: dict = field(default_factory=dict)
+    unknown_meta: dict[str, float] = field(default_factory=dict)  # meta de cartas que no están en cards.yaml
+    battle_meta: object = None                                     # BattleMeta si se aplicaron batallas reales
+    meta_detail: dict[str, dict] = field(default_factory=dict)     # nombre -> meta del catálogo, de datos y final
 
     def info(self, name: str) -> CardInfo | None:
         return self.cards.get(norm(name))

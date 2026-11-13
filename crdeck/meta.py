@@ -1,0 +1,230 @@
+"""Meta calculado con batallas reales.
+
+* Fuerza de cada carta: regresión logística (Bradley-Terry) sobre quién ganó cada batalla,
+  usando las cartas de los dos mazos y la diferencia de nivel medio. Así una carta no parece
+  fuerte solo porque la juega gente con más nivel ni porque siempre va con otra carta fuerte.
+* Sinergia de cada par: cuántas veces más se juegan juntas que si fuera al azar (lift) y,
+  con mucha prudencia, cuánto más ganan juntas que por separado.
+* Mezcla con el catálogo: cada carta pesa más del lado de los datos cuantas más partidas tiene;
+  con pocas partidas manda cards.yaml. Las sinergias de datos se suman a las de synergies.yaml.
+
+Todos los parámetros están en data/rules.yaml, sección battle_meta.
+"""
+from __future__ import annotations
+
+import math
+from collections import Counter
+from dataclasses import dataclass, replace
+from itertools import combinations
+from pathlib import Path
+
+import numpy as np
+
+from .battles import BATTLES_PATH, load_battles, recent
+from .catalog import GameData, Synergy, norm
+
+
+@dataclass
+class CardStat:
+    name: str
+    games: int                 # mazos que la llevaban
+    wins: int
+    draws: int
+    usage: float               # fracción de mazos que la llevan
+    win_rate: float            # victorias / partidas (empate = media victoria)
+    strength: float            # efecto en log-odds de llevarla (controlando nivel y compañeras)
+
+
+@dataclass
+class PairStat:
+    a: str
+    b: str
+    together: int              # mazos con las dos cartas
+    expected: float            # mazos esperados si se eligieran por separado
+    win_rate: float | None     # win rate de los mazos con las dos (None si hay muy pocos)
+    weight: float              # sinergia que aporta al modelo
+
+    @property
+    def lift(self) -> float:
+        return self.together / self.expected if self.expected > 0 else float("inf")
+
+
+@dataclass
+class BattleMeta:
+    n_battles: int
+    n_decks: int
+    n_players: int
+    first: str                 # fecha de la batalla más antigua (ISO)
+    last: str
+    level_effect: float        # log-odds por cada nivel medio de ventaja
+    cards: dict[str, CardStat]
+    pairs: list[PairStat]      # los que superan min_weight, de mayor a menor |peso|
+
+    @property
+    def level_win_gain(self) -> float:
+        """Puntos de probabilidad de ganar que da 1 nivel medio de ventaja (0.05 = +5 puntos)."""
+        return 1.0 / (1.0 + math.exp(-self.level_effect)) - 0.5
+
+
+# ---------------------------------------------------------------- cálculo
+def compute_meta(battles: list[dict], cfg: dict, now=None) -> BattleMeta | None:
+    battles = recent(battles, cfg.get("max_age_days"), now)
+    if not battles:
+        return None
+
+    # Niveles normalizados a la escala del juego (como en collection.parse_player).
+    game_max = max((c[2] or 0 for b in battles for d in b["decks"] for c in d["cards"]), default=0)
+
+    def deck_level(d) -> float:
+        return sum(c[1] + ((game_max - c[2]) if c[2] else 0) for c in d["cards"]) / len(d["cards"])
+
+    games, wins, draws = Counter(), Counter(), Counter()
+    pair_n, pair_w = Counter(), Counter()
+    rows, level_diffs, players = [], [], set()
+    for b in battles:
+        decks = [sorted({c[0] for c in d["cards"]}) for d in b["decks"]]
+        for i, cards in enumerate(decks):
+            players.add(b["decks"][i]["tag"])
+            res = 0.5 if b["winner"] is None else float(b["winner"] == i)
+            for c in cards:
+                games[c] += 1
+                wins[c] += res == 1.0
+                draws[c] += res == 0.5
+            for pair in combinations(cards, 2):
+                pair_n[pair] += 1
+                pair_w[pair] += res
+        if b["winner"] is not None:
+            w = b["winner"]
+            rows.append((decks[w], decks[1 - w]))
+            level_diffs.append(deck_level(b["decks"][w]) - deck_level(b["decks"][1 - w]))
+
+    names = sorted(games)
+    n_decks = 2 * len(battles)
+    strength, level_effect = _fit(rows, level_diffs, {n: i for i, n in enumerate(names)}, cfg["ridge"])
+
+    cards = {}
+    for i, n in enumerate(names):
+        cards[n] = CardStat(n, games[n], int(wins[n]), int(draws[n]), games[n] / n_decks,
+                            (wins[n] + 0.5 * draws[n]) / games[n], float(strength[i]))
+
+    pairs = _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg["synergy"])
+    times = [b["time"] for b in battles]
+    return BattleMeta(len(battles), n_decks, len(players), min(times), max(times),
+                      level_effect, cards, pairs)
+
+
+def _fit(rows, level_diffs, idx, ridge: float, iters: int = 50):
+    """Regresión logística con regularización L2 (Newton). Cada fila: cartas del ganador − del perdedor."""
+    k = len(idx)
+    if not rows:
+        return np.zeros(k), 0.0
+    X = np.zeros((len(rows), k + 1))
+    for r, (win, lose) in enumerate(rows):
+        for c in win:
+            X[r, idx[c]] += 1.0
+        for c in lose:
+            X[r, idx[c]] -= 1.0
+        X[r, k] = level_diffs[r]
+    lam = np.full(k + 1, float(ridge))
+    lam[k] = 1e-3                      # el efecto del nivel casi no se regulariza
+    w = np.zeros(k + 1)
+    for _ in range(iters):
+        p = 1.0 / (1.0 + np.exp(-(X @ w)))
+        grad = -X.T @ (1.0 - p) + lam * w
+        hess = (X.T * (p * (1.0 - p))) @ X + np.diag(lam)
+        step = np.linalg.solve(hess, grad)
+        w -= step
+        if np.max(np.abs(step)) < 1e-8:
+            break
+    return w[:k], float(w[k])
+
+
+def _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg) -> list[PairStat]:
+    s, lo, hi = cfg["smoothing"], cfg["clip"][0], cfg["clip"][1]
+    candidates = [n for n in names if games[n] >= cfg["min_together"]]   # cartas casi nunca vistas: sin datos de pares
+    out = []
+    for a, b in combinations(candidates, 2):
+        n = pair_n.get((a, b), 0)
+        expected = games[a] * games[b] / n_decks
+        weight = cfg["cooc_scale"] * math.log2((n + s) / (expected + s))
+        wr = None
+        if n >= cfg["min_together"]:
+            wr = pair_w[a, b] / n
+            base = (cards[a].win_rate + cards[b].win_rate) / 2
+            shrunk = (pair_w[a, b] + cfg["win_prior"] * base) / (n + cfg["win_prior"])
+            weight += cfg["win_scale"] * (shrunk - base)
+        weight = min(hi, max(lo, weight))
+        if abs(weight) >= cfg["min_weight"]:
+            out.append(PairStat(a, b, n, expected, wr, weight))
+    # Mitad del cupo para combos y mitad para "casi nunca juntas": los negativos tienen pesos
+    # más grandes (log de cocientes pequeños) y si no, se llevarían todo el cupo.
+    out.sort(key=lambda p: -abs(p.weight))
+    pos, neg = [p for p in out if p.weight > 0], [p for p in out if p.weight < 0]
+    half = cfg["max_pairs"] // 2
+    chosen = pos[:half] + neg[:half]
+    rest = pos[half:] + neg[half:]
+    rest.sort(key=lambda p: -abs(p.weight))
+    chosen += rest[: max(0, cfg["max_pairs"] - len(chosen))]
+    chosen.sort(key=lambda p: -abs(p.weight))
+    return chosen
+
+
+# ---------------------------------------------------------------- aplicar al catálogo
+def _percentiles(values: list[float]) -> np.ndarray:
+    if len(values) == 1:
+        return np.array([0.5])
+    ranks = np.argsort(np.argsort(values, kind="stable"), kind="stable")
+    return ranks / (len(values) - 1)
+
+
+def pair_reason(p: PairStat) -> str:
+    if p.weight >= 0:
+        wr = f", {p.win_rate:.0%} de victorias" if p.win_rate is not None else ""
+        return f"Se juegan juntas {p.lift:.1f}× más de lo esperado ({p.together} mazos{wr})"
+    return f"Casi nunca van juntas ({p.together} mazos de {p.expected:.0f} esperados)"
+
+
+def apply_meta(game: GameData, bm: BattleMeta, cfg: dict) -> GameData:
+    """Devuelve una copia del catálogo con el meta y las sinergias ajustados por las batallas."""
+    names = list(bm.cards)
+    p = cfg["popularity_weight"]
+    score = ((1 - p) * _percentiles([bm.cards[n].strength for n in names])
+             + p * _percentiles([bm.cards[n].usage for n in names]))
+    # Los datos deciden el ORDEN de las cartas; la escala sale de cards.yaml para no
+    # desbalancear el valor de las cartas frente a sinergias y roles.
+    scale = sorted(c.meta for c in game.cards.values())
+
+    cards, unknown_meta, detail = dict(game.cards), {}, {}
+    for n, sc in zip(names, score):
+        st = bm.cards[n]
+        data_meta = float(np.quantile(scale, sc))
+        conf = st.games / (st.games + cfg["prior_games"])
+        key = norm(n)
+        info = cards.get(key)
+        prior = info.meta if info else game.rules["unknown_card"]["meta"]
+        final = conf * data_meta + (1 - conf) * prior
+        if info:
+            cards[key] = replace(info, meta=final)
+        else:
+            unknown_meta[key] = final
+        detail[n] = {"catalogo": prior, "datos": data_meta, "final": final, "peso_datos": conf}
+
+    data = {tuple(sorted((norm(pp.a), norm(pp.b)))): pp for pp in bm.pairs}
+    synergies = []
+    for s in game.synergies:
+        pp = data.pop(tuple(sorted((norm(s.a), norm(s.b)))), None)
+        if pp:
+            synergies.append(Synergy(s.a, s.b, s.weight + pp.weight, f"{s.reason} · {pair_reason(pp)}", "ambos"))
+        else:
+            synergies.append(s)
+    synergies += [Synergy(pp.a, pp.b, pp.weight, pair_reason(pp), "batallas") for pp in data.values()]
+
+    return replace(game, cards=cards, synergies=synergies, unknown_meta=unknown_meta,
+                   battle_meta=bm, meta_detail=detail)
+
+
+def load_battle_meta(game: GameData, path: Path = BATTLES_PATH, now=None) -> tuple[GameData, BattleMeta | None]:
+    """Catálogo con el meta de data/battles.json aplicado (o el catálogo tal cual si no hay datos)."""
+    cfg = game.rules["battle_meta"]
+    bm = compute_meta(load_battles(path), cfg, now)
+    return (apply_meta(game, bm, cfg), bm) if bm else (game, None)

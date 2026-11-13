@@ -34,12 +34,13 @@ def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight:
     unknown = rules["unknown_card"]
     out: dict[str, CardEval] = {}
     for name, c in player.cards.items():
-        meta = c.info.meta if c.info else unknown["meta"]
-        sens = c.info.sens if c.info else unknown["sens"]
+        info = game.info(name)   # del catálogo activo: puede traer el meta ajustado con batallas reales
+        meta = info.meta if info else game.unknown_meta.get(norm(name), unknown["meta"])
+        sens = info.sens if info else unknown["sens"]
         lf = level_factor(c.level, ref_level, sens, rules, level_weight)
         evo = 0.0
         if c.evo_unlocked:
-            evo = (c.info.evo_bonus if c.info and c.info.evo_bonus > 0 else rules["evo_bonus_default"]) * lf
+            evo = (info.evo_bonus if info and info.evo_bonus > 0 else rules["evo_bonus_default"]) * lf
         value = meta * lf + (rules["champion_bonus"] if c.champion else 0.0)
         out[name] = CardEval(name, value, meta, lf, ref_level - c.level, 0.0, evo)
 

@@ -31,3 +31,21 @@ level:
 evo_bonus_default: 0.25        # si la API dice que tienes la evolución pero el catálogo no tiene bonus
 champion_bonus: 0.05
 unknown_card: {meta: 0.40, sens: 0.50}   # cartas nuevas que aún no están en cards.yaml
+
+# META CON BATALLAS REALES (pestaña 📊 Meta o: python cli.py --tag "#TU_TAG" --mode meta)
+# Solo se usa si existe data/battles.json. Puedes cambiar estos valores sin volver a descargar.
+battle_meta:
+  battle_types: [PvP, pathOfLegend, riverRacePvP]   # tipos de batalla 1 contra 1 que cuentan
+  max_age_days: 28          # ignora batallas más antiguas (el balance cambia cada mes)
+  ridge: 10                 # prudencia de la regresión: más alto = efectos más pequeños con pocos datos
+  popularity_weight: 0.3    # 0 = solo win rate, 1 = solo popularidad, para ordenar las cartas
+  prior_games: 100          # con esta cantidad de partidas, el dato pesa igual que cards.yaml
+  synergy:
+    min_together: 5         # partidas mínimas de una carta (y de un par) para medir sinergias
+    smoothing: 5            # suaviza el lift de pares con pocos mazos
+    cooc_scale: 0.015       # peso por cada vez que se DUPLICA lo esperado de jugarse juntas
+    win_prior: 100          # prudencia con el win rate de un par (mazos "imaginarios" al 50%)
+    win_scale: 1.0          # peso por punto de win rate extra al ir juntas (0.03 → +0.03)
+    clip: [-0.25, 0.10]     # límites del peso de un par
+    min_weight: 0.02        # ignora pares con peso menor que esto
+    max_pairs: 300          # máximo de pares de datos que se usan

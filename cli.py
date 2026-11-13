@@ -6,6 +6,7 @@ Ejemplos:
   python cli.py --demo --mode war
   python cli.py --demo --mode ranking
   python cli.py --tag "#ABC123" --mode upgrades
+  python cli.py --tag "#ABC123" --mode meta --players 150   (descarga batallas reales)
 """
 from __future__ import annotations
 
@@ -13,9 +14,11 @@ import argparse
 import sys
 
 from crdeck.api import ApiError
+from crdeck.battles import BATTLES_PATH, crawl, save_battles
 from crdeck.collection import default_reference_level
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
+from crdeck.meta import BattleMeta, load_battle_meta
 from crdeck.ranking import rank_archetypes
 from crdeck.scoring import evaluate_cards
 from crdeck.solver import SolveRequest, solve
@@ -40,6 +43,23 @@ def print_deck(i, d, player):
         print(f"  Copiar: {link}")
 
 
+def print_meta(bm: BattleMeta, game, top: int = 15):
+    es = lambda n: game.info(n).es if game.info(n) else n
+    print(f"\nMeta: {bm.n_battles} batallas de {bm.n_players} jugadores ({bm.first[:10]} a {bm.last[:10]})")
+    print(f"1 nivel medio de ventaja ≈ {bm.level_win_gain * 100:+.1f} puntos de probabilidad de ganar")
+    print(f"\nCartas (meta final; entre paréntesis el de cards.yaml):")
+    for n, d in sorted(game.meta_detail.items(), key=lambda kv: -kv[1]["final"])[:top]:
+        c = bm.cards[n]
+        print(f"  {es(n):<24} {d['final']:.2f} ({d['catalogo']:.2f})  uso {c.usage:5.1%}  "
+              f"win rate {c.win_rate:5.1%}  {c.games} partidas")
+    pos = [p for p in bm.pairs if p.weight > 0][:10]
+    neg = [p for p in bm.pairs if p.weight < 0][:5]
+    print("\nSinergias de las batallas:")
+    for p in pos + neg:
+        print(f"  {'+' if p.weight > 0 else '−'} {es(p.a)} + {es(p.b)} ({p.weight:+.3f}): {p.lift:.1f}× lo esperado, "
+              f"{p.together} mazos")
+
+
 def main(argv=None):
     env_found = load_env()
     ap = argparse.ArgumentParser(description="Recomendador de mazos de Clash Royale")
@@ -47,7 +67,7 @@ def main(argv=None):
     src.add_argument("--tag")
     src.add_argument("--json", help="Archivo JSON con la respuesta de la API")
     src.add_argument("--demo", action="store_true")
-    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades", "ranking"], default="optimal")
+    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades", "ranking", "meta"], default="optimal")
     ap.add_argument("--archetype", help="Clave del arquetipo (ver data/archetypes.yaml)")
     ap.add_argument("--ref-level", type=int, help="Nivel de referencia (por defecto: mediana de tus mejores cartas)")
     ap.add_argument("--level-weight", type=float, default=1.0, help="Importancia del nivel (0 a 2)")
@@ -55,11 +75,37 @@ def main(argv=None):
     ap.add_argument("--min-diff", type=int, default=3,
                     help="Cartas que debe cambiar cada alternativa respecto a las anteriores (por defecto 3)")
     ap.add_argument("--time-limit", type=float, default=20.0)
+    ap.add_argument("--players", type=int, default=100, help="Modo meta: jugadores cuyo historial se descarga")
+    ap.add_argument("--seed-tags", default="", help="Modo meta: tags extra para empezar, separados por comas")
+    ap.add_argument("--no-battle-meta", action="store_true", help="Ignora data/battles.json (usa solo los YAML)")
     a = ap.parse_args(argv)
 
     if a.tag and not env_found:
         sys.exit(f"No encuentro el archivo .env. Debe estar exactamente en: {ENV_PATH}")
     game = load_game_data()
+    cfg = game.rules["battle_meta"]
+    if a.mode == "meta":
+        if not a.tag:
+            sys.exit("El modo meta necesita tu --tag (descarga tu historial y el de tus rivales).")
+        seeds = [a.tag] + [t for t in a.seed_tags.split(",") if t.strip()]
+        print(f"Descargando historiales de hasta {a.players} jugadores...")
+        try:
+            battles, info = crawl(seeds, a.players, cfg["battle_types"], progress=lambda i, n, nb: (
+                print(f"  {i}/{n} jugadores · {nb} batallas") if i % 10 == 0 or i == n else None))
+        except ApiError as e:
+            sys.exit(str(e))
+        total = save_battles(battles, max_age_days=cfg["max_age_days"])
+        print(f"{len(battles)} batallas descargadas ({info['errors']} jugadores con error). "
+              f"Total guardado en {BATTLES_PATH}: {total}")
+        game, bm = load_battle_meta(game)
+        if bm:
+            print_meta(bm, game)
+        return
+    if not a.no_battle_meta:
+        game, bm = load_battle_meta(game)
+        if bm:
+            print(f"Meta de batallas reales: {bm.n_battles} batallas ({bm.first[:10]} a {bm.last[:10]}). "
+                  "Usa --no-battle-meta para ignorarlo.")
     try:
         player = load_player(game, tag=a.tag, json_path=a.json, demo=a.demo)
     except ApiError as e:
