@@ -68,6 +68,12 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
 - `sens` cerca de 1 (Mosquetera, Tres mosqueteras) → pierde mucho valor.
 - **Nivel de referencia** = nivel típico de tus rivales (por defecto, la mediana de tus mejores 24 cartas).
 - **Importancia del nivel**: 0 ignora niveles, 2 los castiga el doble.
+- **Bonus por cartas que ya juegas** (`crdeck/comfort.py`): las cartas que usas seguido valen un poco
+  más, porque ya sabes jugarlas. Uso = % de tus últimas batallas (historial de la API, con tu tag) en
+  que iba en tu mazo; las de tu mazo equipado cuentan como 60% o más. Bonus = peso × uso.
+  Peso por defecto 0.10 (solo desempata); con 0.3 o más la app se queda cerca de tu mazo actual.
+  Se ajusta en la barra lateral o con `--comfort`. En la app las marca ♥ y tu mazo actual aparece
+  en ⭐ Óptimo para comparar (y se puede cargar en 🛠️ Creador).
 
 **Modelo ILP** (`crdeck/solver.py`) — variables sí/no por carta y mazo:
 - Restricciones duras: 8 cartas, 1–2 condiciones de victoria, ≥2 antiaéreas, 1–3 hechizos,

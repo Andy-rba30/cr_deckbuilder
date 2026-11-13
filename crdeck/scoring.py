@@ -17,6 +17,7 @@ class CardEval:
     gap: int                   # nivel de referencia − nivel de la carta
     bp_penalty: float
     evo_bonus: float           # solo > 0 si la evolución está desbloqueada
+    comfort: float = 0.0       # bonus por ser una carta que ya juegas (incluido en value)
     warnings: list[str] = field(default_factory=list)
 
 
@@ -29,7 +30,9 @@ def level_factor(level: int, ref: int, sens: float, rules: dict, level_weight: f
     return max(0.0, 1.0 - s * (1.0 - math.exp(-lv["curve"] * gap)))
 
 
-def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight: float = 1.0) -> dict[str, CardEval]:
+def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight: float = 1.0,
+                   comfort_weight: float = 0.0) -> dict[str, CardEval]:
+    """comfort_weight: bonus para una carta que usas en el 100% de tus batallas (ver crdeck/comfort.py)."""
     rules = game.rules
     unknown = rules["unknown_card"]
     out: dict[str, CardEval] = {}
@@ -41,8 +44,9 @@ def evaluate_cards(player: Player, game: GameData, ref_level: int, level_weight:
         evo = 0.0
         if c.evo_unlocked:
             evo = (info.evo_bonus if info and info.evo_bonus > 0 else rules["evo_bonus_default"]) * lf
-        value = meta * lf + (rules["champion_bonus"] if c.champion else 0.0)
-        out[name] = CardEval(name, value, meta, lf, ref_level - c.level, 0.0, evo)
+        bonus = comfort_weight * player.comfort.get(name, 0.0)
+        value = meta * lf + (rules["champion_bonus"] if c.champion else 0.0) + bonus
+        out[name] = CardEval(name, value, meta, lf, ref_level - c.level, 0.0, evo, bonus)
 
     # Puntos de quiebre: comparamos tu carta contra la del rival al nivel de referencia.
     pen = rules["level"]["breakpoint_penalty"] * level_weight
@@ -96,7 +100,8 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
                   evals: dict[str, CardEval]) -> dict:
     rules = game.rules
     cards = [player.cards[n] for n in deck]
-    card_part = sum(evals[n].value for n in deck)
+    comfort_part = sum(evals[n].comfort for n in deck)
+    card_part = sum(evals[n].value for n in deck) - comfort_part
     evo_part = sum(evals[n].evo_bonus for n in evos)
 
     syn_idx = synergy_index(game, set(deck))
@@ -107,7 +112,7 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
     bonuses = [(rb["name"], rb["bonus"], bool(roles_present & set(rb["any_roles"]))) for rb in rules["role_bonuses"]]
     role_part = sum(b for _, b, ok in bonuses if ok)
 
-    total = card_part + evo_part + syn_part + role_part
+    total = card_part + comfort_part + evo_part + syn_part + role_part
 
     atk = sum(evals[c.name].value for c in cards if c.roles & ATTACK_ROLES)
     dfn = sum(evals[c.name].value for c in cards if c.roles & DEFENSE_ROLES)
@@ -124,7 +129,8 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
         "evos": evos,
         "avg_elixir": sum(c.elixir for c in cards) / len(cards),
         "score": total,
-        "parts": {"cartas": card_part, "evoluciones": evo_part, "sinergias": syn_part, "roles": role_part},
+        "parts": {"cartas": card_part, "comodidad": comfort_part, "evoluciones": evo_part,
+                  "sinergias": syn_part, "roles": role_part},
         "ratings": {   # heurísticas propias de 0 a 10
             "Ataque": _sat(atk, 1.2),
             "Defensa": _sat(dfn, 2.0),
@@ -135,3 +141,9 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
         "role_checks": bonuses,
         "warnings": warnings,
     }
+
+
+def pick_evos(cards: list[str], player: Player, evals: dict[str, CardEval], slots: int) -> list[str]:
+    """Para un mazo armado a mano: las evoluciones desbloqueadas con más bonus, hasta llenar los espacios."""
+    evo = [c for c in cards if player.cards[c].evo_unlocked]
+    return sorted(evo, key=lambda c: -evals[c].evo_bonus)[:slots]

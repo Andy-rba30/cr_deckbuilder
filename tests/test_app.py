@@ -53,3 +53,16 @@ def test_builder_complete_and_toggle_cards():
     other = next(n for n in ["Knight", "Bats", "Zap", "Arrows"] if n not in deck)
     at.button(key=f"add_{other}").click().run()            # añadir
     assert at.session_state["builder"][-1] == other and not at.exception
+
+
+def test_current_deck_and_comfort_controls():
+    at = _app()
+    assert any("Tu mazo actual" in e.label for e in at.expander)
+    assert any("cartas que ya juegas" in s.label.lower() for s in at.slider)
+    at.button(key="b_opt").click().run()
+    assert "vs. tu mazo actual" in _html(at)
+    load = next(b for b in at.button if b.label.startswith("📌"))
+    load.click().run()
+    assert at.session_state["builder"] == ["Goblin Barrel", "Princess", "Goblin Gang", "Knight", "Inferno Tower",
+                                           "Rocket", "The Log", "Ice Spirit"]
+    assert "crd-fam" in _html(at) and not at.exception

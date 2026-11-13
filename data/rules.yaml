@@ -49,3 +49,8 @@ battle_meta:
     clip: [-0.25, 0.10]     # límites del peso de un par
     min_weight: 0.02        # ignora pares con peso menor que esto
     max_pairs: 300          # máximo de pares de datos que se usan
+
+# BONUS POR CARTAS QUE YA JUEGAS (las sabes usar). Sale de tus últimas batallas y de tu mazo actual.
+comfort:
+  weight: 0.10          # bonus de una carta que usas en el 100% de tus batallas (0 = sin bonus)
+  current_deck: 0.6     # las cartas de tu mazo equipado cuentan como usadas al menos en este % (0 a 1)

@@ -7,6 +7,7 @@ RARITY_COLOR = {
     "common": "#8fa3b8", "rare": "#f0a020", "epic": "#b05cff",
     "legendary": "#33c9c0", "champion": "#f5c518",
 }
+FAMILIAR_MIN = 0.3   # desde este uso se marca la carta con ♥ (la juegas seguido)
 METER_COLOR = {
     "Ataque": "#ef6a3a", "Defensa": "#3b82f6", "Sinergia": "#22c55e", "Versatilidad": "#a855f7",
 }
@@ -39,6 +40,8 @@ CSS = """
 .crd-badge{position:absolute;top:5px;right:5px;font-size:.58rem;font-weight:900;padding:1px 5px;border-radius:6px;letter-spacing:.03em}
 .crd-badge.evo{background:#9b3cf0;color:#fff}
 .crd-badge.champ{background:#f5c518;color:#2a1d00}
+.crd-fam{position:absolute;bottom:21px;left:5px;width:17px;height:17px;border-radius:50%;background:#ec4899;color:#fff;
+  font-size:.62rem;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px #000a}
 .crd-lv{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:.72rem;font-weight:800;padding:2px 0;
   background:rgba(0,0,0,.66);color:var(--lvc,#fff)}
 .crd-name{font-size:.7rem;text-align:center;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -97,7 +100,7 @@ def level_color(gap: int | None) -> str:
 
 def card_tile(name: str, *, elixir: float | None = None, rarity: str = "", icon: str | None = None,
               level: int | None = None, gap: int | None = None, evo: bool = False, champion: bool = False,
-              note: str = "", tooltip: str = "", show_name: bool = True) -> str:
+              note: str = "", tooltip: str = "", show_name: bool = True, familiar: float = 0.0) -> str:
     rar = RARITY_COLOR.get(rarity, "#6b7280")
     show_name = show_name and bool(icon)   # sin imagen, el nombre ya va dentro de la ficha
     img = f'<img src="{_e(icon)}" alt="{_e(name)}" loading="lazy">' if icon else f'<div class="ph">{_e(name)}</div>'
@@ -105,9 +108,10 @@ def card_tile(name: str, *, elixir: float | None = None, rarity: str = "", icon:
     badge = ('<div class="crd-badge evo">EVO</div>' if evo
              else '<div class="crd-badge champ">👑</div>' if champion else "")
     lv = f'<div class="crd-lv" style="--lvc:{level_color(gap)}">Nv {level}</div>' if level is not None else ""
+    fam = '<div class="crd-fam">♥</div>' if familiar >= FAMILIAR_MIN else ""
     cls = "crd-card evo" if evo else "crd-card"
     return (f'<div class="crd-tile" title="{_e(tooltip or name)}"><div class="{cls}" style="--rar:{rar}">'
-            f'{img}{elx}{badge}{lv}</div>'
+            f'{img}{elx}{badge}{fam}{lv}</div>'
             + (f'<div class="crd-name">{_e(name)}</div>' if show_name else "")
             + (f'<div class="crd-note">{_e(note)}</div>' if note else "") + "</div>")
 
@@ -123,12 +127,15 @@ def owned_tile(name: str, player, evals=None, *, evo: bool = False, note: str = 
     oc = player.cards[name]
     ev = evals.get(name) if evals else None
     icon = icon_override or ((oc.icon_evo or oc.icon) if evo else oc.icon)
+    fam = player.comfort.get(name, 0.0)
     tip = f"{oc.es} · nivel {oc.level}"
     if ev:
         tip += f" · valor {ev.value:.2f} · factor de nivel {ev.level_factor:.2f}"
+    if fam:
+        tip += f" · la juegas en el {fam:.0%} de tus batallas"
     return card_tile(oc.es, elixir=oc.elixir, rarity=oc.rarity, icon=icon, level=oc.level,
                      gap=ev.gap if ev else None, evo=evo, champion=oc.champion, note=note, tooltip=tip,
-                     show_name=show_name)
+                     show_name=show_name, familiar=fam)
 
 
 def meter(label: str, value: float, color: str | None = None, maximum: float = 10.0, text: str | None = None) -> str:

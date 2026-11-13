@@ -7,14 +7,15 @@ import pandas as pd
 import streamlit as st
 
 from crdeck import ui
-from crdeck.api import ApiError
+from crdeck.api import ApiError, fetch_battlelog
 from crdeck.battles import BATTLES_PATH, crawl, load_cards_info, save_battles
 from crdeck.collection import default_reference_level, parse_player
+from crdeck.comfort import apply_comfort
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
 from crdeck.meta import load_battle_meta
 from crdeck.ranking import ArchetypeRank, rank_archetypes
-from crdeck.scoring import evaluate_cards, evaluate_deck
+from crdeck.scoring import evaluate_cards, evaluate_deck, pick_evos
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
 
@@ -67,6 +68,16 @@ with st.sidebar:
     except (ApiError, ValueError) as e:
         st.error(str(e))
 
+    log_err = None
+    if player:   # cartas que ya juegas: tu historial (con Player Tag) y tu mazo actual
+        log = None
+        if api_tag:
+            try:
+                log = fetch_battlelog(api_tag)
+            except ApiError as e:
+                log_err = str(e)
+        apply_comfort(player, log, BASE.rules["comfort"])
+
     if player:
         st.success(f"{player.name} ({player.tag}) — {len(player.cards)} cartas")
         st.header("2. Ajustes")
@@ -75,6 +86,14 @@ with st.sidebar:
                         help="Nivel típico de tus rivales. Por defecto: la mediana de tus mejores cartas.")
         level_weight = st.slider("Importancia del nivel", 0.0, 2.0, 1.0, 0.1,
                                  help="0 = ignora niveles · 1 = normal · 2 = castiga mucho las cartas bajas")
+        comfort_weight = st.slider(
+            "Bonus por cartas que ya juegas", 0.0, 0.5, float(BASE.rules["comfort"]["weight"]), 0.01,
+            help="Suma este valor a una carta que usas en todas tus batallas (proporcional a cuánto la usas). "
+                 "0 = sin bonus · 0.1 desempata · 0.3 o más se queda cerca de tu mazo actual.")
+        st.caption(f"♥ {sum(f >= ui.FAMILIAR_MIN for f in player.comfort.values())} cartas que juegas seguido, "
+                   f"según {player.comfort_source}." if player.comfort else "Sin datos de las cartas que juegas.")
+        if log_err:
+            st.caption(f"No se pudo leer tu historial: {log_err}")
         time_limit = st.slider("Tiempo máximo del solver (s)", 5, 120, 20)
         min_diff = st.slider("Cartas distintas entre alternativas", 1, 6, 3,
                              help="Cuántas cartas debe cambiar cada alternativa respecto a los mazos ya mostrados.")
@@ -93,7 +112,7 @@ if not player:
     st.stop()
 
 game = GAME_META if (use_meta and BM) else BASE
-evals = evaluate_cards(player, game, ref, level_weight)
+evals = evaluate_cards(player, game, ref, level_weight, comfort_weight)
 
 
 # ------------------------------------------------------------------ piezas visuales
@@ -113,8 +132,9 @@ def any_tile(name: str, note: str = "", show_name: bool = True) -> str:
                         note=note or "no la tienes", show_name=show_name)
 
 
-def show_deck(title: str, d: dict):
-    st.html(ui.deck_html(title, d, player, evals, copy_link(d["cards"], player), subtitle=d.get("archetype") or ""))
+def show_deck(title: str, d: dict, subtitle: str | None = None):
+    sub = subtitle if subtitle is not None else (d.get("archetype") or "")
+    st.html(ui.deck_html(title, d, player, evals, copy_link(d["cards"], player), subtitle=sub))
     with st.expander("Detalles: sinergias, roles y avisos"):
         syn = [(f"{a} + {b}  {w:+.2f}", "good" if w > 0 else "bad", r) for a, b, w, r in d["synergies"]]
         st.markdown("**Sinergias activas**")
@@ -130,8 +150,8 @@ def show_deck(title: str, d: dict):
         else:
             st.caption("Ninguno")
         p = d["parts"]
-        st.caption(f"Desglose del puntaje: cartas {p['cartas']:.2f} + evoluciones {p['evoluciones']:.2f} + "
-                   f"sinergias {p['sinergias']:.2f} + roles {p['roles']:.2f}")
+        st.caption(f"Desglose del puntaje: cartas {p['cartas']:.2f} + cartas que ya juegas {p['comodidad']:.2f} + "
+                   f"evoluciones {p['evoluciones']:.2f} + sinergias {p['sinergias']:.2f} + roles {p['roles']:.2f}")
 
 
 def solve_with_alternatives(req: SolveRequest, n_alternatives: int = 0,
@@ -149,19 +169,29 @@ def solve_with_alternatives(req: SolveRequest, n_alternatives: int = 0,
     return items
 
 
-def show_items(items: list[tuple], columns: int = 1):
+def show_items(items: list[tuple], columns: int = 1, subtitle=None):
     for kind, *rest in items:
         if kind == "note":
             st.warning(rest[0])
     decks = [rest for kind, *rest in items if kind == "deck"]
+    sub = (lambda d: None) if subtitle is None else subtitle
     if columns == 1:
         for title, d in decks:
-            show_deck(title, d)
+            show_deck(title, d, sub(d))
         return
     for i in range(0, len(decks), columns):
         for col, (title, d) in zip(st.columns(columns), decks[i:i + columns]):
             with col:
-                show_deck(title, d)
+                show_deck(title, d, sub(d))
+
+
+def current_deck_eval() -> dict | None:
+    """Tu mazo equipado, evaluado igual que las recomendaciones (para comparar)."""
+    cd = player.current_deck
+    if len(cd) != 8:
+        return None
+    evos = pick_evos(cd, player, evals, game.rules["deck"]["evo_slots"])
+    return evaluate_deck(sorted(cd, key=lambda c: c not in evos), evos, player, game, evals)
 
 
 def show_ranking(best: float | None, rows: list[ArchetypeRank]):
@@ -190,7 +220,8 @@ for k in [k for k, r in results.items() if r["ctx"]["tag"] != player.tag]:
 def context(**params) -> dict:
     """Ajustes con los que se calcula un resultado; si cambian, el resultado queda desactualizado."""
     return {"tag": player.tag, "ref": ref, "level_weight": level_weight, "locked": tuple(locked),
-            "banned": tuple(banned), "meta": (bool(use_meta and BM), BM.last if BM else None), **params}
+            "banned": tuple(banned), "meta": (bool(use_meta and BM), BM.last if BM else None),
+            "comfort": comfort_weight, **params}
 
 
 def saved(key: str, ctx: dict) -> dict | None:
@@ -210,6 +241,10 @@ tab_opt, tab_arch, tab_war, tab_build, tab_up, tab_meta, tab_col = st.tabs(
 
 with tab_opt:
     st.caption("El mejor mazo posible con tus cartas y niveles.")
+    current = current_deck_eval()
+    if current:
+        with st.expander(f"📌 Tu mazo actual · puntaje {current['score']:.2f} (para comparar)"):
+            st.html(ui.deck_html("Tu mazo actual", current, player, evals, copy_link(current["cards"], player)))
     alts = st.number_input("Alternativas extra", 0, 5, 2, key="alt_opt")
     ctx = context(alts=alts, min_diff=min_diff)
     if st.button("Recomendar", key="b_opt", type="primary"):
@@ -218,7 +253,8 @@ with tab_opt:
                 SolveRequest(locked=locked, banned=banned, min_diff=min_diff, time_limit=time_limit), alts,
                 lambda i, d: "Mejor mazo" if i == 1 else f"Alternativa {i - 1}")}
     if r := saved("opt", ctx):
-        show_items(r["items"])
+        show_items(r["items"], subtitle=(lambda d: f"{d['score'] - current['score']:+.2f} vs. tu mazo actual")
+                   if current else None)
 
 with tab_arch:
     st.markdown("**¿Qué arquetipo te conviene?**")
@@ -267,7 +303,7 @@ EVO_SLOTS = BASE.rules["deck"]["evo_slots"]
 
 def builder_order(cards: list[str]) -> tuple[list[str], list[str]]:
     """Elige las evoluciones con más bonus y las pone primero (ocupan los primeros espacios)."""
-    evos = sorted((c for c in cards if player.cards[c].evo_unlocked), key=lambda c: -evals[c].evo_bonus)[:EVO_SLOTS]
+    evos = pick_evos(cards, player, evals, EVO_SLOTS)
     return sorted(cards, key=lambda c: (c not in evos, cards.index(c))), evos
 
 
@@ -328,9 +364,11 @@ with tab_build:
                 '<div class="crd-right"><div class="crd-sub">Elige cartas abajo o pulsa ✨ Completar '
                 "para empezar desde el mejor mazo.</div></div></div></div>")
 
-    b1, b2, b3 = st.columns(3)
+    b0, b1, b2, b3 = st.columns(4)
+    b0.button("📌 Cargar mi mazo actual", on_click=lambda: st.session_state.update(builder=list(player.current_deck)),
+              disabled=len(player.current_deck) != 8, width="stretch")
     b1.button("✨ Completar mazo", on_click=builder_complete, disabled=len(sel) >= 8, width="stretch")
-    suggest = b2.button("💡 Sugerir 3 mazos con estas cartas", width="stretch")
+    suggest = b2.button("💡 Sugerir 3 mazos", width="stretch")
     b3.button("🗑️ Vaciar", on_click=lambda: st.session_state.update(builder=[]), disabled=not sel,
               width="stretch")
     ctx = context(builder=tuple(sorted(sel)), min_diff=min_diff)
@@ -368,7 +406,8 @@ with tab_up:
     if st.button("Calcular", key="b_up", type="primary"):
         with st.spinner("Simulando mejoras..."):
             rows = upgrade_advice(player, game, ref, level_weight,
-                                  SolveRequest(archetypes=[up_arch] if up_arch else [], locked=locked, banned=banned))
+                                  SolveRequest(archetypes=[up_arch] if up_arch else [], locked=locked, banned=banned),
+                                  comfort_weight=comfort_weight)
         results["up"] = {"ctx": ctx, "rows": rows}
     if r := saved("up", ctx):
         rows = r["rows"]
@@ -452,14 +491,15 @@ with tab_col:
     f1, f2, f3 = st.columns([2, 2, 1])
     q = f1.text_input("Buscar", placeholder="nombre o rol (splash, building...)", key="c_q").strip().lower()
     rar = f2.multiselect("Rareza", sorted({c.rarity for c in player.cards.values()}), key="c_rar")
-    order_by = f3.selectbox("Ordenar por", ["Valor", "Nivel", "Elixir", "Nombre"], key="c_sort")
+    order_by = f3.selectbox("Ordenar por", ["Valor", "Nivel", "Elixir", "Nombre", "Más jugadas"], key="c_sort")
     keyf = {"Valor": lambda n: -evals[n].value, "Elixir": lambda n: player.cards[n].elixir,
-            "Nivel": lambda n: -player.cards[n].level, "Nombre": lambda n: player.cards[n].es}[order_by]
+            "Nivel": lambda n: -player.cards[n].level, "Nombre": lambda n: player.cards[n].es,
+            "Más jugadas": lambda n: -player.comfort.get(n, 0.0)}[order_by]
     names = sorted((n for n, c in player.cards.items()
                     if (not q or q in c.es.lower() or q in n.lower() or any(q in r for r in c.roles))
                     and (not rar or c.rarity in rar)), key=keyf)
     st.caption(f"{len(names)} cartas · nivel coloreado: verde = a tu nivel de referencia ({ref}) o más, "
-               "ámbar = 1 nivel abajo, rojo = 2 o más.")
+               "ámbar = 1 nivel abajo, rojo = 2 o más · ♥ = la juegas seguido.")
     st.html(ui.pool_html([ui.owned_tile(n, player, evals, evo=player.cards[n].evo_unlocked,
                                         note=f"valor {evals[n].value:.2f}") for n in names]))
     with st.expander("Tabla"):
@@ -467,5 +507,5 @@ with tab_col:
             "Carta": c.es, "Nivel": c.level, "Rareza": c.rarity, "Elixir": c.elixir,
             "Evo": "✨" if c.evo_unlocked else "", "Roles": ", ".join(sorted(c.roles)),
             "Meta": round(evals[n].meta, 2), "Factor nivel": round(evals[n].level_factor, 2),
-            "Valor": round(evals[n].value, 3),
+            "La juegas %": round(100 * player.comfort.get(n, 0.0)), "Valor": round(evals[n].value, 3),
         } for n, c in player.cards.items()]).sort_values("Valor", ascending=False), width="stretch", hide_index=True)

@@ -13,9 +13,10 @@ from __future__ import annotations
 import argparse
 import sys
 
-from crdeck.api import ApiError
+from crdeck.api import ApiError, fetch_battlelog
 from crdeck.battles import BATTLES_PATH, crawl, save_battles
 from crdeck.collection import default_reference_level
+from crdeck.comfort import apply_comfort
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
 from crdeck.meta import BattleMeta, load_battle_meta
@@ -78,6 +79,7 @@ def main(argv=None):
     ap.add_argument("--players", type=int, default=100, help="Modo meta: jugadores cuyo historial se descarga")
     ap.add_argument("--seed-tags", default="", help="Modo meta: tags extra para empezar, separados por comas")
     ap.add_argument("--no-battle-meta", action="store_true", help="Ignora data/battles.json (usa solo los YAML)")
+    ap.add_argument("--comfort", type=float, help="Bonus por cartas que ya juegas (por defecto el de rules.yaml; 0 = sin bonus)")
     a = ap.parse_args(argv)
 
     if a.tag and not env_found:
@@ -110,12 +112,24 @@ def main(argv=None):
         player = load_player(game, tag=a.tag, json_path=a.json, demo=a.demo)
     except ApiError as e:
         sys.exit(str(e))
+    log = None
+    if a.tag:
+        try:
+            log = fetch_battlelog(a.tag)
+        except ApiError as e:
+            print(f"No se pudo leer tu historial (solo se usa tu mazo actual): {e}")
+    apply_comfort(player, log, game.rules["comfort"])
+    comfort = game.rules["comfort"]["weight"] if a.comfort is None else a.comfort
     ref = a.ref_level or default_reference_level(player)
     print(f"Jugador: {player.name} ({player.tag}) | {len(player.cards)} cartas | nivel de referencia {ref}")
     if player.unknown_cards:
         print(f"Cartas sin metadatos en cards.yaml: {', '.join(player.unknown_cards)}")
+    if player.comfort and comfort:
+        top = sorted(player.comfort.items(), key=lambda kv: -kv[1])[:8]
+        print(f"Bonus {comfort:g} por cartas que ya juegas (según {player.comfort_source}): "
+              + ", ".join(f"{player.cards[c].es} {f:.0%}" for c, f in top))
 
-    evals = evaluate_cards(player, game, ref, a.level_weight)
+    evals = evaluate_cards(player, game, ref, a.level_weight, comfort)
     if a.mode == "ranking":
         best, rows = rank_archetypes(player, game, evals, time_limit=min(a.time_limit, 10.0))
         print(f"\nRanking de arquetipos" + (f" (óptimo libre: {best:.2f})" if best is not None else ""))
@@ -136,7 +150,7 @@ def main(argv=None):
         req = SolveRequest(n_decks=1, archetypes=arch, min_diff=a.min_diff, time_limit=a.time_limit)
 
     if a.mode == "upgrades":
-        for r in upgrade_advice(player, game, ref, a.level_weight, req):
+        for r in upgrade_advice(player, game, ref, a.level_weight, req, comfort_weight=comfort):
             print(f"  {r['carta']:<24} nv {r['nivel_actual']} → +1 : {r['ganancia']:+.3f}")
         return
 

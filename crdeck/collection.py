@@ -1,7 +1,7 @@
 """Convierte la respuesta de la API en la colección del jugador con niveles normalizados."""
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .catalog import CardInfo, GameData
 
@@ -37,6 +37,9 @@ class Player:
     trophies: int | None
     max_level: int
     cards: dict[str, OwnedCard]   # clave: nombre en inglés de la API
+    current_deck: list[str] = field(default_factory=list)   # mazo equipado ahora (si la API lo trae)
+    comfort: dict[str, float] = field(default_factory=dict)  # carta -> qué tanto la juegas (0 a 1)
+    comfort_source: str = ""                                 # de dónde salió (para mostrarlo)
 
     @property
     def unknown_cards(self) -> list[str]:
@@ -79,6 +82,7 @@ def parse_player(raw: dict, game: GameData) -> Player:
         trophies=raw.get("trophies"),
         max_level=game_max,
         cards=cards,
+        current_deck=[c["name"] for c in raw.get("currentDeck") or [] if c.get("name") in cards],
     )
 
 
