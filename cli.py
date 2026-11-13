@@ -66,6 +66,10 @@ def print_meta(bm: BattleMeta, game, top: int = 15):
 
 
 def main(argv=None):
+    # La consola de Windows usa cp1252 y falla con ⚠, −, ♥... Así se imprimen bien en cualquier consola.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
     env_found = load_env()
     ap = argparse.ArgumentParser(description="Recomendador de mazos de Clash Royale")
     src = ap.add_mutually_exclusive_group(required=True)
