@@ -1,0 +1,670 @@
+{
+ "tag": "#DEMO",
+ "name": "Jugador demo",
+ "expLevel": 60,
+ "trophies": 9000,
+ "cards": [
+  {
+   "name": "Knight",
+   "id": 26000000,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Archers",
+   "id": 26000001,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Goblins",
+   "id": 26000002,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Giant",
+   "id": 26000003,
+   "level": 9,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "P.E.K.K.A",
+   "id": 26000004,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Minions",
+   "id": 26000005,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Balloon",
+   "id": 26000006,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Witch",
+   "id": 26000007,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Barbarians",
+   "id": 26000008,
+   "level": 11,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Golem",
+   "id": 26000009,
+   "level": 10,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Skeletons",
+   "id": 26000010,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Valkyrie",
+   "id": 26000011,
+   "level": 9,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Skeleton Army",
+   "id": 26000012,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Bomber",
+   "id": 26000013,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Musketeer",
+   "id": 26000014,
+   "level": 10,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Baby Dragon",
+   "id": 26000015,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Prince",
+   "id": 26000016,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Wizard",
+   "id": 26000017,
+   "level": 10,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Mini P.E.K.K.A",
+   "id": 26000018,
+   "level": 13,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Spear Goblins",
+   "id": 26000019,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Giant Skeleton",
+   "id": 26000020,
+   "level": 6,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Hog Rider",
+   "id": 26000021,
+   "level": 13,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Minion Horde",
+   "id": 26000022,
+   "level": 13,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Ice Wizard",
+   "id": 26000023,
+   "level": 3,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Royal Giant",
+   "id": 26000024,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Princess",
+   "id": 26000026,
+   "level": 3,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Dark Prince",
+   "id": 26000027,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Lava Hound",
+   "id": 26000029,
+   "level": 3,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Ice Spirit",
+   "id": 26000030,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Fire Spirit",
+   "id": 26000031,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Miner",
+   "id": 26000032,
+   "level": 5,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Bowler",
+   "id": 26000034,
+   "level": 9,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Lumberjack",
+   "id": 26000035,
+   "level": 4,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Battle Ram",
+   "id": 26000036,
+   "level": 13,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Inferno Dragon",
+   "id": 26000037,
+   "level": 4,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Ice Golem",
+   "id": 26000038,
+   "level": 11,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Mega Minion",
+   "id": 26000039,
+   "level": 13,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Dart Goblin",
+   "id": 26000040,
+   "level": 10,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Goblin Gang",
+   "id": 26000041,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Electro Wizard",
+   "id": 26000042,
+   "level": 5,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Executioner",
+   "id": 26000045,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Bandit",
+   "id": 26000046,
+   "level": 4,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Night Witch",
+   "id": 26000048,
+   "level": 7,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Bats",
+   "id": 26000049,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Royal Ghost",
+   "id": 26000050,
+   "level": 3,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Mega Knight",
+   "id": 26000055,
+   "level": 5,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Wall Breakers",
+   "id": 26000058,
+   "level": 9,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Fisherman",
+   "id": 26000061,
+   "level": 7,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Firecracker",
+   "id": 26000064,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Electro Spirit",
+   "id": 26000084,
+   "level": 13,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Skeleton King",
+   "id": 26000069,
+   "level": 4,
+   "maxLevel": 6,
+   "rarity": "champion",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Archer Queen",
+   "id": 26000072,
+   "level": 4,
+   "maxLevel": 6,
+   "rarity": "champion",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Cannon",
+   "id": 27000000,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Inferno Tower",
+   "id": 27000003,
+   "level": 11,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Bomb Tower",
+   "id": 27000004,
+   "level": 11,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Tesla",
+   "id": 27000006,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "X-Bow",
+   "id": 27000008,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Tombstone",
+   "id": 27000009,
+   "level": 10,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Fireball",
+   "id": 28000000,
+   "level": 13,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Arrows",
+   "id": 28000001,
+   "level": 15,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Rocket",
+   "id": 28000003,
+   "level": 12,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Goblin Barrel",
+   "id": 28000004,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Freeze",
+   "id": 28000005,
+   "level": 9,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Lightning",
+   "id": 28000007,
+   "level": 8,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Zap",
+   "id": 28000008,
+   "level": 12,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {},
+   "evolutionLevel": 1,
+   "maxEvolutionLevel": 1
+  },
+  {
+   "name": "Poison",
+   "id": 28000009,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Graveyard",
+   "id": 28000010,
+   "level": 7,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "The Log",
+   "id": 28000011,
+   "level": 7,
+   "maxLevel": 8,
+   "rarity": "legendary",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Tornado",
+   "id": 28000012,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Earthquake",
+   "id": 28000014,
+   "level": 11,
+   "maxLevel": 14,
+   "rarity": "rare",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Barbarian Barrel",
+   "id": 28000015,
+   "level": 7,
+   "maxLevel": 11,
+   "rarity": "epic",
+   "count": 0,
+   "iconUrls": {}
+  },
+  {
+   "name": "Giant Snowball",
+   "id": 28000017,
+   "level": 14,
+   "maxLevel": 16,
+   "rarity": "common",
+   "count": 0,
+   "iconUrls": {}
+  }
+ ]
+}

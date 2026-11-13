@@ -1,0 +1,63 @@
+# Sinergias entre pares de cartas (nombres en inglés, como en la API).
+# weight > 0 = combo; weight < 0 = antisinergia.
+# Lista propia basada en conocimiento general de la comunidad. Edítala libremente.
+synergies:
+  - {cards: [Miner, Wall Breakers],        weight: 0.30, reason: "Doble presión barata sobre la torre"}
+  - {cards: [Miner, Poison],               weight: 0.25, reason: "Minero tanquea mientras el Veneno limpia"}
+  - {cards: [Tornado, Executioner],        weight: 0.35, reason: "Tornado junta tropas en el área del Verdugo"}
+  - {cards: [Tornado, Ice Wizard],         weight: 0.15, reason: "Control de grupo"}
+  - {cards: [Tornado, Electro Giant],      weight: 0.20, reason: "Tornado arrastra tropas al rango del Gigante eléctrico"}
+  - {cards: [Hog Rider, Earthquake],       weight: 0.25, reason: "Terremoto derriba la estructura que frena al Montapuercos"}
+  - {cards: [Hog Rider, Ice Spirit],       weight: 0.15, reason: "Ciclo rápido y apoyo al empuje"}
+  - {cards: [Hog Rider, Fireball],         weight: 0.15, reason: "Limpia el apoyo defensivo"}
+  - {cards: [Hog Rider, Musketeer],        weight: 0.15, reason: "Núcleo clásico de ciclo"}
+  - {cards: [Hog Rider, Cannon],           weight: 0.15, reason: "Defensa barata + contraataque"}
+  - {cards: [Lava Hound, Balloon],         weight: 0.35, reason: "Ataque aéreo combinado"}
+  - {cards: [Lava Hound, Mega Minion],     weight: 0.15, reason: "Apoyo aéreo"}
+  - {cards: [Lava Hound, Skeleton Dragons], weight: 0.15, reason: "Apoyo aéreo con daño en área"}
+  - {cards: [Lava Hound, Tombstone],       weight: 0.15, reason: "Defensa barata en estilo aéreo"}
+  - {cards: [Golem, Night Witch],          weight: 0.30, reason: "Empuje masivo detrás del Gólem"}
+  - {cards: [Golem, Baby Dragon],          weight: 0.15, reason: "Apoyo con daño en área"}
+  - {cards: [Golem, Lumberjack],           weight: 0.20, reason: "Furia al morir acelera el empuje"}
+  - {cards: [Golem, Lightning],            weight: 0.15, reason: "Elimina defensas del rival"}
+  - {cards: [Royal Giant, Fisherman],      weight: 0.25, reason: "Pescador saca al tanque rival de su línea"}
+  - {cards: [Royal Giant, Lightning],      weight: 0.15, reason: "Despeja defensas del Gigante noble"}
+  - {cards: [X-Bow, Tesla],                weight: 0.30, reason: "Asedio + defensa estructural"}
+  - {cards: [X-Bow, Archers],              weight: 0.15, reason: "Defensa de la Ballesta"}
+  - {cards: [Mortar, Dart Goblin],         weight: 0.15, reason: "Presión a distancia"}
+  - {cards: [Mortar, Miner],               weight: 0.20, reason: "Minero protege al Mortero"}
+  - {cards: [Graveyard, Poison],           weight: 0.30, reason: "Veneno limpia defensores del Cementerio"}
+  - {cards: [Graveyard, Freeze],           weight: 0.25, reason: "Congela la torre y las defensas"}
+  - {cards: [Giant, Graveyard],            weight: 0.25, reason: "Gigante tanquea, Cementerio remata"}
+  - {cards: [Giant, Sparky],               weight: 0.15, reason: "Chispitas detrás del Gigante"}
+  - {cards: [Goblin Barrel, Princess],     weight: 0.25, reason: "Bait: castiga el hechizo ligero rival"}
+  - {cards: [Goblin Barrel, Goblin Gang],  weight: 0.20, reason: "Bait de hechizo ligero"}
+  - {cards: [Goblin Barrel, Dart Goblin],  weight: 0.15, reason: "Bait de hechizo ligero"}
+  - {cards: [Goblin Barrel, Rocket],       weight: 0.15, reason: "Daño a torre garantizado"}
+  - {cards: [Goblin Barrel, Inferno Tower], weight: 0.10, reason: "Defensa clásica de Log Bait"}
+  - {cards: [Princess, Goblin Gang],       weight: 0.15, reason: "Saturan los hechizos ligeros rivales"}
+  - {cards: [Battle Ram, Bandit],          weight: 0.25, reason: "Presión doble por el puente"}
+  - {cards: [Battle Ram, Royal Ghost],     weight: 0.15, reason: "Presión doble por el puente"}
+  - {cards: [Bandit, Royal Ghost],         weight: 0.20, reason: "Bridge Spam"}
+  - {cards: [P.E.K.K.A, Battle Ram],       weight: 0.20, reason: "PEKKA defiende, Ariete contraataca"}
+  - {cards: [P.E.K.K.A, Electro Wizard],   weight: 0.20, reason: "E-Wiz protege al PEKKA de enjambres y resets"}
+  - {cards: [P.E.K.K.A, Bandit],           weight: 0.15, reason: "Bridge Spam con defensa pesada"}
+  - {cards: [Ram Rider, Bandit],           weight: 0.15, reason: "Presión doble"}
+  - {cards: [Balloon, Lumberjack],         weight: 0.30, reason: "Furia del Leñador acelera al Globo"}
+  - {cards: [Balloon, Freeze],             weight: 0.15, reason: "Asegura la llegada del Globo"}
+  - {cards: [Electro Giant, Lightning],    weight: 0.15, reason: "Despeja el camino"}
+  - {cards: [Royal Hogs, Royal Recruits],  weight: 0.30, reason: "Split push en las dos líneas"}
+  - {cards: [Mega Knight, Miner],          weight: 0.15, reason: "Contraataque tras defensa del Megacaballero"}
+  - {cards: [Elixir Golem, Battle Healer], weight: 0.25, reason: "Curación del empuje"}
+  - {cards: [Elixir Golem, Rage],          weight: 0.15, reason: "Empuje acelerado"}
+  - {cards: [Goblin Drill, Wall Breakers], weight: 0.20, reason: "Presión constante sobre la torre"}
+  - {cards: [Goblin Giant, Sparky],        weight: 0.30, reason: "Sparky protegida dentro del Gigante duende"}
+  - {cards: [Three Musketeers, Battle Ram], weight: 0.20, reason: "Presión dividida"}
+  - {cards: [Three Musketeers, Elixir Collector], weight: 0.25, reason: "Financia las 3M"}
+  # ------ Antisinergias ------
+  - {cards: [Golem, X-Bow],                weight: -0.50, reason: "Arquetipos incompatibles"}
+  - {cards: [Golem, Lava Hound],           weight: -0.40, reason: "Dos tanques carísimos"}
+  - {cards: [Golem, Royal Giant],          weight: -0.30, reason: "Dos tanques"}
+  - {cards: [Golem, Three Musketeers],     weight: -0.40, reason: "Demasiado elixir"}
+  - {cards: [Mega Knight, P.E.K.K.A],      weight: -0.20, reason: "Dos tanques de 7 de elixir"}
+  - {cards: [Lava Hound, Royal Giant],     weight: -0.30, reason: "Planes de ataque opuestos"}

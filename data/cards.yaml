@@ -1,0 +1,128 @@
+# Catálogo de cartas: metadatos que la API de Supercell NO entrega.
+# La clave `name` es el nombre en INGLÉS tal como lo devuelve la API.
+#
+#   es:     nombre para mostrar
+#   elixir: costo (si la API lo trae, se usa el de la API)
+#   roles:  funciones de la carta (ver lista en README)
+#   sens:   dependencia de nivel, 0 = funciona a cualquier nivel, 1 = depende muchísimo
+#   meta:   fuerza general estimada, de 0 a 1
+#   evo:    bonus extra si tienes la evolución desbloqueada y la usas en un espacio de evolución
+#   champion: true si es campeón (máximo 1 por mazo)
+#
+# IMPORTANTE: `meta`, `sens` y `evo` son ESTIMACIONES INICIALES para que el prototipo funcione.
+# Ajústalas a tu criterio o según el meta de la temporada.
+cards:
+  # ---------------- Tropas ----------------
+  - {name: Knight,            es: Caballero,              elixir: 3, roles: [mini_tank, cheap_defense],            sens: 0.50, meta: 0.65, evo: 0.30}
+  - {name: Archers,           es: Arqueras,               elixir: 3, roles: [air_defense, ranged_dps],             sens: 0.60, meta: 0.55, evo: 0.25}
+  - {name: Goblins,           es: Duendes,                elixir: 2, roles: [cycle, swarm, dps],                   sens: 0.40, meta: 0.45}
+  - {name: Giant,             es: Gigante,                elixir: 5, roles: [win_condition, tank],                 sens: 0.60, meta: 0.55}
+  - {name: P.E.K.K.A,         es: P.E.K.K.A,              elixir: 7, roles: [tank, anti_tank_dps],                 sens: 0.70, meta: 0.60, evo: 0.30}
+  - {name: Minions,           es: Esbirros,               elixir: 3, roles: [air_defense, swarm, dps],             sens: 0.50, meta: 0.50}
+  - {name: Balloon,           es: Globo bombástico,       elixir: 5, roles: [win_condition],                       sens: 0.70, meta: 0.60}
+  - {name: Witch,             es: Bruja,                  elixir: 5, roles: [splash, air_defense, support],        sens: 0.60, meta: 0.45, evo: 0.30}
+  - {name: Barbarians,        es: Bárbaros,               elixir: 5, roles: [anti_tank_dps, swarm],                sens: 0.50, meta: 0.45, evo: 0.30}
+  - {name: Golem,             es: Gólem,                  elixir: 8, roles: [win_condition, tank],                 sens: 0.60, meta: 0.55}
+  - {name: Skeletons,         es: Esqueletos,             elixir: 1, roles: [cycle, cheap_defense, swarm],         sens: 0.15, meta: 0.70, evo: 0.35}
+  - {name: Valkyrie,          es: Valquiria,              elixir: 4, roles: [mini_tank, splash],                   sens: 0.60, meta: 0.60, evo: 0.30}
+  - {name: Skeleton Army,     es: Ejército de esqueletos, elixir: 3, roles: [swarm, anti_tank_dps, bait],          sens: 0.30, meta: 0.55, evo: 0.25}
+  - {name: Bomber,            es: Bombardero,             elixir: 2, roles: [splash],                              sens: 0.50, meta: 0.45, evo: 0.30}
+  - {name: Musketeer,         es: Mosquetera,             elixir: 4, roles: [air_defense, ranged_dps, support],    sens: 0.85, meta: 0.60, evo: 0.30}
+  - {name: Baby Dragon,       es: Bebé dragón,            elixir: 4, roles: [air_defense, splash, support],        sens: 0.60, meta: 0.60, evo: 0.30}
+  - {name: Prince,            es: Príncipe,               elixir: 5, roles: [win_condition, dps],                  sens: 0.60, meta: 0.45}
+  - {name: Wizard,            es: Mago,                   elixir: 5, roles: [air_defense, splash],                 sens: 0.75, meta: 0.45, evo: 0.30}
+  - {name: Mini P.E.K.K.A,    es: Mini P.E.K.K.A,         elixir: 4, roles: [anti_tank_dps, mini_tank],            sens: 0.70, meta: 0.60}
+  - {name: Spear Goblins,     es: Duendes lanceros,       elixir: 2, roles: [air_defense, swarm, bait, cycle],     sens: 0.30, meta: 0.50}
+  - {name: Giant Skeleton,    es: Esqueleto gigante,      elixir: 6, roles: [tank, splash],                        sens: 0.50, meta: 0.35}
+  - {name: Hog Rider,         es: Montapuercos,           elixir: 4, roles: [win_condition],                       sens: 0.60, meta: 0.75}
+  - {name: Minion Horde,      es: Horda de esbirros,      elixir: 5, roles: [air_defense, anti_tank_dps, swarm],   sens: 0.60, meta: 0.40}
+  - {name: Ice Wizard,        es: Mago de hielo,          elixir: 3, roles: [air_defense, splash, support],        sens: 0.45, meta: 0.55}
+  - {name: Royal Giant,       es: Gigante noble,          elixir: 6, roles: [win_condition, tank],                 sens: 0.75, meta: 0.60, evo: 0.30}
+  - {name: Guards,            es: Guardias,               elixir: 3, roles: [cheap_defense, swarm],                sens: 0.35, meta: 0.50}
+  - {name: Princess,          es: Princesa,               elixir: 3, roles: [air_defense, splash, bait],           sens: 0.35, meta: 0.60}
+  - {name: Dark Prince,       es: Príncipe oscuro,        elixir: 4, roles: [mini_tank, splash],                   sens: 0.60, meta: 0.55}
+  - {name: Three Musketeers,  es: Tres mosqueteras,       elixir: 9, roles: [win_condition, air_defense, ranged_dps], sens: 0.90, meta: 0.35}
+  - {name: Lava Hound,        es: Sabueso de lava,        elixir: 7, roles: [win_condition, tank],                 sens: 0.50, meta: 0.55}
+  - {name: Ice Spirit,        es: Espíritu de hielo,      elixir: 1, roles: [cycle, cheap_defense],                sens: 0.15, meta: 0.75, evo: 0.25}
+  - {name: Fire Spirit,       es: Espíritu de fuego,      elixir: 1, roles: [cycle, splash, air_defense],          sens: 0.25, meta: 0.55}
+  - {name: Miner,             es: Minero,                 elixir: 3, roles: [win_condition, mini_tank],            sens: 0.45, meta: 0.70}
+  - {name: Sparky,            es: Chispitas,              elixir: 6, roles: [splash, anti_tank_dps],               sens: 0.70, meta: 0.35}
+  - {name: Bowler,            es: Lanzarrocas,            elixir: 5, roles: [splash, mini_tank],                   sens: 0.60, meta: 0.50}
+  - {name: Lumberjack,        es: Leñador,                elixir: 4, roles: [dps, support],                        sens: 0.55, meta: 0.55}
+  - {name: Battle Ram,        es: Ariete de batalla,      elixir: 4, roles: [win_condition],                       sens: 0.50, meta: 0.60, evo: 0.35}
+  - {name: Inferno Dragon,    es: Dragón infernal,        elixir: 4, roles: [air_defense, anti_tank_dps],          sens: 0.60, meta: 0.55}
+  - {name: Ice Golem,         es: Gólem de hielo,         elixir: 2, roles: [mini_tank, cheap_defense, cycle],     sens: 0.40, meta: 0.65}
+  - {name: Mega Minion,       es: Megaesbirro,            elixir: 3, roles: [air_defense, dps],                    sens: 0.60, meta: 0.55}
+  - {name: Dart Goblin,       es: Duende lanzadardos,     elixir: 3, roles: [air_defense, ranged_dps, bait],       sens: 0.60, meta: 0.55}
+  - {name: Goblin Gang,       es: Pandilla de duendes,    elixir: 3, roles: [swarm, bait, cheap_defense, air_defense], sens: 0.35, meta: 0.60}
+  - {name: Electro Wizard,    es: Mago eléctrico,         elixir: 4, roles: [air_defense, reset, support],         sens: 0.55, meta: 0.70}
+  - {name: Elite Barbarians,  es: Bárbaros de élite,      elixir: 6, roles: [win_condition, dps],                  sens: 0.60, meta: 0.35}
+  - {name: Hunter,            es: Cazador,                elixir: 4, roles: [air_defense, anti_tank_dps],          sens: 0.60, meta: 0.50}
+  - {name: Executioner,       es: Verdugo,                elixir: 5, roles: [air_defense, splash],                 sens: 0.65, meta: 0.50}
+  - {name: Bandit,            es: Bandida,                elixir: 3, roles: [mini_tank, dps],                      sens: 0.50, meta: 0.60}
+  - {name: Royal Recruits,    es: Reclutas reales,        elixir: 7, roles: [swarm, mini_tank],                    sens: 0.55, meta: 0.40, evo: 0.30}
+  - {name: Night Witch,       es: Bruja nocturna,         elixir: 4, roles: [support, dps],                        sens: 0.60, meta: 0.55}
+  - {name: Bats,              es: Murciélagos,            elixir: 2, roles: [air_defense, swarm, cycle],           sens: 0.30, meta: 0.60, evo: 0.30}
+  - {name: Royal Ghost,       es: Fantasma real,          elixir: 3, roles: [mini_tank, splash],                   sens: 0.50, meta: 0.55}
+  - {name: Ram Rider,         es: Montacarneros,          elixir: 5, roles: [win_condition],                       sens: 0.55, meta: 0.50}
+  - {name: Zappies,           es: Electrocutadores,       elixir: 4, roles: [air_defense, reset],                  sens: 0.60, meta: 0.40}
+  - {name: Rascals,           es: Pillos,                 elixir: 5, roles: [air_defense, mini_tank],              sens: 0.50, meta: 0.40}
+  - {name: Cannon Cart,       es: Carro de cañón,         elixir: 5, roles: [anti_tank_dps],                       sens: 0.60, meta: 0.35}
+  - {name: Mega Knight,       es: Megacaballero,          elixir: 7, roles: [tank, splash],                        sens: 0.60, meta: 0.65, evo: 0.30}
+  - {name: Skeleton Barrel,   es: Barril de esqueletos,   elixir: 3, roles: [win_condition, bait],                 sens: 0.40, meta: 0.45}
+  - {name: Flying Machine,    es: Máquina voladora,       elixir: 4, roles: [air_defense, ranged_dps],             sens: 0.70, meta: 0.40}
+  - {name: Wall Breakers,     es: Rompemuros,             elixir: 2, roles: [win_condition, cycle],                sens: 0.40, meta: 0.55, evo: 0.30}
+  - {name: Royal Hogs,        es: Puercos reales,         elixir: 5, roles: [win_condition],                       sens: 0.50, meta: 0.55, evo: 0.30}
+  - {name: Goblin Giant,      es: Gigante duende,         elixir: 6, roles: [win_condition, tank, air_defense],    sens: 0.60, meta: 0.40}
+  - {name: Fisherman,         es: Pescador,               elixir: 3, roles: [cheap_defense, support],              sens: 0.45, meta: 0.60}
+  - {name: Magic Archer,      es: Arquero mágico,         elixir: 4, roles: [air_defense, ranged_dps],             sens: 0.60, meta: 0.50}
+  - {name: Electro Dragon,    es: Dragón eléctrico,       elixir: 5, roles: [air_defense, reset, splash],          sens: 0.60, meta: 0.45}
+  - {name: Firecracker,       es: Lanzafuegos,            elixir: 3, roles: [air_defense, splash],                 sens: 0.60, meta: 0.60, evo: 0.35}
+  - {name: Elixir Golem,      es: Gólem de elixir,        elixir: 3, roles: [win_condition, tank],                 sens: 0.50, meta: 0.30}
+  - {name: Battle Healer,     es: Sanadora guerrera,      elixir: 4, roles: [support, mini_tank],                  sens: 0.55, meta: 0.35}
+  - {name: Skeleton Dragons,  es: Dragones esqueleto,     elixir: 4, roles: [air_defense, splash],                 sens: 0.60, meta: 0.45}
+  - {name: Mother Witch,      es: Madre bruja,            elixir: 4, roles: [air_defense, support],                sens: 0.60, meta: 0.45}
+  - {name: Electro Spirit,    es: Espíritu eléctrico,     elixir: 1, roles: [cycle, reset, air_defense],           sens: 0.20, meta: 0.60}
+  - {name: Electro Giant,     es: Gigante eléctrico,      elixir: 7, roles: [win_condition, tank],                 sens: 0.60, meta: 0.50}
+  - {name: Phoenix,           es: Fénix,                  elixir: 4, roles: [air_defense, dps],                    sens: 0.60, meta: 0.50}
+  - {name: Heal Spirit,       es: Espíritu sanador,       elixir: 1, roles: [cycle],                               sens: 0.20, meta: 0.45}
+  # ---------------- Campeones ----------------
+  - {name: Mighty Miner,      es: Gran minero,            elixir: 4, roles: [anti_tank_dps, mini_tank],            sens: 0.40, meta: 0.60, champion: true}
+  - {name: Skeleton King,     es: Rey esqueleto,          elixir: 4, roles: [mini_tank, splash],                   sens: 0.40, meta: 0.60, champion: true}
+  - {name: Archer Queen,      es: Reina arquera,          elixir: 5, roles: [air_defense, ranged_dps],             sens: 0.40, meta: 0.60, champion: true}
+  - {name: Golden Knight,     es: Caballero dorado,       elixir: 4, roles: [mini_tank, dps],                      sens: 0.40, meta: 0.55, champion: true}
+  - {name: Monk,              es: Monje,                  elixir: 5, roles: [mini_tank],                           sens: 0.40, meta: 0.55, champion: true}
+  - {name: Little Prince,     es: Principito,             elixir: 3, roles: [air_defense, ranged_dps],             sens: 0.40, meta: 0.60, champion: true}
+  # ---------------- Estructuras ----------------
+  - {name: Cannon,            es: Cañón,                  elixir: 3, roles: [building],                            sens: 0.50, meta: 0.55, evo: 0.30}
+  - {name: Goblin Hut,        es: Choza de duendes,       elixir: 5, roles: [building],                            sens: 0.50, meta: 0.30}
+  - {name: Mortar,            es: Mortero,                elixir: 4, roles: [win_condition, building],             sens: 0.60, meta: 0.45, evo: 0.30}
+  - {name: Inferno Tower,     es: Torre infernal,         elixir: 5, roles: [building, anti_tank_dps, air_defense], sens: 0.60, meta: 0.60}
+  - {name: Bomb Tower,        es: Torre bombardera,       elixir: 4, roles: [building, splash],                    sens: 0.60, meta: 0.50}
+  - {name: Barbarian Hut,     es: Choza de bárbaros,      elixir: 6, roles: [building],                            sens: 0.50, meta: 0.25}
+  - {name: Tesla,             es: Tesla,                  elixir: 4, roles: [building, air_defense],               sens: 0.60, meta: 0.60, evo: 0.30}
+  - {name: Elixir Collector,  es: Recolector de elixir,   elixir: 6, roles: [building],                            sens: 0.20, meta: 0.30}
+  - {name: X-Bow,             es: Ballesta,               elixir: 6, roles: [win_condition, building, air_defense], sens: 0.70, meta: 0.55}
+  - {name: Tombstone,         es: Lápida,                 elixir: 3, roles: [building, swarm],                     sens: 0.40, meta: 0.45}
+  - {name: Furnace,           es: Horno,                  elixir: 4, roles: [building, splash],                    sens: 0.50, meta: 0.40}
+  - {name: Goblin Cage,       es: Jaula de duende,        elixir: 4, roles: [building, mini_tank],                 sens: 0.50, meta: 0.45}
+  - {name: Goblin Drill,      es: Taladro de duendes,     elixir: 4, roles: [win_condition, building],             sens: 0.50, meta: 0.50}
+  # ---------------- Hechizos ----------------
+  - {name: Fireball,          es: Bola de fuego,          elixir: 4, roles: [big_spell],                           sens: 0.70, meta: 0.65}
+  - {name: Arrows,            es: Flechas,                elixir: 3, roles: [small_spell],                         sens: 0.50, meta: 0.50}
+  - {name: Rage,              es: Furia,                  elixir: 2, roles: [support],                             sens: 0.20, meta: 0.30}
+  - {name: Rocket,            es: Cohete,                 elixir: 6, roles: [big_spell],                           sens: 0.60, meta: 0.55}
+  - {name: Goblin Barrel,     es: Barril de duendes,      elixir: 3, roles: [win_condition, bait],                 sens: 0.50, meta: 0.60, evo: 0.30}
+  - {name: Freeze,            es: Hielo,                  elixir: 4, roles: [support],                             sens: 0.30, meta: 0.40}
+  - {name: Lightning,         es: Rayo,                   elixir: 6, roles: [big_spell, reset],                    sens: 0.60, meta: 0.50}
+  - {name: Zap,               es: Descarga,               elixir: 2, roles: [small_spell, reset],                  sens: 0.40, meta: 0.60, evo: 0.30}
+  - {name: Poison,            es: Veneno,                 elixir: 4, roles: [big_spell],                           sens: 0.40, meta: 0.60}
+  - {name: Graveyard,         es: Cementerio,             elixir: 5, roles: [win_condition],                       sens: 0.40, meta: 0.55}
+  - {name: The Log,           es: El Tronco,              elixir: 2, roles: [small_spell],                         sens: 0.50, meta: 0.75}
+  - {name: Tornado,           es: Tornado,                elixir: 3, roles: [small_spell, support],                sens: 0.30, meta: 0.55}
+  - {name: Clone,             es: Clon,                   elixir: 3, roles: [support],                             sens: 0.20, meta: 0.25}
+  - {name: Earthquake,        es: Terremoto,              elixir: 3, roles: [big_spell],                           sens: 0.40, meta: 0.55}
+  - {name: Barbarian Barrel,  es: Barril de bárbaro,      elixir: 2, roles: [small_spell],                         sens: 0.45, meta: 0.60}
+  - {name: Giant Snowball,    es: Bola de nieve,          elixir: 2, roles: [small_spell],                         sens: 0.40, meta: 0.55, evo: 0.25}
+  - {name: Royal Delivery,    es: Envío real,             elixir: 3, roles: [small_spell],                         sens: 0.50, meta: 0.45}
+  - {name: Void,              es: Vacío,                  elixir: 3, roles: [big_spell],                           sens: 0.50, meta: 0.50}

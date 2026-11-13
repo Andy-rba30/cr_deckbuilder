@@ -1,0 +1,71 @@
+# Plantillas de arquetipos (nombres de cartas en inglés, como en la API).
+#   core:     cartas obligatorias (todas)
+#   core_any: al menos UNA de estas
+#   groups:   de cada lista, al menos `min` cartas
+#   forbid:   cartas prohibidas en este arquetipo
+#   avg_elixir: rango propio de elixir (opcional)
+#   role_limits: reemplaza límites de rules.yaml solo para este arquetipo (opcional)
+archetypes:
+  log_bait:
+    name: Log Bait
+    core: [Goblin Barrel]
+    groups:
+      - {from: [Princess, Goblin Gang, Dart Goblin, Skeleton Barrel, Spear Goblins, Skeleton Army], min: 2}
+      - {from: [Inferno Tower, Cannon, Tesla, Bomb Tower], min: 1}
+      - {from: [The Log, Barbarian Barrel, Zap, Giant Snowball, Arrows], min: 1}
+      - {from: [Rocket, Fireball, Poison], min: 1}
+    forbid: [Golem, Lava Hound, Electro Giant, P.E.K.K.A, Mega Knight]
+    avg_elixir: [2.6, 3.6]
+    role_limits: {win_condition: {min: 1, max: 1}}
+  bridge_spam:
+    name: Bridge Spam
+    core_any: [Battle Ram, Ram Rider]
+    groups:
+      - {from: [Bandit, Royal Ghost, Dark Prince, Prince], min: 1}
+      - {from: [P.E.K.K.A, Electro Wizard, Mega Knight, Magic Archer], min: 1}
+    forbid: [Golem, Lava Hound, X-Bow, Mortar]
+  beatdown:
+    name: Beatdown
+    core_any: [Golem, Giant, Lava Hound, Electro Giant, Goblin Giant, Elixir Golem]
+    groups:
+      - {from: [Night Witch, Baby Dragon, Lumberjack, Electro Dragon, Sparky, Balloon, Mega Minion, Skeleton Dragons, Dark Prince], min: 2}
+    avg_elixir: [3.5, 4.6]
+  miner_control:
+    name: Miner Control
+    core: [Miner]
+    groups:
+      - {from: [Wall Breakers, Poison, Bomb Tower, Inferno Tower, Tesla], min: 2}
+    forbid: [Golem, Lava Hound, Electro Giant]
+    avg_elixir: [2.8, 3.6]
+  hog_cycle:
+    name: Hog Cycle
+    core: [Hog Rider]
+    groups:
+      - {from: [Ice Spirit, Skeletons, Electro Spirit, Fire Spirit, Ice Golem], min: 2}
+    forbid: [Golem, Lava Hound, P.E.K.K.A, Mega Knight]
+    avg_elixir: [2.6, 3.3]
+    role_limits: {win_condition: {min: 1, max: 1}}
+  siege:
+    name: Asedio (X-Bow / Mortero)
+    core_any: [X-Bow, Mortar]
+    groups:
+      - {from: [Tesla, Archers, Knight, Dart Goblin, Skeletons, Ice Spirit, Ice Golem], min: 2}
+    forbid: [Golem, Lava Hound, Royal Giant]
+    role_limits: {win_condition: {min: 1, max: 1}}
+  lava_loon:
+    name: LavaLoon
+    core: [Lava Hound]
+    groups:
+      - {from: [Balloon, Miner], min: 1}
+      - {from: [Mega Minion, Skeleton Dragons, Inferno Dragon, Minions, Tombstone, Guards, Baby Dragon], min: 2}
+  graveyard:
+    name: Graveyard
+    core: [Graveyard]
+    groups:
+      - {from: [Poison, Freeze, Tornado], min: 1}
+      - {from: [Giant, Knight, Ice Golem, Valkyrie, Bowler, Baby Dragon], min: 1}
+  royal_giant:
+    name: Royal Giant
+    core: [Royal Giant]
+    groups:
+      - {from: [Fisherman, Hunter, Mother Witch, Lightning, Electro Spirit], min: 1}

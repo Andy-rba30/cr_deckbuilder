@@ -1,0 +1,33 @@
+# Reglas de construcción de mazos.
+deck:
+  size: 8
+  evo_slots: 2              # espacios de evolución por mazo (cámbialo si Supercell cambia los slots)
+  max_champions: 1
+  avg_elixir: [2.6, 4.3]    # rango permitido del promedio de elixir
+  role_limits:              # RESTRICCIONES DURAS por mazo
+    win_condition: {min: 1, max: 2}
+    air_defense:   {min: 2}
+    tank:          {max: 1}
+    building:      {max: 2}
+  spell_roles: [small_spell, big_spell]
+  min_spells: 1
+  max_spells: 3
+
+# RESTRICCIONES SUAVES: suman puntos si el mazo tiene al menos una carta con alguno de esos roles
+role_bonuses:
+  - {name: "Hechizo ligero",        any_roles: [small_spell],                          bonus: 0.25}
+  - {name: "Hechizo fuerte",        any_roles: [big_spell],                            bonus: 0.15}
+  - {name: "Ancla defensiva",       any_roles: [building, mini_tank, anti_tank_dps],   bonus: 0.20}
+  - {name: "Respuesta a tanques",   any_roles: [anti_tank_dps, building],              bonus: 0.20}
+  - {name: "Daño en área",          any_roles: [splash],                               bonus: 0.20}
+  - {name: "Carta de ciclo barata", any_roles: [cycle],                                bonus: 0.10}
+
+level:
+  curve: 0.45                  # qué tan rápido castiga la diferencia de nivel
+  over_bonus_per_level: 0.03   # bonus por estar SOBRE el nivel de referencia
+  over_bonus_cap: 2            # máximo de niveles que suman bonus
+  breakpoint_penalty: 0.15     # castigo por cada punto de quiebre perdido
+
+evo_bonus_default: 0.25        # si la API dice que tienes la evolución pero el catálogo no tiene bonus
+champion_bonus: 0.05
+unknown_card: {meta: 0.40, sens: 0.50}   # cartas nuevas que aún no están en cards.yaml

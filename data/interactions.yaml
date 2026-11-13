@@ -1,0 +1,12 @@
+# Puntos de quiebre (breakpoints) entre cartas.
+#   kills_when_diff_ge: k  ->  el atacante mata al objetivo cuando (nivel_atacante - nivel_objetivo) >= k
+#     k = 0  -> lo mata a igual nivel
+#     k = 1  -> necesita estar 1 nivel por encima
+#
+# ⚠ EJEMPLOS ILUSTRATIVOS (verified: false). Los umbrales reales cambian con cada ajuste
+# de balance: verifícalos con tablas de estadísticas antes de confiar en ellos.
+interactions:
+  - {attacker: Fireball, target: Musketeer,    kills_when_diff_ge: 1, verified: false}
+  - {attacker: The Log,  target: Princess,     kills_when_diff_ge: 0, verified: false}
+  - {attacker: Arrows,   target: Minion Horde, kills_when_diff_ge: 0, verified: false}
+  - {attacker: Fireball, target: Wizard,       kills_when_diff_ge: 0, verified: false}
