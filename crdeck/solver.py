@@ -20,6 +20,7 @@ class SolveRequest:
     locked: list[str] = field(default_factory=list)              # cartas obligatorias
     banned: list[str] = field(default_factory=list)              # cartas prohibidas
     exclude_decks: list[list[str]] = field(default_factory=list) # mazos ya mostrados (para alternativas)
+    min_diff: int = 3                          # alternativas: cartas que deben cambiar respecto a cada mazo excluido
     balance_weight: int = 10                   # Guerra: peso del mazo más débil
     time_limit: float = 20.0
 
@@ -35,6 +36,14 @@ class SolveResult:
 def _resolve(names, player: Player) -> list[str]:
     by_norm = {norm(n): n for n in player.cards}
     return [by_norm[norm(x)] for x in names if norm(x) in by_norm]
+
+
+def archetype_wincons(arch: dict) -> list[str]:
+    """Condiciones de victoria que admite un arquetipo: las que aparecen en su plantilla
+    (core, core_any, groups) más las de `extra_wincons`. Cualquier otra queda prohibida."""
+    names = arch.get("core", []) + arch.get("core_any", []) + arch.get("extra_wincons", [])
+    names += [c for g in arch.get("groups", []) for c in g["from"]]
+    return names
 
 
 def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: SolveRequest) -> SolveResult:
@@ -55,7 +64,8 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     for c in _resolve(req.banned, player):
         for d in D:
             m.Add(x[c, d] == 0)
-    for c in _resolve(req.locked, player):
+    locked = _resolve(req.locked, player)
+    for c in locked:
         if req.n_decks == 1:
             m.Add(x[c, 0] == 1)
         else:
@@ -87,11 +97,13 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         lo, hi = rules["avg_elixir"]
         if arch:
             lo, hi = arch.get("avg_elixir", [lo, hi])
-            label = f"Mazo {d + 1} ({arch['name']})"
+            label = arch["name"] if req.n_decks == 1 else f"Mazo {d + 1} ({arch['name']})"
             core = arch.get("core", [])
             owned_core = _resolve(core, player)
             if len(owned_core) < len(core):
-                return SolveResult(False, "SIN_CARTAS", [], [f"{label}: no tienes {', '.join(set(core) - set(owned_core))}."])
+                owned_norm = {norm(c) for c in owned_core}
+                missing = [c for c in core if norm(c) not in owned_norm]
+                return SolveResult(False, "SIN_CARTAS", [], [f"{label}: no tienes {', '.join(missing)}."])
             for c in owned_core:
                 m.Add(x[c, d] == 1)
             if arch.get("core_any"):
@@ -108,6 +120,12 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
                     m.Add(X(opts) >= need)
             for c in _resolve(arch.get("forbid", []), player):
                 m.Add(x[c, d] == 0)
+            # Coherencia: solo las condiciones de victoria del propio arquetipo
+            # (o las que el usuario dejó como obligatorias).
+            allowed = set(_resolve(archetype_wincons(arch), player)) | set(locked)
+            for c in ids:
+                if "win_condition" in player.cards[c].roles and c not in allowed:
+                    m.Add(x[c, d] == 0)
 
         elix10 = sum(round(player.cards[c].elixir * 10) * x[c, d] for c in ids)
         m.Add(elix10 >= round(lo * 10 * rules["size"]))
@@ -138,8 +156,9 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
                 terms.append(round(rb["bonus"] * SCALE) * z)
 
         for prev in req.exclude_decks:
+            # Cada alternativa debe cambiar al menos `min_diff` cartas respecto a cada mazo ya mostrado.
             prev_ids = _resolve(prev, player)
-            m.Add(X(prev_ids) <= len(prev_ids) - 1)
+            m.Add(X(prev_ids) <= max(0, len(prev_ids) - max(1, req.min_diff)))
 
         deck_scores.append(sum(terms))
 
@@ -161,8 +180,12 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
     status = solver.Solve(m)
     status_name = solver.StatusName(status)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
-        notes.append("No existe un mazo que cumpla todas las reglas con tus cartas. "
-                     "Prueba a relajar el rango de elixir, quitar cartas bloqueadas o cambiar de arquetipo.")
+        if req.exclude_decks:
+            notes.append(f"No hay más alternativas que cambien al menos {max(1, req.min_diff)} cartas "
+                         "respecto a los mazos anteriores. Baja ese número o quita cartas obligatorias.")
+        else:
+            notes.append("No existe un mazo que cumpla todas las reglas con tus cartas. "
+                         "Prueba a relajar el rango de elixir, quitar cartas bloqueadas o cambiar de arquetipo.")
         return SolveResult(False, status_name, [], notes)
     if status == cp_model.FEASIBLE:
         best, bound = solver.ObjectiveValue(), solver.BestObjectiveBound()

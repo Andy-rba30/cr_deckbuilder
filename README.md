@@ -5,8 +5,8 @@ Lee tu cuenta con la API oficial de Supercell y arma mazos con un modelo de
 
 | Modo | Qué hace |
 |---|---|
-| ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas distintas |
-| 🧩 Arquetipo | Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
+| ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas que cambian al menos 3 cartas |
+| 🧩 Arquetipo | Ranking de qué arquetipo te conviene + variantes de Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
 | ⚔️ Guerra de clanes | 4 mazos **sin cartas repetidas**, optimizados a la vez para que ninguno quede débil |
 | 📈 Asesor de mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
 | 📚 Mi colección | Tus cartas con nivel normalizado, factor de nivel y valor |
@@ -31,6 +31,7 @@ Se abre en el navegador; elige **Demo** en la barra lateral. También por consol
 ```bash
 python cli.py --demo --mode optimal --alternatives 2
 python cli.py --demo --mode archetype --archetype log_bait
+python cli.py --demo --mode ranking
 python cli.py --demo --mode war
 python cli.py --demo --mode upgrades
 ```
@@ -65,7 +66,10 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
   máx. 1 tanque, máx. 2 estructuras, máx. 1 campeón, rango de elixir, espacios de evolución.
 - Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + roles cubiertos.
 - Guerra: además, cada carta en un solo mazo, y se maximiza **el mazo más débil** (×10) + el total.
-- Alternativas: se vuelve a resolver prohibiendo repetir exactamente el mazo anterior.
+- Arquetipos: solo admiten las condiciones de victoria de su plantilla (`core`, `core_any`, `groups`
+  o `extra_wincons`), para que no se cuele, por ejemplo, un Montapuercos en un Graveyard.
+- Alternativas: se vuelve a resolver exigiendo que cambien al menos N cartas (3 por defecto;
+  ajustable en la barra lateral o con `--min-diff`) respecto a cada mazo ya mostrado.
 
 Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución del óptimo teórico.
 

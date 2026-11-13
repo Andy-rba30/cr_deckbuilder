@@ -10,6 +10,7 @@ from crdeck.api import ApiError
 from crdeck.collection import default_reference_level, parse_player
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
+from crdeck.ranking import ArchetypeRank, rank_archetypes
 from crdeck.scoring import evaluate_cards
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
@@ -55,6 +56,8 @@ with st.sidebar:
         level_weight = st.slider("Importancia del nivel", 0.0, 2.0, 1.0, 0.1,
                                  help="0 = ignora niveles · 1 = normal · 2 = castiga mucho las cartas bajas")
         time_limit = st.slider("Tiempo máximo del solver (s)", 5, 120, 20)
+        min_diff = st.slider("Cartas distintas entre alternativas", 1, 6, 3,
+                             help="Cuántas cartas debe cambiar cada alternativa respecto a los mazos ya mostrados.")
         names_es = {c.es: n for n, c in sorted(player.cards.items(), key=lambda kv: kv[1].es)}
         locked = [names_es[x] for x in st.multiselect("Cartas obligatorias", list(names_es))]
         banned = [names_es[x] for x in st.multiselect("Cartas prohibidas", list(names_es))]
@@ -108,19 +111,67 @@ def show_deck(title: str, d: dict):
     st.divider()
 
 
-def run(req: SolveRequest, n_alternatives: int = 0, label=lambda i, d: f"Mazo {i}"):
-    shown = []
-    with st.spinner("Resolviendo el modelo ILP..."):
-        for k in range(n_alternatives + 1):
-            req.exclude_decks = shown
-            res = solve(player, game, evals, req)
-            for n in res.notes:
-                st.warning(n)
-            if not res.ok:
-                break
-            for i, d in enumerate(res.decks, 1):
-                show_deck(label(k + i, d), d)
-            shown = shown + [d["cards"] for d in res.decks]
+def solve_with_alternatives(req: SolveRequest, n_alternatives: int = 0,
+                            label=lambda i, d: f"Mazo {i}") -> list[tuple]:
+    """Resuelve el mazo y sus alternativas. Devuelve ("note", texto) y ("deck", título, mazo) en orden."""
+    items, shown = [], []
+    for k in range(n_alternatives + 1):
+        req.exclude_decks = shown
+        res = solve(player, game, evals, req)
+        items += [("note", n) for n in res.notes]
+        if not res.ok:
+            break
+        items += [("deck", label(k + i, d), d) for i, d in enumerate(res.decks, 1)]
+        shown = shown + [d["cards"] for d in res.decks]
+    return items
+
+
+def show_items(items: list[tuple]):
+    for kind, *rest in items:
+        if kind == "note":
+            st.warning(rest[0])
+        else:
+            show_deck(*rest)
+
+
+def show_ranking(best: float | None, rows: list[ArchetypeRank]):
+    if best is not None:
+        st.caption(f"Óptimo libre (sin arquetipo): {best:.2f}. Elige uno abajo para ver el mazo completo.")
+    table = [{
+        "Puesto": str(pos) if a.ok else "—",
+        "Arquetipo": a.name,
+        "Puntaje": a.score,
+        "vs. óptimo": (a.score - best) if a.ok and best is not None else None,
+        "Elixir": a.deck["avg_elixir"] if a.ok else None,
+        "Mazo": ", ".join(player.cards[c].es for c in a.deck["cards"]) if a.ok else "—",
+        "Avisos": a.note,
+    } for pos, a in enumerate(rows, 1)]
+    st.dataframe(pd.DataFrame(table), width="stretch", hide_index=True, column_config={
+        "Puntaje": st.column_config.NumberColumn(format="%.2f"),
+        "vs. óptimo": st.column_config.NumberColumn(format="%+.2f"),
+        "Elixir": st.column_config.NumberColumn(format="%.1f"),
+    })
+
+
+# ------------------------------------------------------------------ resultados guardados
+# Streamlit vuelve a ejecutar todo el script con cada clic o cambio de un control.
+# Los resultados se guardan en session_state para que no desaparezcan al tocar otro ajuste.
+results: dict = st.session_state.setdefault("results", {})
+for k in [k for k, r in results.items() if r["ctx"]["tag"] != player.tag]:
+    del results[k]   # eran de otro jugador: sus cartas ya no aplican
+
+
+def context(**params) -> dict:
+    """Ajustes con los que se calcula un resultado; si cambian, el resultado queda desactualizado."""
+    return {"tag": player.tag, "ref": ref, "level_weight": level_weight,
+            "locked": tuple(locked), "banned": tuple(banned), **params}
+
+
+def saved(key: str, ctx: dict) -> dict | None:
+    r = results.get(key)
+    if r and r["ctx"] != ctx:
+        st.info("Estos resultados se calcularon con otros ajustes. Pulsa el botón para actualizarlos.")
+    return r
 
 
 st.title("🃏 Recomendador de mazos")
@@ -133,17 +184,39 @@ tab_opt, tab_arch, tab_war, tab_up, tab_col = st.tabs(
 with tab_opt:
     st.caption("El mejor mazo posible con tus cartas y niveles.")
     alts = st.number_input("Alternativas extra", 0, 5, 2, key="alt_opt")
+    ctx = context(alts=alts, min_diff=min_diff)
     if st.button("Recomendar", key="b_opt", type="primary"):
-        run(SolveRequest(locked=locked, banned=banned, time_limit=time_limit), alts,
-            lambda i, d: "Mejor mazo" if i == 1 else f"Alternativa {i - 1}")
+        with st.spinner("Resolviendo el modelo ILP..."):
+            results["opt"] = {"ctx": ctx, "items": solve_with_alternatives(
+                SolveRequest(locked=locked, banned=banned, min_diff=min_diff, time_limit=time_limit), alts,
+                lambda i, d: "Mejor mazo" if i == 1 else f"Alternativa {i - 1}")}
+    if r := saved("opt", ctx):
+        show_items(r["items"])
 
 with tab_arch:
+    st.markdown("**¿Qué arquetipo te conviene?**")
+    st.caption("Arma la mejor variante de cada arquetipo con tus cartas y los ordena por puntaje.")
+    ctx = context()
+    if st.button("Comparar arquetipos", key="b_rank"):
+        with st.spinner("Armando todos los arquetipos..."):
+            best, rows = rank_archetypes(player, game, evals, locked, banned, time_limit)
+        results["rank"] = {"ctx": ctx, "best": best, "rows": rows}
+    if r := saved("rank", ctx):
+        show_ranking(r["best"], r["rows"])
+    st.divider()
+
     keys = list(game.archetypes)
     arch = st.selectbox("Arquetipo", keys, format_func=lambda k: game.archetypes[k]["name"])
     alts = st.number_input("Alternativas extra", 0, 5, 1, key="alt_arch")
+    ctx = context(arch=arch, alts=alts, min_diff=min_diff)
     if st.button("Armar variante", key="b_arch", type="primary"):
-        run(SolveRequest(archetypes=[arch], locked=locked, banned=banned, time_limit=time_limit), alts,
-            lambda i, d: f"{d['archetype']} — variante {i}")
+        with st.spinner("Resolviendo el modelo ILP..."):
+            results["arch"] = {"ctx": ctx, "items": solve_with_alternatives(
+                SolveRequest(archetypes=[arch], locked=locked, banned=banned, min_diff=min_diff,
+                             time_limit=time_limit), alts,
+                lambda i, d: f"{d['archetype']} — variante {i}")}
+    if r := saved("arch", ctx):
+        show_items(r["items"])
 
 with tab_war:
     st.caption("4 mazos sin cartas repetidas, optimizados a la vez para que ninguno quede débil.")
@@ -151,20 +224,28 @@ with tab_war:
     fmt = lambda k: "Automático" if k is None else game.archetypes[k]["name"]
     wcols = st.columns(4)
     war_archs = [wcols[i].selectbox(f"Mazo {i + 1}", opts, format_func=fmt, key=f"war{i}") for i in range(4)]
+    ctx = context(archs=tuple(war_archs))
     if st.button("Armar los 4 mazos", key="b_war", type="primary"):
-        run(SolveRequest(n_decks=4, war_unique=True, archetypes=war_archs,
-                         locked=locked, banned=banned, time_limit=time_limit),
-            0, lambda i, d: f"Mazo {i}" + (f" — {d['archetype']}" if d["archetype"] else ""))
+        with st.spinner("Resolviendo el modelo ILP..."):
+            results["war"] = {"ctx": ctx, "items": solve_with_alternatives(
+                SolveRequest(n_decks=4, war_unique=True, archetypes=war_archs,
+                             locked=locked, banned=banned, time_limit=time_limit),
+                0, lambda i, d: f"Mazo {i}" + (f" — {d['archetype']}" if d["archetype"] else ""))}
+    if r := saved("war", ctx):
+        show_items(r["items"])
 
 with tab_up:
     st.caption("Simula subir cada carta un nivel y mide cuánto mejora tu mejor mazo.")
     up_arch = st.selectbox("Para el modo", [None] + list(game.archetypes),
                            format_func=lambda k: "Óptimo" if k is None else game.archetypes[k]["name"])
+    ctx = context(arch=up_arch)
     if st.button("Calcular", key="b_up", type="primary"):
         with st.spinner("Simulando mejoras..."):
             rows = upgrade_advice(player, game, ref, level_weight,
                                   SolveRequest(archetypes=[up_arch] if up_arch else [], locked=locked, banned=banned))
-        st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+        results["up"] = {"ctx": ctx, "rows": rows}
+    if r := saved("up", ctx):
+        st.dataframe(pd.DataFrame(r["rows"]), width="stretch", hide_index=True)
 
 with tab_col:
     rows = [{

@@ -4,6 +4,7 @@ Ejemplos:
   python cli.py --demo --mode optimal
   python cli.py --demo --mode archetype --archetype log_bait
   python cli.py --demo --mode war
+  python cli.py --demo --mode ranking
   python cli.py --tag "#ABC123" --mode upgrades
 """
 from __future__ import annotations
@@ -15,6 +16,7 @@ from crdeck.api import ApiError
 from crdeck.collection import default_reference_level
 from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
+from crdeck.ranking import rank_archetypes
 from crdeck.scoring import evaluate_cards
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
@@ -45,11 +47,13 @@ def main(argv=None):
     src.add_argument("--tag")
     src.add_argument("--json", help="Archivo JSON con la respuesta de la API")
     src.add_argument("--demo", action="store_true")
-    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades"], default="optimal")
+    ap.add_argument("--mode", choices=["optimal", "archetype", "war", "upgrades", "ranking"], default="optimal")
     ap.add_argument("--archetype", help="Clave del arquetipo (ver data/archetypes.yaml)")
     ap.add_argument("--ref-level", type=int, help="Nivel de referencia (por defecto: mediana de tus mejores cartas)")
     ap.add_argument("--level-weight", type=float, default=1.0, help="Importancia del nivel (0 a 2)")
     ap.add_argument("--alternatives", type=int, default=0, help="Mazos alternativos extra (modos optimal/archetype)")
+    ap.add_argument("--min-diff", type=int, default=3,
+                    help="Cartas que debe cambiar cada alternativa respecto a las anteriores (por defecto 3)")
     ap.add_argument("--time-limit", type=float, default=20.0)
     a = ap.parse_args(argv)
 
@@ -66,13 +70,24 @@ def main(argv=None):
         print(f"Cartas sin metadatos en cards.yaml: {', '.join(player.unknown_cards)}")
 
     evals = evaluate_cards(player, game, ref, a.level_weight)
+    if a.mode == "ranking":
+        best, rows = rank_archetypes(player, game, evals, time_limit=min(a.time_limit, 10.0))
+        print(f"\nRanking de arquetipos" + (f" (óptimo libre: {best:.2f})" if best is not None else ""))
+        for pos, r in enumerate(rows, 1):
+            if r.ok:
+                delta = f"{r.score - best:+.2f}" if best is not None else ""
+                cards = ", ".join(player.cards[c].es for c in r.deck["cards"])
+                print(f"  {pos:>2}. {r.name:<26} {r.score:5.2f} ({delta})  elixir {r.deck['avg_elixir']:.1f}  {cards}")
+            else:
+                print(f"   -  {r.name:<26} no disponible: {r.note}")
+        return
     if a.mode == "war":
         req = SolveRequest(n_decks=4, war_unique=True, time_limit=a.time_limit)
     else:
         arch = [a.archetype] if a.mode == "archetype" else []
         if a.mode == "archetype" and a.archetype not in game.archetypes:
             sys.exit(f"Arquetipo desconocido. Opciones: {', '.join(game.archetypes)}")
-        req = SolveRequest(n_decks=1, archetypes=arch, time_limit=a.time_limit)
+        req = SolveRequest(n_decks=1, archetypes=arch, min_diff=a.min_diff, time_limit=a.time_limit)
 
     if a.mode == "upgrades":
         for r in upgrade_advice(player, game, ref, a.level_weight, req):
