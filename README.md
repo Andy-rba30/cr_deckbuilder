@@ -8,15 +8,21 @@ Lee tu cuenta con la API oficial de Supercell y arma mazos con un modelo de
 | ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas que cambian al menos 3 cartas |
 | 🧩 Arquetipo | Ranking de qué arquetipo te conviene + variantes de Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
 | ⚔️ Guerra de clanes | 4 mazos **sin cartas repetidas**, optimizados a la vez para que ninguno quede débil |
-| 🛠️ Creador | Arma tu mazo a mano (＋ Añadir / ✕ Quitar), míralo evaluado al momento y **✨ Completar** rellena los huecos |
+| 🛠️ Creador | Arma tu mazo a mano (＋ Añadir / ✕ Quitar), míralo evaluado al momento, revisa reglas y amenazas, **🔍 cambios sugeridos** con un clic y **✨ Completar** rellena los huecos |
 | 📈 Mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
 | 📊 Meta | Descarga batallas reales de jugadores de tu nivel y calcula fuerza de cartas y combos |
 | 📚 Colección | Galería de tus cartas con nivel coloreado, filtros y valor |
 
 Los mazos se muestran como en el juego: cuadrícula de 4×2 con imagen de cada carta (si la API la
 trae), costo de elixir, nivel coloreado (verde = a tu nivel de referencia, ámbar = 1 abajo,
-rojo = 2 o más), marca **EVO** y 👑, elixir medio, costo de ciclo, botón para copiar al juego y
-barras de ataque, defensa, sinergia y versatilidad. El tema oscuro está en `.streamlit/config.toml`.
+rojo = 2 o más), marca **EVO** y 👑, ♥ en las cartas que juegas, elixir medio, costo de ciclo,
+botón para copiar al juego, **victoria estimada** (con batallas descargadas) y barras de ataque,
+defensa, sinergia y cobertura de amenazas. El tema oscuro está en `.streamlit/config.toml`.
+
+**Imágenes oficiales:** las cartas usan las imágenes de la API oficial de Clash Royale. Con tu
+Player Tag vienen con tu cuenta; si tienes la clave en `.env`, la app además descarga el catálogo
+completo (`/cards`, guardado 7 días en `.cache/`) para mostrar imágenes también en la demo y en
+las cartas que no tienes. Sin clave, se ven fichas de color con el nombre.
 
 ## Instalación
 
@@ -78,7 +84,8 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
 **Modelo ILP** (`crdeck/solver.py`) — variables sí/no por carta y mazo:
 - Restricciones duras: 8 cartas, 1–2 condiciones de victoria, ≥2 antiaéreas, 1–3 hechizos,
   máx. 1 tanque, máx. 2 estructuras, máx. 1 campeón, rango de elixir, espacios de evolución.
-- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + roles cubiertos.
+- Puntaje: valor de las cartas + bonus de evoluciones + sinergias entre pares + roles cubiertos
+  + **cobertura de amenazas** (ver abajo).
 - Guerra: además, cada carta en un solo mazo, y se maximiza **el mazo más débil** (×10) + el total.
 - Arquetipos: solo admiten las condiciones de victoria de su plantilla (`core`, `core_any`, `groups`
   o `extra_wincons`), para que no se cuele, por ejemplo, un Montapuercos en un Graveyard.
@@ -87,6 +94,16 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
 
 Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución del óptimo teórico.
 En Guerra, el modelo arranca desde 4 mazos armados uno por uno, así llega antes a buenas soluciones.
+
+**Respuesta a amenazas** (`data/threats.yaml`, `crdeck/threats.py`): 7 amenazas típicas (aéreos,
+enjambres, tanques, presión rápida, asedio, tropas de apoyo, infernos y cargas). Cada carta tiene
+una respuesta de 0 a 1 (por sus roles o un valor exacto); la cobertura de un mazo es la suma de sus
+respuestas dividida por `need` (máx. 100%). Cada amenaza cubierta suma hasta 0.15 al puntaje y si
+una queda por debajo del 50% aparece un aviso. Son estimaciones editables, como `cards.yaml`.
+
+**Cambios sugeridos** (`crdeck/advice.py`): para cada carta de un mazo prueba todas tus cartas en su
+lugar, se queda con los cambios que suben el puntaje y respetan las reglas, y propone uno por carta
+sin repetir la que entra. Se usa en 🛠️ Creador (botón **Aplicar**).
 
 ## Meta con batallas reales (`crdeck/battles.py`, `crdeck/meta.py`)
 
@@ -106,6 +123,9 @@ y las de más de 28 días se descartan, porque el balance cambia cada mes.
 - **Sinergias**: cuántas veces más se juegan dos cartas juntas de lo esperado si fuera al azar, más
   (con mucha prudencia) cuánto más ganan juntas. Se suman a las de `synergies.yaml`. La mitad del
   cupo es para combos y la otra mitad para cartas que casi nunca van juntas.
+- **Victoria estimada**: con la misma regresión, la probabilidad de que un mazo le gane a un rival
+  típico de tu nivel (el mazo medio del meta, al nivel de referencia), con un rango del 90%. Tiene en
+  cuenta la fuerza de cada carta y tu nivel medio; no las sinergias.
 - Se activa o desactiva con el interruptor **Usar meta de batallas reales** (o `--no-battle-meta`).
   Todos los parámetros están en `rules.yaml`, sección `battle_meta`, y se pueden cambiar sin volver
   a descargar.
@@ -120,6 +140,7 @@ Con 100 jugadores son unas 100 peticiones a la API (cerca de 1 minuto) y unas 1.
 | `data/synergies.yaml` | Combos (+) y antisinergias (−) con su peso y explicación |
 | `data/interactions.yaml` | Puntos de quiebre (ej. Bola de fuego vs Mosquetera) |
 | `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves y parámetros del meta de batallas |
+| `data/threats.yaml` | Amenazas y qué tan bien responde cada carta (por rol o valor exacto) |
 | `data/archetypes.yaml` | Plantillas de arquetipos: núcleo, grupos, cartas prohibidas, elixir |
 
 Roles disponibles: `win_condition, tank, mini_tank, building, air_defense, small_spell, big_spell,
@@ -136,7 +157,8 @@ splash, anti_tank_dps, dps, ranged_dps, support, cycle, cheap_defense, swarm, ba
   ajusta `evo_slots` en `rules.yaml`. Los héroes no están modelados todavía.
 - El modo Guerra puede tardar unos 20 s (más en computadoras con pocos núcleos).
 - El jugador demo es inventado y sus IDs de cartas son de ejemplo.
-- Uso personal. Si algún día lo publicas, revisa la Política de contenido de fans de Supercell.
+- Uso personal. La app muestra el aviso de la [Política de contenido de fans de Supercell](https://www.supercell.com/fan-content-policy):
+  material no oficial, sin respaldo de Supercell. Si algún día lo publicas, revisa esa política.
 
 ## Pruebas
 

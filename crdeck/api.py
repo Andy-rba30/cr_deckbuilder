@@ -45,6 +45,17 @@ def fetch_battlelog(tag: str, api_key: str | None = None, base_url: str | None =
     return data.get("items", []) if isinstance(data, dict) else data
 
 
+def has_key() -> bool:
+    return (os.getenv("CR_API_KEY") or "").strip() not in PLACEHOLDERS
+
+
+def fetch_cards(api_key: str | None = None, base_url: str | None = None,
+                ttl_seconds: int = 7 * 24 * 3600, use_cache: bool = True) -> list[dict]:
+    """Catálogo oficial de todas las cartas (nombre, id, rareza, elixir e imágenes en iconUrls)."""
+    data = _get_json("/cards", CACHE_DIR / "cards.json", ttl_seconds, use_cache, api_key, base_url)
+    return data.get("items", []) if isinstance(data, dict) else data
+
+
 def _get_json(path: str, cache_file: Path, ttl_seconds: int, use_cache: bool,
               api_key: str | None, base_url: str | None):
     if use_cache and cache_file.exists() and time.time() - cache_file.stat().st_mtime < ttl_seconds:

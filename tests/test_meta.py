@@ -141,3 +141,24 @@ def test_solver_works_with_battle_meta(tmp_path):
 
 def test_tag_helper_makes_valid_tags():
     assert api.normalize_tag(tag(12345))
+
+
+# ---------------------------------------------------------------- probabilidad de victoria
+def test_win_probability_matches_hidden_effects():
+    from fake_battles import DECKS
+    hog, lo, hi = BM.win_probability(DECKS["hog"], 0.0)
+    golem = BM.win_probability(DECKS["golem"], 0.0)[0]
+    bait = BM.win_probability(DECKS["bait"], 0.0)[0]
+    assert lo < hog < hi
+    assert hog > 0.58 and golem < 0.42 and 0.44 < bait < 0.56     # reales: 64.6%, 35.4%, 50%
+    assert BM.win_probability(DECKS["bait"], 1.0)[0] > bait + 0.05  # +1 nivel ayuda
+
+
+def test_decks_get_win_probability_only_with_battle_data():
+    gm = apply_meta(GAME, BM, CFG)
+    player = load_player(GAME, demo=True)
+    ev = evaluate_cards(player, gm, 15)
+    d = solve(player, gm, ev, SolveRequest(time_limit=10)).decks[0]
+    assert d["win"] is not None and 0 < d["win"][0] < 1
+    d0 = solve(player, GAME, evaluate_cards(player, GAME, 15), SolveRequest(time_limit=10)).decks[0]
+    assert d0["win"] is None

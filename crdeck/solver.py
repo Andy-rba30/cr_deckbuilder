@@ -9,8 +9,10 @@ from ortools.sat.python import cp_model
 from .catalog import GameData, norm
 from .collection import Player
 from .scoring import CardEval, evaluate_deck, synergy_index
+from .threats import answers
 
-SCALE = 1000  # CP-SAT solo trabaja con enteros
+SCALE = 10000      # CP-SAT solo trabaja con enteros
+COVER_STEPS = 20   # cobertura de amenazas en pasos de 5%
 
 
 @dataclass
@@ -76,6 +78,8 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         return bool(player.cards[c].roles & set(roles))
 
     syn = synergy_index(game, set(ids))
+    ans = answers(game, player)
+    threat_w = game.threats.get("weight", 0.0)
     deck_scores = []
 
     for d in D:
@@ -155,6 +159,16 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
                 z = m.NewBoolVar(f"rb[{rb['name']}][{d}]")
                 m.Add(z <= X(group))
                 terms.append(round(rb["bonus"] * SCALE) * z)
+
+        # Cobertura de amenazas: u/COVER_STEPS = min(1, suma de respuestas / need).
+        for key, t in game.threats.get("threats", {}).items():
+            resp = ans.get(key, {})
+            if not resp or threat_w <= 0:
+                continue
+            u = m.NewIntVar(0, COVER_STEPS, f"cov[{key}][{d}]")
+            m.Add(round(float(t["need"]) * 100) * u
+                  <= COVER_STEPS * sum(round(a * 100) * x[c, d] for c, a in resp.items()))
+            terms.append(round(threat_w * SCALE / COVER_STEPS) * u)
 
         for prev in req.exclude_decks:
             # Cada alternativa debe cambiar al menos `min_diff` cartas respecto a cada mazo ya mostrado.

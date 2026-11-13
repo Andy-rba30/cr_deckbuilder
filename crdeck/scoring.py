@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 
 from .catalog import GameData, norm
 from .collection import Player
+from .threats import answers, coverage
 
 
 @dataclass
@@ -97,32 +98,45 @@ def _sat(x: float, k: float) -> float:
 
 
 def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameData,
-                  evals: dict[str, CardEval]) -> dict:
+                  evals: dict[str, CardEval], syn_idx: dict | None = None, ans: dict | None = None) -> dict:
+    """syn_idx / ans: índices precalculados (synergy_index de todas tus cartas, threats.answers)
+    para evaluar muchos mazos seguidos más rápido."""
     rules = game.rules
     cards = [player.cards[n] for n in deck]
     comfort_part = sum(evals[n].comfort for n in deck)
     card_part = sum(evals[n].value for n in deck) - comfort_part
     evo_part = sum(evals[n].evo_bonus for n in evos)
 
-    syn_idx = synergy_index(game, set(deck))
-    active = [(a, b, w, r) for (a, b), (w, r) in syn_idx.items()]
+    dset = set(deck)
+    idx = syn_idx if syn_idx is not None else synergy_index(game, dset)
+    active = [(a, b, w, r) for (a, b), (w, r) in idx.items() if a in dset and b in dset]
     syn_part = sum(w for _, _, w, _ in active)
 
     roles_present = set().union(*(c.roles for c in cards))
     bonuses = [(rb["name"], rb["bonus"], bool(roles_present & set(rb["any_roles"]))) for rb in rules["role_bonuses"]]
     role_part = sum(b for _, b, ok in bonuses if ok)
 
-    total = card_part + comfort_part + evo_part + syn_part + role_part
+    cov = coverage(deck, game, ans if ans is not None else answers(game, player))
+    threat_part = game.threats.get("weight", 0.0) * sum(t["cov"] for t in cov)
+
+    total = card_part + comfort_part + evo_part + syn_part + role_part + threat_part
 
     atk = sum(evals[c.name].value for c in cards if c.roles & ATTACK_ROLES)
     dfn = sum(evals[c.name].value for c in cards if c.roles & DEFENSE_ROLES)
-    air = sum(1 for c in cards if "air_defense" in c.roles)
-    versatility = (sum(1 for *_, ok in bonuses if ok) + min(air, 3) / 3) / (len(bonuses) + 1)
 
     warnings = [w for n in deck for w in evals[n].warnings]
     for c in cards:
         if evals[c.name].gap >= 2:
             warnings.append(f"{c.es} está {evals[c.name].gap} niveles bajo tu referencia")
+    for t in cov:
+        if t["cov"] < game.threats.get("warn_below", 0.0):
+            warnings.append(f"Poca respuesta a {t['name'].lower()} ({t['cov']:.0%}): {t['examples']}")
+
+    bm = game.battle_meta
+    win = None
+    if bm is not None and len(deck) == rules["deck"]["size"]:
+        # Nivel medio del mazo menos el de referencia (los rivales): −media de los gap.
+        win = bm.win_probability(deck, -sum(evals[n].gap for n in deck) / len(deck))
 
     return {
         "cards": deck,
@@ -130,13 +144,15 @@ def evaluate_deck(deck: list[str], evos: list[str], player: Player, game: GameDa
         "avg_elixir": sum(c.elixir for c in cards) / len(cards),
         "score": total,
         "parts": {"cartas": card_part, "comodidad": comfort_part, "evoluciones": evo_part,
-                  "sinergias": syn_part, "roles": role_part},
+                  "sinergias": syn_part, "roles": role_part, "amenazas": threat_part},
         "ratings": {   # heurísticas propias de 0 a 10
             "Ataque": _sat(atk, 1.2),
             "Defensa": _sat(dfn, 2.0),
             "Sinergia": _sat(syn_part, 0.5),
-            "Versatilidad": 10.0 * versatility,
+            "Cobertura": 10.0 * sum(t["cov"] for t in cov) / max(1, len(cov)),
         },
+        "coverage": cov,
+        "win": win,   # (probabilidad, mínimo, máximo) contra un rival típico, o None sin batallas
         "synergies": [(player.cards[a].es, player.cards[b].es, w, r) for a, b, w, r in active],
         "role_checks": bonuses,
         "warnings": warnings,
@@ -147,3 +163,23 @@ def pick_evos(cards: list[str], player: Player, evals: dict[str, CardEval], slot
     """Para un mazo armado a mano: las evoluciones desbloqueadas con más bonus, hasta llenar los espacios."""
     evo = [c for c in cards if player.cards[c].evo_unlocked]
     return sorted(evo, key=lambda c: -evals[c].evo_bonus)[:slots]
+
+
+def rule_checks(cards: list[str], player: Player, game: GameData) -> list[tuple[str, bool]]:
+    """Reglas duras de rules.yaml aplicadas a un mazo armado a mano: (texto, se cumple)."""
+    rules = game.rules["deck"]
+    out = []
+    for role, lim in rules["role_limits"].items():
+        n = sum(role in player.cards[c].roles for c in cards)
+        ok = lim.get("min", 0) <= n <= lim.get("max", 99)
+        rng = f"{lim.get('min', 0)}–{lim['max']}" if "max" in lim else f"≥{lim['min']}"
+        out.append((f"{role.replace('_', ' ')}: {n} ({rng})", ok))
+    n_sp = sum(bool(player.cards[c].roles & set(rules["spell_roles"])) for c in cards)
+    out.append((f"hechizos: {n_sp} ({rules['min_spells']}–{rules['max_spells']})",
+                rules["min_spells"] <= n_sp <= rules["max_spells"]))
+    n_ch = sum(player.cards[c].champion for c in cards)
+    out.append((f"campeones: {n_ch} (máx. {rules['max_champions']})", n_ch <= rules["max_champions"]))
+    lo, hi = rules["avg_elixir"]
+    avg = sum(player.cards[c].elixir for c in cards) / max(1, len(cards))
+    out.append((f"elixir {avg:.1f} ({lo}–{hi})", lo <= avg <= hi))
+    return out

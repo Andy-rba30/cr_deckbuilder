@@ -35,6 +35,10 @@ def print_deck(i, d, player):
         champ = " [CAMPEÓN]" if oc.champion else ""
         print(f"  - {oc.es:<24} nv {oc.level}{evo}{champ}")
     print("  Valoración: " + ", ".join(f"{k} {v:.1f}" for k, v in d["ratings"].items()))
+    if d.get("win"):
+        p, lo, hi = d["win"]
+        print(f"  Victoria estimada contra un rival típico de tu nivel: {p:.0%} ({lo:.0%}–{hi:.0%})")
+    print("  Amenazas: " + ", ".join(f"{t['name']} {t['cov']:.0%}" for t in d["coverage"]))
     for a, b, w, r in d["synergies"]:
         print(f"  {'+' if w > 0 else '−'} {a} + {b} ({w:+.2f}): {r}")
     for w in d["warnings"]:

@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import math
 from collections import Counter
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from itertools import combinations
 from pathlib import Path
 
@@ -59,11 +59,31 @@ class BattleMeta:
     level_effect: float        # log-odds por cada nivel medio de ventaja
     cards: dict[str, CardStat]
     pairs: list[PairStat]      # los que superan min_weight, de mayor a menor |peso|
+    # Para estimar la probabilidad de ganar de un mazo (ver win_probability):
+    index: dict[str, int] = field(default_factory=dict, repr=False)   # carta -> columna de la regresión
+    coef: np.ndarray | None = field(default=None, repr=False)        # fuerzas + efecto de nivel (al final)
+    cov: np.ndarray | None = field(default=None, repr=False)         # covarianza aproximada de coef
+    mean_x: np.ndarray | None = field(default=None, repr=False)      # mazo medio del meta (uso de cada carta)
 
     @property
     def level_win_gain(self) -> float:
         """Puntos de probabilidad de ganar que da 1 nivel medio de ventaja (0.05 = +5 puntos)."""
         return 1.0 / (1.0 + math.exp(-self.level_effect)) - 0.5
+
+    def win_probability(self, deck: list[str], level_diff: float, z: float = 1.645) -> tuple[float, float, float]:
+        """Probabilidad de ganar contra un rival típico del meta (mazo medio, al nivel de referencia).
+
+        level_diff: nivel medio de tu mazo menos el de tus rivales. Devuelve (estimación, mínimo, máximo)
+        con un intervalo del 90%. Las cartas sin datos cuentan como neutras.
+        """
+        v = np.append(-self.mean_x, level_diff)
+        for c in deck:
+            if c in self.index:
+                v[self.index[c]] += 1.0
+        logit = float(v @ self.coef)
+        sd = math.sqrt(max(0.0, float(v @ self.cov @ v)))
+        sig = lambda t: 1.0 / (1.0 + math.exp(-t))
+        return sig(logit), sig(logit - z * sd), sig(logit + z * sd)
 
 
 # ---------------------------------------------------------------- cálculo
@@ -100,7 +120,9 @@ def compute_meta(battles: list[dict], cfg: dict, now=None) -> BattleMeta | None:
 
     names = sorted(games)
     n_decks = 2 * len(battles)
-    strength, level_effect = _fit(rows, level_diffs, {n: i for i, n in enumerate(names)}, cfg["ridge"])
+    index = {n: i for i, n in enumerate(names)}
+    coef, cov = _fit(rows, level_diffs, index, cfg["ridge"])
+    strength, level_effect = coef[:-1], float(coef[-1])
 
     cards = {}
     for i, n in enumerate(names):
@@ -109,15 +131,18 @@ def compute_meta(battles: list[dict], cfg: dict, now=None) -> BattleMeta | None:
 
     pairs = _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg["synergy"])
     times = [b["time"] for b in battles]
+    mean_x = np.array([games[n] / n_decks for n in names])   # = uso de cada carta
     return BattleMeta(len(battles), n_decks, len(players), min(times), max(times),
-                      level_effect, cards, pairs)
+                      level_effect, cards, pairs, index, coef, cov, mean_x)
 
 
 def _fit(rows, level_diffs, idx, ridge: float, iters: int = 50):
-    """Regresión logística con regularización L2 (Newton). Cada fila: cartas del ganador − del perdedor."""
+    """Regresión logística con regularización L2 (Newton). Cada fila: cartas del ganador − del perdedor.
+    Devuelve (coeficientes: fuerzas de cartas + efecto de nivel al final, covarianza aproximada)."""
     k = len(idx)
     if not rows:
-        return np.zeros(k), 0.0
+        lam = np.full(k + 1, float(ridge))
+        return np.zeros(k + 1), np.diag(1.0 / lam)
     X = np.zeros((len(rows), k + 1))
     for r, (win, lose) in enumerate(rows):
         for c in win:
@@ -136,7 +161,9 @@ def _fit(rows, level_diffs, idx, ridge: float, iters: int = 50):
         w -= step
         if np.max(np.abs(step)) < 1e-8:
             break
-    return w[:k], float(w[k])
+    p = 1.0 / (1.0 + np.exp(-(X @ w)))
+    hess = (X.T * (p * (1.0 - p))) @ X + np.diag(lam)
+    return w, np.linalg.inv(hess)      # aproximación de Laplace: covarianza = inversa del hessiano
 
 
 def _pair_weights(names, games, pair_n, pair_w, cards, n_decks, cfg) -> list[PairStat]:

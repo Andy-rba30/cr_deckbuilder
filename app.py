@@ -7,7 +7,8 @@ import pandas as pd
 import streamlit as st
 
 from crdeck import ui
-from crdeck.api import ApiError, fetch_battlelog
+from crdeck.advice import suggest_swaps
+from crdeck.api import ApiError, fetch_battlelog, fetch_cards, has_key
 from crdeck.battles import BATTLES_PATH, crawl, load_cards_info, save_battles
 from crdeck.collection import default_reference_level, parse_player
 from crdeck.comfort import apply_comfort
@@ -15,7 +16,7 @@ from crdeck.deck_link import copy_link
 from crdeck.loader import ENV_PATH, load_env, load_game_data, load_player
 from crdeck.meta import load_battle_meta
 from crdeck.ranking import ArchetypeRank, rank_archetypes
-from crdeck.scoring import evaluate_cards, evaluate_deck, pick_evos
+from crdeck.scoring import evaluate_cards, evaluate_deck, pick_evos, rule_checks
 from crdeck.solver import SolveRequest, solve
 from crdeck.upgrade import upgrade_advice
 
@@ -36,7 +37,17 @@ def meta_game(mtime: float | None):
     return game, bm, load_cards_info()
 
 
+@st.cache_resource(ttl=24 * 3600)
+def api_cards() -> dict[str, dict]:
+    """Catálogo oficial de la API (imágenes de TODAS las cartas). Solo con clave en .env."""
+    try:
+        return {c["name"]: c for c in fetch_cards()}
+    except ApiError:
+        return {}
+
+
 BASE = base_game()
+API_CARDS = api_cards() if has_key() else {}
 GAME_META, BM, SEEN_CARDS = meta_game(BATTLES_PATH.stat().st_mtime if BATTLES_PATH.exists() else None)
 CFG_META = BASE.rules["battle_meta"]
 
@@ -69,6 +80,11 @@ with st.sidebar:
         st.error(str(e))
 
     log_err = None
+    if player:   # imágenes oficiales para las cartas que no las traen (demo, JSON viejo)
+        for n, c in player.cards.items():
+            icons = (API_CARDS.get(n) or {}).get("iconUrls") or {}
+            c.icon = c.icon or icons.get("medium")
+            c.icon_evo = c.icon_evo or icons.get("evolutionMedium")
     if player:   # cartas que ya juegas: tu historial (con Player Tag) y tu mazo actual
         log = None
         if api_tag:
@@ -126,10 +142,13 @@ def any_tile(name: str, note: str = "", show_name: bool = True) -> str:
     if name in player.cards:
         return ui.owned_tile(name, player, evals, note=note, show_name=show_name)
     seen = SEEN_CARDS.get(name, {})
+    off = API_CARDS.get(name, {})
     info = BASE.info(name)
-    elixir = seen.get("elixir") or (info.elixir if info else None)
-    return ui.card_tile(es(name), elixir=elixir, rarity=seen.get("rarity", ""), icon=seen.get("icon"),
-                        note=note or "no la tienes", show_name=show_name)
+    elixir = seen.get("elixir") or off.get("elixirCost") or (info.elixir if info else None)
+    icon = seen.get("icon") or (off.get("iconUrls") or {}).get("medium")
+    rarity = seen.get("rarity") or str(off.get("rarity", "")).lower()
+    return ui.card_tile(es(name), elixir=elixir, rarity=rarity, icon=icon, note=note or "no la tienes",
+                        show_name=show_name)
 
 
 def show_deck(title: str, d: dict, subtitle: str | None = None):
@@ -142,6 +161,8 @@ def show_deck(title: str, d: dict, subtitle: str | None = None):
             st.html(ui.chips(syn))
         else:
             st.caption("Ninguna")
+        st.markdown("**Respuesta a amenazas** (pasa el ratón para ver qué cartas responden)")
+        st.html(ui.coverage_chips(d["coverage"], es))
         st.markdown("**Roles cubiertos**")
         st.html(ui.chips([(("✓ " if ok else "✗ ") + n, "good" if ok else "bad", "") for n, _, ok in d["role_checks"]]))
         st.markdown("**Avisos**")
@@ -202,7 +223,7 @@ def show_ranking(best: float | None, rows: list[ArchetypeRank]):
     for pos, a in enumerate(ok, 1):
         tiles = [ui.owned_tile(c, player, evals, evo=c in a.deck["evos"], show_name=False) for c in a.deck["cards"]]
         st.html(ui.rank_row(pos, a.name, a.score, (a.score - best) if best is not None else None,
-                            a.deck["avg_elixir"], tiles, 100 * a.score / top))
+                            a.deck["avg_elixir"], tiles, 100 * a.score / top, a.deck.get("win")))
     missing = [a for a in rows if not a.ok]
     if missing:
         st.markdown("**No disponibles con tus cartas**")
@@ -240,7 +261,9 @@ tab_opt, tab_arch, tab_war, tab_build, tab_up, tab_meta, tab_col = st.tabs(
     ["⭐ Óptimo", "🧩 Arquetipos", "⚔️ Guerra de clanes", "🛠️ Creador", "📈 Mejoras", "📊 Meta", "📚 Colección"])
 
 with tab_opt:
-    st.caption("El mejor mazo posible con tus cartas y niveles.")
+    st.caption("El mejor mazo posible con tus cartas y niveles."
+               + ("" if (use_meta and BM) else " · 💡 Descarga batallas en 📊 Meta para ver la "
+                  "probabilidad de victoria estimada de cada mazo."))
     current = current_deck_eval()
     if current:
         with st.expander(f"📌 Tu mazo actual · puntaje {current['score']:.2f} (para comparar)"):
@@ -307,23 +330,13 @@ def builder_order(cards: list[str]) -> tuple[list[str], list[str]]:
     return sorted(cards, key=lambda c: (c not in evos, cards.index(c))), evos
 
 
-def rule_checks(cards: list[str]) -> list[tuple[str, str, str]]:
-    rules = game.rules["deck"]
-    out = []
-    for role, lim in rules["role_limits"].items():
-        n = sum(role in player.cards[c].roles for c in cards)
-        ok = lim.get("min", 0) <= n <= lim.get("max", 99)
-        rng = f"{lim.get('min', 0)}–{lim['max']}" if "max" in lim else f"≥{lim['min']}"
-        out.append((f"{'✓' if ok else '✗'} {role.replace('_', ' ')}: {n} ({rng})", "good" if ok else "bad", ""))
-    n_sp = sum(bool(player.cards[c].roles & set(rules["spell_roles"])) for c in cards)
-    ok = rules["min_spells"] <= n_sp <= rules["max_spells"]
-    out.append((f"{'✓' if ok else '✗'} hechizos: {n_sp} ({rules['min_spells']}–{rules['max_spells']})",
-                "good" if ok else "bad", ""))
-    lo, hi = rules["avg_elixir"]
-    avg = sum(player.cards[c].elixir for c in cards) / len(cards)
-    ok = lo <= avg <= hi
-    out.append((f"{'✓' if ok else '✗'} elixir {avg:.1f} ({lo}–{hi})", "good" if ok else "bad", ""))
-    return out
+def rule_chips(cards: list[str]) -> str:
+    return ui.chips([(f"{'✓' if ok else '✗'} {txt}", "good" if ok else "bad", "")
+                     for txt, ok in rule_checks(cards, player, game)])
+
+
+def apply_swap(old: str, new: str):
+    st.session_state.builder = [new if c == old else c for c in st.session_state.get("builder", [])]
 
 
 def builder_add(name: str):
@@ -357,7 +370,27 @@ with tab_build:
         d = evaluate_deck(order, evos, player, game, evals)
         st.html(ui.deck_html("Tu mazo", d, player, evals, copy_link(order, player) if len(sel) == 8 else None,
                              subtitle=f"{len(sel)}/8 cartas", empty_slots=8 - len(sel)))
-        st.html(ui.chips(rule_checks(sel)))
+        st.markdown("**Reglas del mazo**")
+        st.html(rule_chips(sel))
+        st.markdown("**Respuesta a amenazas** (pasa el ratón para ver qué cartas responden)")
+        st.html(ui.coverage_chips(d["coverage"], es))
+        if len(sel) == 8:
+            st.markdown("#### 🔍 Cambios sugeridos")
+            swaps = suggest_swaps(sel, player, game, evals, locked, banned)
+            if not swaps:
+                st.caption("No hay ningún cambio de una carta que mejore este mazo y respete las reglas. 👍")
+            for sw in swaps[:5]:
+                win = ""
+                if sw["win_before"] and sw["win_after"]:
+                    win = f" · victoria {sw['win_before'][0]:.0%} → {sw['win_after'][0]:.0%}"
+                c1, c2 = st.columns([6, 1], vertical_alignment="center")
+                c1.html(ui.combos_html([ui.combo_html(
+                    ui.owned_tile(sw["out"], player, evals, show_name=False),
+                    ui.owned_tile(sw["in"], player, evals, show_name=False),
+                    f"Cambia {es(sw['out'])} por {es(sw['in'])}: {sw['gain']:+.2f}{win}",
+                    sw["why"], sep="→")]))
+                c2.button("Aplicar", key=f"swap_{sw['out']}_{sw['in']}", on_click=apply_swap,
+                          args=(sw["out"], sw["in"]), width="stretch")
     else:
         st.html('<div class="crd-root"><div class="crd-deck"><div class="crd-left"><div class="crd-grid">'
                 + "".join(ui.empty_tile() for _ in range(8)) + "</div></div>"
@@ -509,3 +542,8 @@ with tab_col:
             "Meta": round(evals[n].meta, 2), "Factor nivel": round(evals[n].level_factor, 2),
             "La juegas %": round(100 * player.comfort.get(n, 0.0)), "Valor": round(evals[n].value, 3),
         } for n, c in player.cards.items()]).sort_values("Valor", ascending=False), width="stretch", hide_index=True)
+
+st.divider()
+st.caption("Este material no es oficial y no está respaldado por Supercell. Para más información, consulta la "
+           "[Política de contenido de fans de Supercell](https://www.supercell.com/fan-content-policy). "
+           "Las imágenes de las cartas vienen de la API oficial de Clash Royale.")

@@ -66,3 +66,16 @@ def test_current_deck_and_comfort_controls():
     assert at.session_state["builder"] == ["Goblin Barrel", "Princess", "Goblin Gang", "Knight", "Inferno Tower",
                                            "Rocket", "The Log", "Ice Spirit"]
     assert "crd-fam" in _html(at) and not at.exception
+
+
+def test_builder_shows_coverage_and_swap_suggestions():
+    at = _app()
+    load = next(b for b in at.button if b.label.startswith("📌"))
+    load.click().run()
+    html = _html(at)
+    assert "Aéreos" in html and "Cambia " in html
+    before = list(at.session_state["builder"])
+    apply = next(b for b in at.button if b.label == "Aplicar")
+    apply.click().run()
+    assert at.session_state["builder"] != before and len(at.session_state["builder"]) == 8
+    assert not at.exception

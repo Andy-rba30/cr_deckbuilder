@@ -9,7 +9,7 @@ RARITY_COLOR = {
 }
 FAMILIAR_MIN = 0.3   # desde este uso se marca la carta con ♥ (la juegas seguido)
 METER_COLOR = {
-    "Ataque": "#ef6a3a", "Defensa": "#3b82f6", "Sinergia": "#22c55e", "Versatilidad": "#a855f7",
+    "Ataque": "#ef6a3a", "Defensa": "#3b82f6", "Sinergia": "#22c55e", "Cobertura": "#a855f7",
 }
 
 CSS = """
@@ -25,9 +25,10 @@ CSS = """
 .crd-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .crd-pool{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px}
 .crd-tile{min-width:0}
-.crd-card{position:relative;aspect-ratio:5/6;border-radius:11px;overflow:hidden;border:2px solid var(--rar);
+.crd-card{position:relative;aspect-ratio:4/5;border-radius:11px;overflow:hidden;border:2px solid var(--rar);
   background:linear-gradient(160deg,var(--rar) 0%,#1a1f2b 78%)}
-.crd-card img{width:100%;height:100%;object-fit:cover;display:block}
+/* Las imágenes oficiales (285×420) traen margen transparente: se encuadra solo la carta (14–271 × 66–388). */
+.crd-card img{position:absolute;left:-5.45%;top:0;margin-top:-25.7%;width:110.9%;max-width:none;height:auto;display:block}
 .crd-card .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
   font-weight:800;font-size:.78rem;line-height:1.1;padding:22px 5px 18px;color:#fff;text-shadow:0 1px 3px #000}
 .crd-card.evo{border-color:#c86bff;box-shadow:0 0 0 2px #c86bff55,0 0 16px #b44dffaa}
@@ -161,7 +162,7 @@ def deck_html(title: str, d: dict, player, evals, link: str | None = None, subti
     foot = (f'<span class="crd-pill"><span class="crd-drop"></span>{d["avg_elixir"]:.1f} medio</span>'
             + (f'<span class="crd-pill">🔄 ciclo {cycle_cost(elix):g}</span>' if len(elix) >= 4 else "")
             + (f'<a class="crd-copy" href="{_e(link)}" target="_blank">📋 Copiar al juego</a>' if link else ""))
-    meters = "".join(meter(k, v) for k, v in d["ratings"].items())
+    meters = (win_meter(d["win"]) if d.get("win") else "") + "".join(meter(k, v) for k, v in d["ratings"].items())
     return (f'<div class="crd-root"><div class="crd-deck">'
             f'<div class="crd-head"><div><div class="crd-title">{_e(title)}</div>'
             + (f'<div class="crd-sub">{_e(subtitle)}</div>' if subtitle else "")
@@ -169,6 +170,27 @@ def deck_html(title: str, d: dict, player, evals, link: str | None = None, subti
             f'<div class="crd-score">{d["score"]:.2f}</div></div></div>'
             f'<div class="crd-left"><div class="crd-grid">{"".join(tiles)}</div><div class="crd-foot">{foot}</div></div>'
             f'<div class="crd-right">{meters}</div></div></div>')
+
+
+def win_color(p: float) -> str:
+    return "#22c55e" if p >= 0.52 else "#f59e0b" if p >= 0.48 else "#ef4444"
+
+
+def win_meter(win: tuple[float, float, float]) -> str:
+    """Probabilidad estimada de ganar contra un rival típico de tu nivel, con su rango (90%)."""
+    p, lo, hi = win
+    return meter("Victoria estimada", 100 * p, win_color(p), maximum=100,
+                 text=f"{p:.0%}  ({lo:.0%}–{hi:.0%})")
+
+
+def coverage_chips(cov: list[dict], es) -> str:
+    """Una etiqueta por amenaza: verde ≥80%, ámbar ≥50%, roja por debajo. es: nombre en español."""
+    items = []
+    for t in cov:
+        cls = "good" if t["cov"] >= 0.8 else "warn" if t["cov"] >= 0.5 else "bad"
+        who = ", ".join(f"{es(c)} {a:.1f}" for c, a in t["by"]) or "ninguna carta"
+        items.append((f"{t['name']} {t['cov']:.0%}", cls, f"Ej.: {t['examples']}. Responden: {who}"))
+    return chips(items)
 
 
 def chips(items: list[tuple[str, str, str]]) -> str:
@@ -189,8 +211,8 @@ def pool_html(tiles: list[str]) -> str:
     return f'<div class="crd-root"><div class="crd-pool">{"".join(tiles)}</div></div>'
 
 
-def combo_html(tile_a: str, tile_b: str, title: str, detail: str) -> str:
-    return (f'<div class="crd-combo">{tile_a}<b>+</b>{tile_b}'
+def combo_html(tile_a: str, tile_b: str, title: str, detail: str, sep: str = "+") -> str:
+    return (f'<div class="crd-combo">{tile_a}<b>{_e(sep)}</b>{tile_b}'
             f'<div class="txt"><b>{_e(title)}</b><br><span class="crd-sub">{_e(detail)}</span></div></div>')
 
 
@@ -199,9 +221,10 @@ def combos_html(items: list[str]) -> str:
 
 
 def rank_row(pos: int, name: str, score: float, delta: float | None, elixir: float, tiles: list[str],
-             pct: float) -> str:
+             pct: float, win: tuple | None = None) -> str:
     """Fila del ranking de arquetipos: puesto, nombre, barra de puntaje y mini mazo."""
     d = f" ({delta:+.2f} vs. óptimo)" if delta is not None else ""
+    d += f" · {win[0]:.0%} victoria" if win else ""
     return (f'<div class="crd-root"><div class="crd-rank"><div class="info">'
             f'<div><span class="crd-pos">{pos}</span><b>{_e(name)}</b></div>'
             f'<div class="crd-sub">puntaje {score:.2f}{_e(d)} · elixir {elixir:.1f}</div>'
