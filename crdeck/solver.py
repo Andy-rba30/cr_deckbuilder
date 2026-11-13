@@ -210,6 +210,8 @@ def solve(player: Player, game: GameData, evals: dict[str, CardEval], req: Solve
         ev = evaluate_deck(cards, evos, player, game, evals)
         ev["archetype"] = game.archetypes[archs[d]]["name"] if archs[d] else None
         decks.append(ev)
+    if req.n_decks > 1 and len(set(archs)) == 1:
+        decks.sort(key=lambda dk: -dk["score"])   # mazos intercambiables: el más fuerte primero
     return SolveResult(True, status_name, decks, notes)
 
 

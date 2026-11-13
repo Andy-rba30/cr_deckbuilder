@@ -36,5 +36,5 @@ def upgrade_advice(player: Player, game: GameData, ref_level: int, level_weight:
         if r.ok:
             gain = sum(d["score"] for d in r.decks) - base_score
             results.append({"carta": player.cards[name].es, "nivel_actual": player.cards[name].level,
-                            "ganancia": round(gain, 3)})
+                            "ganancia": round(gain, 3), "nombre_api": name})
     return sorted(results, key=lambda r: -r["ganancia"])

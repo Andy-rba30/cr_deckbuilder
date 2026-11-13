@@ -94,7 +94,7 @@ def main(argv=None):
                 print(f"  {i}/{n} jugadores · {nb} batallas") if i % 10 == 0 or i == n else None))
         except ApiError as e:
             sys.exit(str(e))
-        total = save_battles(battles, max_age_days=cfg["max_age_days"])
+        total = save_battles(battles, max_age_days=cfg["max_age_days"], cards_info=info["cards"])
         print(f"{len(battles)} batallas descargadas ({info['errors']} jugadores con error). "
               f"Total guardado en {BATTLES_PATH}: {total}")
         game, bm = load_battle_meta(game)

@@ -8,8 +8,15 @@ Lee tu cuenta con la API oficial de Supercell y arma mazos con un modelo de
 | ⭐ Óptimo | El mejor mazo posible con tus cartas y niveles, más alternativas que cambian al menos 3 cartas |
 | 🧩 Arquetipo | Ranking de qué arquetipo te conviene + variantes de Log Bait, Bridge Spam, Beatdown, Miner Control, Hog Cycle, Asedio, LavaLoon, Graveyard, Royal Giant |
 | ⚔️ Guerra de clanes | 4 mazos **sin cartas repetidas**, optimizados a la vez para que ninguno quede débil |
-| 📈 Asesor de mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
-| 📚 Mi colección | Tus cartas con nivel normalizado, factor de nivel y valor |
+| 🛠️ Creador | Arma tu mazo a mano (＋ Añadir / ✕ Quitar), míralo evaluado al momento y **✨ Completar** rellena los huecos |
+| 📈 Mejoras | Simula subir cada carta +1 nivel y te dice cuál mejora más tu mazo |
+| 📊 Meta | Descarga batallas reales de jugadores de tu nivel y calcula fuerza de cartas y combos |
+| 📚 Colección | Galería de tus cartas con nivel coloreado, filtros y valor |
+
+Los mazos se muestran como en el juego: cuadrícula de 4×2 con imagen de cada carta (si la API la
+trae), costo de elixir, nivel coloreado (verde = a tu nivel de referencia, ámbar = 1 abajo,
+rojo = 2 o más), marca **EVO** y 👑, elixir medio, costo de ciclo, botón para copiar al juego y
+barras de ataque, defensa, sinergia y versatilidad. El tema oscuro está en `.streamlit/config.toml`.
 
 ## Instalación
 
@@ -32,6 +39,7 @@ Se abre en el navegador; elige **Demo** en la barra lateral. También por consol
 python cli.py --demo --mode optimal --alternatives 2
 python cli.py --demo --mode archetype --archetype log_bait
 python cli.py --demo --mode ranking
+python cli.py --tag "#ABC123" --mode meta --players 150   # descarga batallas reales (necesita clave)
 python cli.py --demo --mode war
 python cli.py --demo --mode upgrades
 ```
@@ -72,6 +80,31 @@ factor_nivel = 1 − sens × (1 − e^(−0.45 × diferencia))    si la carta es
   ajustable en la barra lateral o con `--min-diff`) respecto a cada mazo ya mostrado.
 
 Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución del óptimo teórico.
+En Guerra, el modelo arranca desde 4 mazos armados uno por uno, así llega antes a buenas soluciones.
+
+## Meta con batallas reales (`crdeck/battles.py`, `crdeck/meta.py`)
+
+En la pestaña **📊 Meta** (con tu Player Tag) o con `--mode meta`, la app descarga tu historial
+de batallas, luego el de tus rivales, el de los rivales de ellos, etc. Como el juego empareja
+jugadores parecidos, la muestra refleja **el meta de tu nivel**. Solo cuentan batallas 1 contra 1
+(los tipos están en `rules.yaml`), cada una se guarda una vez en `data/battles.json` (no se sube a git)
+y las de más de 28 días se descartan, porque el balance cambia cada mes.
+
+- **Fuerza de cada carta**: regresión logística sobre quién ganó cada batalla, con las cartas de los
+  dos mazos y la diferencia de nivel. Así una carta no parece fuerte solo porque la juega gente con
+  más nivel o porque siempre va con otra carta fuerte. También da cuánto vale 1 nivel de ventaja.
+- **Meta final** = mezcla de los datos con `cards.yaml` según cuántas partidas hay: con 100 partidas
+  pesan igual; con pocas manda el catálogo. Los datos deciden el orden de las cartas y la escala sale
+  de `cards.yaml`, para no desbalancear el modelo. Las cartas nuevas que faltan en el catálogo
+  también reciben su meta de los datos.
+- **Sinergias**: cuántas veces más se juegan dos cartas juntas de lo esperado si fuera al azar, más
+  (con mucha prudencia) cuánto más ganan juntas. Se suman a las de `synergies.yaml`. La mitad del
+  cupo es para combos y la otra mitad para cartas que casi nunca van juntas.
+- Se activa o desactiva con el interruptor **Usar meta de batallas reales** (o `--no-battle-meta`).
+  Todos los parámetros están en `rules.yaml`, sección `battle_meta`, y se pueden cambiar sin volver
+  a descargar.
+
+Con 100 jugadores son unas 100 peticiones a la API (cerca de 1 minuto) y unas 1.500–2.500 batallas.
 
 ## Archivos que puedes editar (sin tocar código)
 
@@ -80,7 +113,7 @@ Si el tiempo se acaba, la app te dice a qué distancia (en %) está la solución
 | `data/cards.yaml` | Roles, sensibilidad al nivel, fuerza en el meta y bonus de evolución de cada carta |
 | `data/synergies.yaml` | Combos (+) y antisinergias (−) con su peso y explicación |
 | `data/interactions.yaml` | Puntos de quiebre (ej. Bola de fuego vs Mosquetera) |
-| `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves |
+| `data/rules.yaml` | Reglas del mazo: límites por rol, elixir, espacios de evolución, bonus suaves y parámetros del meta de batallas |
 | `data/archetypes.yaml` | Plantillas de arquetipos: núcleo, grupos, cartas prohibidas, elixir |
 
 Roles disponibles: `win_condition, tank, mini_tank, building, air_defense, small_spell, big_spell,

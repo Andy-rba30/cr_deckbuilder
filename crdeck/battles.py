@@ -61,6 +61,7 @@ def crawl(seed_tags: list[str], max_players: int = 100, battle_types=("PvP", "pa
             queue.append(tag)
 
     battles: dict[str, dict] = {}
+    cards_info: dict[str, dict] = {}
     visited = errors = streak = 0
     while queue and visited < max_players:
         tag = queue.popleft()
@@ -81,6 +82,9 @@ def crawl(seed_tags: list[str], max_players: int = 100, battle_types=("PvP", "pa
             if b is None:
                 continue
             battles.setdefault(b["key"], b)
+            for side in ("team", "opponent"):
+                for c in raw[side][0]["cards"]:
+                    cards_info.setdefault(c["name"], card_info(c))
             for d in b["decks"]:
                 if d["tag"] not in seen:
                     seen.add(d["tag"])
@@ -89,7 +93,13 @@ def crawl(seed_tags: list[str], max_players: int = 100, battle_types=("PvP", "pa
             progress(visited, max_players, len(battles))
         if delay:
             time.sleep(delay)
-    return list(battles.values()), {"players": visited, "errors": errors}
+    return list(battles.values()), {"players": visited, "errors": errors, "cards": cards_info}
+
+
+def card_info(c: dict) -> dict:
+    """Datos para dibujar una carta que quizá no tienes: imagen, rareza y elixir."""
+    return {"icon": (c.get("iconUrls") or {}).get("medium"), "rarity": str(c.get("rarity", "")).lower(),
+            "elixir": c.get("elixirCost")}
 
 
 def recent(battles: list[dict], max_age_days: float | None, now: datetime | None = None) -> list[dict]:
@@ -100,19 +110,27 @@ def recent(battles: list[dict], max_age_days: float | None, now: datetime | None
     return [b for b in battles if b["time"] >= cutoff]   # fechas ISO: se comparan como texto
 
 
+def _load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
 def load_battles(path: Path = BATTLES_PATH) -> list[dict]:
-    if not path.exists():
-        return []
-    return json.loads(path.read_text(encoding="utf-8")).get("battles", [])
+    return _load(path).get("battles", [])
+
+
+def load_cards_info(path: Path = BATTLES_PATH) -> dict[str, dict]:
+    return _load(path).get("cards", {})
 
 
 def save_battles(new: list[dict], path: Path = BATTLES_PATH, max_age_days: float | None = None,
-                 now: datetime | None = None) -> int:
+                 now: datetime | None = None, cards_info: dict | None = None) -> int:
     """Une las batallas nuevas con las guardadas (sin repetir), descarta las viejas y guarda. Devuelve el total."""
     merged = {b["key"]: b for b in load_battles(path)}
     merged.update({b["key"]: b for b in new})
     battles = sorted(recent(list(merged.values()), max_age_days, now), key=lambda b: b["time"])
     path.parent.mkdir(parents=True, exist_ok=True)
-    payload = {"version": 1, "updated": (now or datetime.now(timezone.utc)).strftime(ISO), "battles": battles}
+    cards = {**load_cards_info(path), **(cards_info or {})}
+    payload = {"version": 1, "updated": (now or datetime.now(timezone.utc)).strftime(ISO),
+               "cards": cards, "battles": battles}
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     return len(battles)
